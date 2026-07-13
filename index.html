@@ -15,7 +15,7 @@
   :root{
     --bg:#f4f1fb; --card:#ffffff; --ink:#403a56; --muted:#8a84a3; --faint:#b6b1c9;
     --line:#eae4f5; --line2:#f2eefb; --accent:#6857d8; --on-accent:#ffffff; --accent-soft:#ece8fc;
-    --green:#5cbf95; --green-ink:#18805c; --green-soft:#e6f6ef; --amber:#f0b48a; --danger:#e08a9a;
+    --green:#5cbf95; --green-ink:#18805c; --green-soft:#e6f6ef; --amber:#f0b48a; --danger:#e08a9a; --heat0:#e2dbf1;
     --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",Roboto,sans-serif;
     --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
     --shadow:0 1px 2px rgba(64,58,86,.04),0 10px 26px rgba(124,108,232,.12);
@@ -25,7 +25,7 @@
   body[data-theme="dark"]{
     --bg:#1a1826; --card:#272338; --ink:#e9e5f4; --muted:#a49cbe; --faint:#6d6688;
     --line:#37324b; --line2:#2f2b42; --accent:#a99bff; --on-accent:#221c3a; --accent-soft:#2f2a49;
-    --green:#63d3a3; --green-ink:#7fe3b4; --green-soft:#20362c; --amber:#f0b48a; --danger:#eb9aa9;
+    --green:#63d3a3; --green-ink:#7fe3b4; --green-soft:#20362c; --amber:#f0b48a; --danger:#eb9aa9; --heat0:#3b3456;
     --shadow:0 1px 2px rgba(0,0,0,.28),0 10px 26px rgba(0,0,0,.34);
     --navbg:rgba(39,35,56,.82);
   }
@@ -113,10 +113,18 @@
   .wknum{font:600 10px var(--mono);color:var(--faint);margin-top:-3px}
   .wkcol.today .wklabel,.wkcol.today .wknum{color:var(--accent)}
 
-  .heat{display:flex;gap:4px;overflow-x:auto;padding-bottom:4px}
+  .heat-wrap{display:flex;gap:6px;margin-top:4px}
+  .heat-days{display:flex;flex-direction:column;gap:4px;padding-top:18px;flex:none}
+  .heat-days span{height:13px;font:600 9px var(--mono);color:var(--faint);display:flex;align-items:center}
+  .heat-scroll{overflow-x:auto;padding-bottom:4px;flex:1}
+  .heat-months{display:flex;gap:4px;height:14px;margin-bottom:4px}
+  .heat-months span{width:13px;flex:none;font:600 9px var(--mono);color:var(--faint);white-space:nowrap;overflow:visible}
+  .heat{display:flex;gap:4px}
   .heatcol{display:flex;flex-direction:column;gap:4px}
   .cell{width:13px;height:13px;border-radius:3px;background:var(--line2)}
-  .heat-legend{display:flex;align-items:center;gap:6px;justify-content:flex-end;margin-top:12px;font-size:11px;color:var(--faint)}
+  .cell.zero{background:var(--heat0)}
+  .cell.today{box-shadow:0 0 0 2px var(--accent)}
+  .heat-legend{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:14px;font-size:11px;color:var(--faint)}
   .heat-legend .cell{width:11px;height:11px}
   .brk{margin-top:2px}
   .brk-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line2)}
@@ -260,14 +268,22 @@
       </div>
       <div class="panel">
         <h2>Last 12 weeks</h2>
-        <p class="sub">Each square is a day. Greener means more of that day’s tasks got done.</p>
-        <div class="heat" id="heat"></div>
-        <div class="heat-legend"><span>Less</span>
-          <span class="cell" style="background:var(--line2)"></span>
+        <p class="sub">Columns are weeks, newest on the right. Rows are days, Monday at top. Today is outlined; greener means more of that day’s tasks got done.</p>
+        <div class="heat-wrap">
+          <div class="heat-days"><span>M</span><span></span><span>W</span><span></span><span>F</span><span></span><span>S</span></div>
+          <div class="heat-scroll">
+            <div class="heat-months" id="heatMonths"></div>
+            <div class="heat" id="heat"></div>
+          </div>
+        </div>
+        <div class="heat-legend">
+          <span class="cell" style="background:var(--line2)"></span><span>no tasks</span>
+          <span style="width:6px"></span>
+          <span>Less</span>
+          <span class="cell zero"></span>
           <span class="cell" style="background:hsl(150 50% 82%)"></span>
-          <span class="cell" style="background:hsl(150 55% 74%)"></span>
-          <span class="cell" style="background:hsl(150 60% 66%)"></span>
-          <span class="cell" style="background:hsl(150 63% 60%)"></span>
+          <span class="cell" style="background:hsl(150 57% 70%)"></span>
+          <span class="cell" style="background:hsl(150 62% 61%)"></span>
           <span>More</span>
         </div>
       </div>
@@ -525,14 +541,31 @@
     $("#stAvg").innerHTML=(cnt?Math.round(sum/cnt*100):0)+'<span class="u">%</span>';
     $("#stPerfect").textContent=perfect;
     const heat=$("#heat");heat.innerHTML="";
-    const end=today();const startOffset=(11*7)+end.getDay();
-    for(let w=0;w<12;w++){const col=document.createElement("div");col.className="heatcol";
-      for(let dow=0;dow<7;dow++){const back=startOffset-(w*7+dow);const cell=document.createElement("div");cell.className="cell";
-        if(back>=0){const date=addDays(end,-back);const r=ratio(date);if(r!==null)cell.style.background=heatColor(r);cell.title=keyFor(date)+(r!==null?" · "+Math.round(r*100)+"%":"");}
-        else cell.style.visibility="hidden";
-        col.appendChild(cell);}
-      heat.appendChild(col);}
-    heat.scrollLeft=heat.scrollWidth;
+    const months=$("#heatMonths");if(months)months.innerHTML="";
+    const WEEKS=12,end=today(),tkEnd=keyFor(end);
+    const mondayThis=addDays(end,-((end.getDay()+6)%7));
+    const firstMonday=addDays(mondayThis,-(WEEKS-1)*7);
+    let lastMonth=-1;
+    for(let w=0;w<WEEKS;w++){
+      const colDate=addDays(firstMonday,w*7);
+      if(months){const ms=document.createElement("span");if(colDate.getMonth()!==lastMonth){ms.textContent=colDate.toLocaleDateString(undefined,{month:"short"});lastMonth=colDate.getMonth();}months.appendChild(ms);}
+      const col=document.createElement("div");col.className="heatcol";
+      for(let dow=0;dow<7;dow++){
+        const date=addDays(firstMonday,w*7+dow);
+        const cell=document.createElement("div");cell.className="cell";
+        if(date>end){cell.style.visibility="hidden";}
+        else{
+          const r=ratio(date);
+          if(r===null){cell.title=keyFor(date)+" · no tasks";}
+          else if(r===0){cell.classList.add("zero");cell.title=keyFor(date)+" · 0%";}
+          else{cell.style.background=heatColor(r);cell.title=keyFor(date)+" · "+Math.round(r*100)+"%";}
+          if(keyFor(date)===tkEnd)cell.classList.add("today");
+        }
+        col.appendChild(cell);
+      }
+      heat.appendChild(col);
+    }
+    const hs=document.querySelector(".heat-scroll");if(hs)hs.scrollLeft=hs.scrollWidth;
     const rows=state.tasks.map(t=>{let sc=0,dn=0;for(let i=0;i<30;i++){const date=addDays(today(),-i);if(t.days.includes(date.getDay())){sc++;if(isDone(date,t.id))dn++;}}return {name:t.name,rate:sc?dn/sc:null,sc};}).filter(r=>r.sc>0);
     rows.sort((a,b)=>a.rate-b.rate);
     $("#breakdown").innerHTML=rows.length?rows.map(r=>{const p=Math.round(r.rate*100);
