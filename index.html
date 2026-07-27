@@ -16,7 +16,7 @@
     --bg:#f4f1fb; --card:#ffffff; --ink:#403a56; --muted:#8a84a3; --faint:#b6b1c9;
     --line:#eae4f5; --line2:#f2eefb; --accent:#6857d8; --on-accent:#ffffff; --accent-soft:#ece8fc;
     --green:#5cbf95; --green-ink:#18805c; --green-soft:#e6f6ef; --amber:#f0b48a; --danger:#e08a9a;
-    --heat0:#ded6ef; --h1:#bfe6d3; --h2:#8ed4b0; --h3:#4fbc8b; --h4:#1f9c6b;
+    --heat0:#ded6ef; --h1:#f8cd99; --h2:#e6ba35; --h3:#54b654; --h4:#1d8961;
     --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",Roboto,sans-serif;
     --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
     --shadow:0 1px 2px rgba(64,58,86,.04),0 10px 26px rgba(124,108,232,.12);
@@ -27,7 +27,7 @@
     --bg:#1a1826; --card:#272338; --ink:#e9e5f4; --muted:#a49cbe; --faint:#6d6688;
     --line:#37324b; --line2:#2f2b42; --accent:#a99bff; --on-accent:#221c3a; --accent-soft:#2f2a49;
     --green:#63d3a3; --green-ink:#7fe3b4; --green-soft:#20362c; --amber:#f0b48a; --danger:#eb9aa9;
-    --heat0:#3b3456; --h1:#2f6b56; --h2:#3f9873; --h3:#55c496; --h4:#7fe8b6;
+    --heat0:#3b3456; --h1:#975a26; --h2:#a98724; --h3:#5fc267; --h4:#81e1b9;
     --shadow:0 1px 2px rgba(0,0,0,.28),0 10px 26px rgba(0,0,0,.34);
     --navbg:rgba(39,35,56,.82);
   }
@@ -139,16 +139,21 @@
 
   .heat-wrap{display:flex;gap:6px;margin-top:4px}
   .heat-days{display:flex;flex-direction:column;gap:4px;padding-top:18px;flex:none}
-  .heat-days span{height:13px;font:600 9px var(--mono);color:var(--faint);display:flex;align-items:center}
+  .heat-days span{height:18px;font:600 9px var(--mono);color:var(--faint);display:flex;align-items:center}
   .heat-scroll{overflow-x:auto;padding-bottom:4px;flex:1}
   .heat-months{display:flex;gap:4px;height:14px;margin-bottom:4px}
-  .heat-months span{width:13px;flex:none;font:600 9px var(--mono);color:var(--faint);white-space:nowrap;overflow:visible}
+  .heat-months span{width:18px;flex:none;font:600 9px var(--mono);color:var(--faint);white-space:nowrap;overflow:visible}
   .heat{display:flex;gap:4px}
   .heatcol{display:flex;flex-direction:column;gap:4px}
-  .cell{width:13px;height:13px;border-radius:3px;background:var(--line2)}
-  .cell.today{box-shadow:0 0 0 2px var(--accent)}
-  .heat-legend{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:14px;font-size:11px;color:var(--faint)}
-  .heat-legend .cell{width:11px;height:11px}
+  .cell{width:18px;height:18px;border-radius:4px;background:var(--line2);overflow:hidden;display:flex;align-items:flex-end;cursor:pointer}
+  .cell i{display:block;width:100%;border-radius:3px;transition:height .3s ease}
+  .cell.nosched{opacity:.4;cursor:default}
+  .cell.today{box-shadow:inset 0 0 0 2px var(--accent)}
+  .cell.sel{box-shadow:inset 0 0 0 2px var(--ink)}
+  .heat-read{font:600 12px var(--mono);color:var(--muted);margin-top:12px;min-height:17px}
+  .heat-read b{color:var(--ink)}
+  .heat-legend{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:var(--faint)}
+  .heat-legend .cell{width:15px;height:15px;cursor:default}
   .heat-legend b{font:600 9.5px var(--mono);color:var(--faint)}
 
   .brk{margin-top:2px}
@@ -325,14 +330,15 @@
             <div class="heat" id="heat"></div>
           </div>
         </div>
+        <div class="heat-read" id="heatRead">Tap any square to see that day.</div>
         <div class="heat-legend">
-          <span class="cell" style="background:var(--line2)"></span><span>none scheduled</span>
-          <span style="width:10px"></span>
-          <span class="cell" style="background:var(--heat0)"></span><b>0</b>
-          <span class="cell" style="background:var(--h1)"></span><b>1–33</b>
-          <span class="cell" style="background:var(--h2)"></span><b>34–66</b>
-          <span class="cell" style="background:var(--h3)"></span><b>67–99</b>
-          <span class="cell" style="background:var(--h4)"></span><b>100%</b>
+          <span class="cell nosched"></span><span>none</span>
+          <span style="width:8px"></span>
+          <span class="cell"><i style="height:14%;background:var(--heat0)"></i></span><b>0</b>
+          <span class="cell"><i style="height:28%;background:var(--h1)"></i></span><b>1–33</b>
+          <span class="cell"><i style="height:52%;background:var(--h2)"></i></span><b>34–66</b>
+          <span class="cell"><i style="height:80%;background:var(--h3)"></i></span><b>67–99</b>
+          <span class="cell"><i style="height:100%;background:var(--h4)"></i></span><b>100%</b>
         </div>
       </div>
       <div class="panel">
@@ -888,8 +894,14 @@
         if(date>end)cell.style.visibility="hidden";
         else{
           const r=ratio(date);
-          cell.style.background=heatVar(r);
-          cell.title=keyFor(date)+(r===null?" · nothing scheduled":" · "+Math.round(r*100)+"%");
+          if(r===null)cell.classList.add("nosched");
+          else{
+            const i=document.createElement("i");
+            i.style.height=(r<=0?14:Math.max(14,Math.round(r*100)))+"%";
+            i.style.background=heatVar(r);
+            cell.appendChild(i);
+            cell.onclick=()=>selectHeatDay(date,cell);
+          }
           if(keyFor(date)===tkEnd)cell.classList.add("today");
         }
         col.appendChild(cell);
@@ -906,6 +918,17 @@
     wireBrk("#breakdown");
   }
 
+  function selectHeatDay(date,cell){
+    $$("#heat .cell").forEach(c=>c.classList.remove("sel"));
+    cell.classList.add("sel");
+    const p=dayPoints(date),ds=doneSet(date),ts=tinySet(date),s=scheduledFor(date);
+    const full=s.filter(t=>ds.has(t.id)).length;
+    const tn=s.filter(t=>!ds.has(t.id)&&ts.has(t.id)).length;
+    const lbl=date.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
+    let txt="<b>"+lbl+"</b> · "+Math.round(p.got/p.tot*100)+"% · "+p.got+"/"+p.tot+" pts · "+full+" of "+s.length+" tasks";
+    if(tn)txt+=" (+"+tn+" tiny)";
+    $("#heatRead").innerHTML=txt;
+  }
   // ---------- TASK DETAIL ----------
   function taskStreak(t){
     let cur=0;
@@ -939,8 +962,15 @@
         const date=addDays(firstMonday,w*7+dow);
         const cell=document.createElement("div");cell.className="cell";
         if(date>end)cell.style.visibility="hidden";
-        else if(!t.days.includes(date.getDay())){cell.style.background="var(--line2)";cell.title=keyFor(date)+" · not scheduled";}
-        else{const ok=isDone(date,t.id);cell.style.background=ok?"var(--h4)":"var(--heat0)";cell.title=keyFor(date)+(ok?" · done":" · missed");}
+        else if(!t.days.includes(date.getDay())){cell.classList.add("nosched");cell.title=keyFor(date)+" · not scheduled";}
+        else{
+          const ok=isDone(date,t.id),tn=tinySet(date).has(t.id);
+          const i=document.createElement("i");
+          i.style.height=ok?"100%":(tn?"40%":"14%");
+          i.style.background=ok?"var(--h4)":(tn?"var(--h2)":"var(--heat0)");
+          cell.appendChild(i);
+          cell.title=keyFor(date)+(ok?" · done":(tn?" · tiny version":" · missed"));
+        }
         col.appendChild(cell);
       }
       heat.appendChild(col);
