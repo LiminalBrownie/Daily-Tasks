@@ -15,7 +15,8 @@
   :root{
     --bg:#f4f1fb; --card:#ffffff; --ink:#403a56; --muted:#8a84a3; --faint:#b6b1c9;
     --line:#eae4f5; --line2:#f2eefb; --accent:#6857d8; --on-accent:#ffffff; --accent-soft:#ece8fc;
-    --green:#5cbf95; --green-ink:#18805c; --green-soft:#e6f6ef; --amber:#f0b48a; --danger:#e08a9a; --heat0:#e2dbf1;
+    --green:#5cbf95; --green-ink:#18805c; --green-soft:#e6f6ef; --amber:#f0b48a; --danger:#e08a9a;
+    --heat0:#ded6ef; --h1:#bfe6d3; --h2:#8ed4b0; --h3:#4fbc8b; --h4:#1f9c6b;
     --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,"Segoe UI",Roboto,sans-serif;
     --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
     --shadow:0 1px 2px rgba(64,58,86,.04),0 10px 26px rgba(124,108,232,.12);
@@ -25,18 +26,14 @@
   body[data-theme="dark"]{
     --bg:#1a1826; --card:#272338; --ink:#e9e5f4; --muted:#a49cbe; --faint:#6d6688;
     --line:#37324b; --line2:#2f2b42; --accent:#a99bff; --on-accent:#221c3a; --accent-soft:#2f2a49;
-    --green:#63d3a3; --green-ink:#7fe3b4; --green-soft:#20362c; --amber:#f0b48a; --danger:#eb9aa9; --heat0:#3b3456;
+    --green:#63d3a3; --green-ink:#7fe3b4; --green-soft:#20362c; --amber:#f0b48a; --danger:#eb9aa9;
+    --heat0:#3b3456; --h1:#2f6b56; --h2:#3f9873; --h3:#55c496; --h4:#7fe8b6;
     --shadow:0 1px 2px rgba(0,0,0,.28),0 10px 26px rgba(0,0,0,.34);
     --navbg:rgba(39,35,56,.82);
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0;padding:0}
-  body{
-    font-family:var(--sans); background:var(--bg); color:var(--ink);
-    -webkit-font-smoothing:antialiased; line-height:1.4;
-    padding-bottom:calc(74px + var(--safe-b));
-    transition:background-color .3s ease,color .3s ease;
-  }
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.4;padding-bottom:calc(74px + var(--safe-b));transition:background-color .3s ease,color .3s ease}
   .wrap{max-width:520px;margin:0 auto;padding:0 18px}
   .view{display:none;animation:fade .25s ease}
   body[data-view="today"] #view-today,
@@ -51,7 +48,7 @@
   h1{font-size:26px;font-weight:700;letter-spacing:-.02em;margin:0}
   .weekday{font:500 13px var(--mono);color:var(--muted)}
 
-  .meter-card{background:var(--card);border-radius:22px;padding:20px;margin-top:16px;box-shadow:var(--shadow)}
+  .meter-card{background:var(--card);border-radius:22px;padding:20px;margin-top:16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
   .meter-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px}
   .pct{font:700 46px/0.9 var(--mono);letter-spacing:-.03em;font-variant-numeric:tabular-nums;transition:color .5s ease}
   .pct small{font-size:20px;font-weight:600;opacity:.55}
@@ -65,7 +62,11 @@
   .stamp .dot{width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-size:11px}
   body.complete .track{box-shadow:inset 0 1px 2px rgba(31,170,95,.15),0 0 0 3px var(--green-soft)}
   body.complete.pulse .fill{animation:pulse .6s ease}
-  @keyframes pulse{0%{filter:brightness(1)}40%{filter:brightness(1.14)}100%{filter:brightness(1)}}
+  @keyframes pulse{0%{filter:brightness(1)}40%{filter:brightness(1.16)}100%{filter:brightness(1)}}
+  #toast{position:absolute;right:20px;top:16px;font:700 15px var(--mono);color:var(--green-ink);opacity:0;pointer-events:none}
+  #toast.go{animation:floatup 1.3s ease forwards}
+  @keyframes floatup{0%{opacity:0;transform:translateY(6px) scale(.9)}18%{opacity:1;transform:translateY(-2px) scale(1)}70%{opacity:1;transform:translateY(-12px)}100%{opacity:0;transform:translateY(-24px)}}
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:90;display:none}
 
   .list{margin-top:18px}
   .list-label{font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:0 4px 10px}
@@ -76,8 +77,31 @@
   .task.done .check{background:var(--green);border-color:var(--green)}
   .task.done .check svg{opacity:1;transform:none}
   .task .name{font-size:16px;font-weight:500;transition:.2s ease}
-  .task .rem{font:600 11px var(--mono);color:var(--faint);margin-top:2px}
+  .task .sub2{font:500 11.5px var(--mono);color:var(--faint);margin-top:3px}
   .task.done .name{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--line)}
+  .wchip{font:700 10px var(--mono);padding:3px 7px;border-radius:6px;background:var(--accent-soft);color:var(--accent);flex:none;letter-spacing:.04em}
+  .task.done .wchip{opacity:.45}
+  .task.tiny .check{background:var(--amber);border-color:var(--amber)}
+  .task.tiny .check svg{opacity:1;transform:none}
+  .task.tiny .name{color:var(--muted)}
+  .tinybtn{font:600 10.5px var(--mono);letter-spacing:.04em;padding:5px 9px;border-radius:8px;border:1px dashed var(--line);background:none;color:var(--faint);cursor:pointer;flex:none}
+  .tinybtn:active{background:var(--line2)}
+  .task.done .tinybtn,.task.tiny .tinybtn{display:none}
+  .tinytag{font:600 10px var(--mono);color:var(--amber);letter-spacing:.04em}
+  .goalgrad{font:600 12px var(--sans);color:var(--accent);margin-top:11px;opacity:0;height:0;overflow:hidden;transition:.3s ease}
+  .goalgrad.show{opacity:1;height:auto}
+  .fresh{background:var(--card);border-radius:18px;padding:16px 18px;margin-top:14px;box-shadow:var(--shadow);border-left:3px solid var(--accent)}
+  .fresh h3{font-size:14.5px;margin:0 0 5px;font-weight:600}
+  .fresh p{font-size:13px;color:var(--muted);margin:0;line-height:1.5}
+  .revnav{display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:14px;padding:6px;box-shadow:var(--shadow);margin-bottom:16px}
+  #revLabel{font:600 14px var(--sans)}
+  .revsum{font-size:13.5px;line-height:1.6;color:var(--ink);background:var(--card);border-radius:16px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px}
+  .revsum b{color:var(--accent)}
+  .revbars{display:flex;gap:5px;align-items:flex-end;height:90px;margin-top:6px}
+  .revcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;justify-content:flex-end}
+  .revtrack{width:100%;height:70px;background:var(--line2);border-radius:7px;display:flex;align-items:flex-end;overflow:hidden}
+  .revfill{width:100%;border-radius:7px}
+  .revlab{font:600 9.5px var(--mono);color:var(--faint)}
 
   .empty{text-align:center;padding:44px 24px;color:var(--muted)}
   .empty h3{color:var(--ink);font-size:17px;margin:0 0 6px}
@@ -93,7 +117,7 @@
   .stats.three{grid-template-columns:1fr 1fr 1fr}
   .stat{background:var(--card);border-radius:16px;padding:15px 16px;box-shadow:var(--shadow)}
   .stat .v{font:700 26px var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-  .stats.three .stat .v{font-size:22px}
+  .stats.three .stat .v{font-size:21px}
   .stat .l{font-size:12px;color:var(--muted);margin-top:2px}
   .stat .v .u{font-size:14px;font-weight:600;color:var(--faint);margin-left:2px}
   .panel{background:var(--card);border-radius:20px;padding:18px;margin-top:16px;box-shadow:var(--shadow)}
@@ -122,10 +146,11 @@
   .heat{display:flex;gap:4px}
   .heatcol{display:flex;flex-direction:column;gap:4px}
   .cell{width:13px;height:13px;border-radius:3px;background:var(--line2)}
-  .cell.zero{background:var(--heat0)}
   .cell.today{box-shadow:0 0 0 2px var(--accent)}
-  .heat-legend{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:14px;font-size:11px;color:var(--faint)}
+  .heat-legend{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:14px;font-size:11px;color:var(--faint)}
   .heat-legend .cell{width:11px;height:11px}
+  .heat-legend b{font:600 9.5px var(--mono);color:var(--faint)}
+
   .brk{margin-top:2px}
   .brk-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line2)}
   .brk-row:first-child{border-top:none}
@@ -135,7 +160,7 @@
   .brk-pct{font:600 13px var(--mono);font-variant-numeric:tabular-nums;width:38px;text-align:right;color:var(--muted)}
 
   .mtask{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:16px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow)}
-  .mtask .info{flex:1;min-width:0}
+  .mtask .info{flex:1;min-width:0;cursor:pointer}
   .mtask .info .nm{font-size:16px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .mtask .info .dys{font:500 11px var(--mono);color:var(--muted);letter-spacing:.04em;margin-top:3px}
   .mtask .info .dys .rt{color:var(--accent)}
@@ -149,6 +174,10 @@
   .seg{display:flex;background:var(--line2);border-radius:12px;padding:3px;gap:3px}
   .seg button{flex:1;border:none;background:none;padding:9px;border-radius:9px;font:600 13px var(--sans);color:var(--muted);cursor:pointer}
   .seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+  .togrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid var(--line2)}
+  .togrow:first-of-type{border-top:none}
+  .togrow .tl{font-size:14px;font-weight:500}
+  .togrow .td{font-size:12px;color:var(--muted);margin-top:2px}
 
   .data-actions{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
   .link-row{display:flex;gap:10px;flex-wrap:wrap}
@@ -191,6 +220,11 @@
   .days{display:flex;gap:7px;justify-content:space-between}
   .dchip{flex:1;aspect-ratio:1;max-width:44px;border-radius:12px;background:var(--card);border:1px solid var(--line);color:var(--muted);font:600 14px var(--sans);cursor:pointer;display:grid;place-items:center}
   .dchip.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+  .wsel{display:flex;gap:8px}
+  .wsel button{flex:1;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:11px 6px;cursor:pointer;color:var(--muted)}
+  .wsel button .wt{display:block;font:600 13.5px var(--sans)}
+  .wsel button .wp{display:block;font:700 10px var(--mono);margin-top:3px;opacity:.75}
+  .wsel button.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
   .rem-inline{display:flex;align-items:center;gap:14px}
   .rem-inline input[type=time]{font:600 16px var(--mono);color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;outline:none}
   .rem-inline input[type=time]:disabled{color:var(--faint);opacity:.6}
@@ -198,29 +232,43 @@
   .sheet-actions{display:flex;gap:10px;margin-top:8px}
   .sheet-actions .btn{flex:1}
 
+  .dstat{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px}
+  .dstat .stat{padding:13px 14px}
+  .dstat .v{font-size:21px}
+  .dowbars{display:flex;gap:7px;align-items:flex-end}
+  .dowcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .dowtrack{width:100%;height:74px;background:var(--line2);border-radius:8px;display:flex;align-items:flex-end;overflow:hidden}
+  .dowfill{width:100%;border-radius:8px}
+  .dowlab{font:600 10.5px var(--mono);color:var(--muted)}
+  .dowpct{font:600 9.5px var(--mono);color:var(--faint);margin-top:-3px}
+  .hidden-haptic{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden;left:-9999px}
+
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body data-view="today" data-theme="light">
+
+  <canvas id="confetti"></canvas>
+  <div class="hidden-haptic" id="hapticBox"><label id="hapticLabel" for="hapticSwitch"></label><input type="checkbox" switch id="hapticSwitch"></div>
 
   <main class="wrap">
     <!-- TODAY -->
     <section id="view-today" class="view">
       <header>
         <div class="kicker">Today’s charge</div>
-        <div class="datewrap">
-          <h1 id="todayDate">—</h1>
-          <div class="weekday" id="todayWeekday"></div>
-        </div>
+        <div class="datewrap"><h1 id="todayDate">—</h1><div class="weekday" id="todayWeekday"></div></div>
       </header>
       <div class="meter-card">
+        <div id="toast"></div>
         <div class="meter-top">
           <div class="pct" id="pctText">0<small>%</small></div>
-          <div class="count"><b id="countText">0 / 0</b><span>tasks done</span></div>
+          <div class="count"><b id="countText">0 / 0</b><span id="countLabel">effort points</span></div>
         </div>
         <div class="track"><div class="fill" id="fill"></div></div>
+        <div class="goalgrad" id="goalGrad"></div>
         <div class="stamp"><span class="dot">✓</span><span>Day complete — every task done.</span></div>
       </div>
+      <div id="freshStart"></div>
       <div class="list" id="todayList"></div>
     </section>
 
@@ -238,7 +286,7 @@
       <div class="panel">
         <div class="week-top">
           <div class="pct" id="weekPct">0<small>%</small></div>
-          <div class="count"><b id="weekCount">0 / 0</b><span>tasks this week</span></div>
+          <div class="count"><b id="weekCount">0 / 0</b><span>effort points</span></div>
         </div>
         <div class="weekbars" id="weekBars"></div>
       </div>
@@ -261,14 +309,15 @@
         <div class="datewrap"><h1>Trends</h1></div>
       </header>
       <div class="stats">
-        <div class="stat"><div class="v" id="stCurrent">0<span class="u">d</span></div><div class="l">Current streak (full days)</div></div>
+        <div class="stat"><div class="v" id="stConsist">0<span class="u">%</span></div><div class="l">Consistency · 30d</div></div>
+        <div class="stat"><div class="v" id="stCurrent">0<span class="u">d</span></div><div class="l">Current streak</div></div>
         <div class="stat"><div class="v" id="stBest">0<span class="u">d</span></div><div class="l">Best streak</div></div>
-        <div class="stat"><div class="v" id="stAvg">0<span class="u">%</span></div><div class="l">Avg completion · 30d</div></div>
         <div class="stat"><div class="v" id="stPerfect">0</div><div class="l">Perfect days · 30d</div></div>
       </div>
+      <p class="hint" id="freezeNote" style="margin:10px 4px 0"></p>
       <div class="panel">
         <h2>Last 12 weeks</h2>
-        <p class="sub">Columns are weeks, newest on the right. Rows are days, Monday at top. Today is outlined; greener means more of that day’s tasks got done.</p>
+        <p class="sub">Columns are weeks, newest on the right. Rows are days, Monday at top. Today is outlined.</p>
         <div class="heat-wrap">
           <div class="heat-days"><span>M</span><span></span><span>W</span><span></span><span>F</span><span></span><span>S</span></div>
           <div class="heat-scroll">
@@ -277,21 +326,21 @@
           </div>
         </div>
         <div class="heat-legend">
-          <span class="cell" style="background:var(--line2)"></span><span>no tasks</span>
-          <span style="width:6px"></span>
-          <span>Less</span>
-          <span class="cell zero"></span>
-          <span class="cell" style="background:hsl(150 50% 82%)"></span>
-          <span class="cell" style="background:hsl(150 57% 70%)"></span>
-          <span class="cell" style="background:hsl(150 62% 61%)"></span>
-          <span>More</span>
+          <span class="cell" style="background:var(--line2)"></span><span>none scheduled</span>
+          <span style="width:10px"></span>
+          <span class="cell" style="background:var(--heat0)"></span><b>0</b>
+          <span class="cell" style="background:var(--h1)"></span><b>1–33</b>
+          <span class="cell" style="background:var(--h2)"></span><b>34–66</b>
+          <span class="cell" style="background:var(--h3)"></span><b>67–99</b>
+          <span class="cell" style="background:var(--h4)"></span><b>100%</b>
         </div>
       </div>
       <div class="panel">
         <h2>What to work on</h2>
-        <p class="sub">Completion rate per task over the last 30 days. Lowest first.</p>
+        <p class="sub">Completion rate per task over the last 30 days. Tap one for its own trends.</p>
         <div class="brk" id="breakdown"></div>
       </div>
+      <button class="btn btn-plain btn-block" id="reviewBtn" style="margin-top:16px">Monthly review →</button>
     </section>
 
     <!-- TASKS -->
@@ -313,12 +362,21 @@
         </div>
       </div>
 
+      <div class="settings-card">
+        <div class="list-label">Feedback</div>
+        <div class="togrow"><div><div class="tl">Haptics</div><div class="td">A tap when you check something off. Stronger for heavier tasks.</div></div>
+          <label class="switch"><input type="checkbox" id="prefHaptic"><span class="slider"></span></label></div>
+        <div class="togrow"><div><div class="tl">Confetti on a perfect day</div><div class="td">A short burst when everything scheduled is done.</div></div>
+          <label class="switch"><input type="checkbox" id="prefConfetti"><span class="slider"></span></label></div>
+        <div class="togrow"><div><div class="tl">Surprise encouragement</div><div class="td">Occasional unpredictable note instead of the usual points.</div></div>
+          <label class="switch"><input type="checkbox" id="prefSurprise"><span class="slider"></span></label></div>
+        <div class="togrow"><div><div class="tl">Streak grace days</div><div class="td">Two missed days a month won’t reset your streak.</div></div>
+          <label class="switch"><input type="checkbox" id="prefFreeze"><span class="slider"></span></label></div>
+      </div>
+
       <div class="reminder-card">
         <div class="rc-head">
-          <div>
-            <div class="list-label" style="margin:0">End-of-day reminder</div>
-            <p class="rc-sub">A nudge if tasks are still unfinished.</p>
-          </div>
+          <div><div class="list-label" style="margin:0">End-of-day reminder</div><p class="rc-sub">A nudge if tasks are still unfinished.</p></div>
           <label class="switch"><input type="checkbox" id="remToggle"><span class="slider"></span></label>
         </div>
         <div class="rc-time"><span>Remind me at</span><input type="time" id="remTime" value="20:00"></div>
@@ -345,21 +403,13 @@
   <nav>
     <div class="nav-inner">
       <button class="nav-btn active" data-nav="today">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        Today
-      </button>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Today</button>
       <button class="nav-btn" data-nav="week">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
-        Week
-      </button>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Week</button>
       <button class="nav-btn" data-nav="trends">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
-        Trends
-      </button>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>Trends</button>
       <button class="nav-btn" data-nav="tasks">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>
-        Tasks
-      </button>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>Tasks</button>
     </div>
   </nav>
 
@@ -370,6 +420,25 @@
       <div class="field">
         <label>Task name</label>
         <input type="text" id="taskName" placeholder="e.g. Read 10 pages" autocomplete="off" enterkeyhint="done">
+      </div>
+      <div class="field">
+        <label>Effort</label>
+        <div class="wsel" id="wSel">
+          <button data-w="1"><span class="wt">Light</span><span class="wp">1 pt</span></button>
+          <button data-w="2"><span class="wt">Normal</span><span class="wp">2 pts</span></button>
+          <button data-w="3"><span class="wt">Heavy</span><span class="wp">4 pts</span></button>
+        </div>
+        <p class="hint">Heavier tasks fill more of the day’s bar, so a hard day counts for more.</p>
+      </div>
+      <div class="field">
+        <label>When / where <span style="text-transform:none;letter-spacing:0;font-weight:500">(optional)</span></label>
+        <input type="text" id="taskCue" placeholder="e.g. right after my 9am coffee" autocomplete="off">
+        <p class="hint">Naming a specific moment measurably raises follow-through versus a vague intention.</p>
+      </div>
+      <div class="field">
+        <label>Tiny version <span style="text-transform:none;letter-spacing:0;font-weight:500">(optional)</span></label>
+        <input type="text" id="taskTiny" placeholder="e.g. read one page" autocomplete="off">
+        <p class="hint">A two-minute floor for bad days. Logging it keeps your streak alive and earns 1 point, so a rough day still counts as showing up.</p>
       </div>
       <div class="field">
         <label>Repeats on</label>
@@ -395,30 +464,108 @@
     </div>
   </div>
 
+  <!-- task detail sheet -->
+  <div class="overlay" id="detailOverlay">
+    <div class="sheet">
+      <h2 id="dTitle">Task</h2>
+      <p class="sub" id="dSchedule" style="font-size:12.5px;color:var(--muted);margin:-12px 0 18px"></p>
+      <div class="dstat">
+        <div class="stat"><div class="v" id="dStreak">0</div><div class="l">Streak</div></div>
+        <div class="stat"><div class="v" id="dRate">0<span class="u">%</span></div><div class="l">30-day rate</div></div>
+        <div class="stat"><div class="v" id="dTotal">0</div><div class="l">Total done</div></div>
+      </div>
+      <div class="panel" style="margin-top:0">
+        <h2>Last 12 weeks</h2>
+        <p class="sub">Only the days this task was scheduled.</p>
+        <div class="heat-wrap">
+          <div class="heat-days"><span>M</span><span></span><span>W</span><span></span><span>F</span><span></span><span>S</span></div>
+          <div class="heat-scroll"><div class="heat" id="dHeat"></div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>By day of week</h2>
+        <p class="sub">Where this task slips, over the last 8 weeks.</p>
+        <div class="dowbars" id="dDow"></div>
+      </div>
+      <div class="sheet-actions" style="margin-top:18px">
+        <button class="btn btn-plain" id="dClose">Close</button>
+        <button class="btn btn-primary" id="dEdit">Edit task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- monthly review sheet -->
+  <div class="overlay" id="reviewOverlay">
+    <div class="sheet">
+      <h2>Monthly review</h2>
+      <div class="revnav">
+        <button class="wknav-btn" id="revPrev" aria-label="Previous month">‹</button>
+        <div id="revLabel">This month</div>
+        <button class="wknav-btn" id="revNext" aria-label="Next month">›</button>
+      </div>
+      <div class="revsum" id="revSummary"></div>
+      <div class="dstat">
+        <div class="stat"><div class="v" id="revConsist">0<span class="u">%</span></div><div class="l">Consistency</div></div>
+        <div class="stat"><div class="v" id="revShowed">0</div><div class="l">Days showed up</div></div>
+        <div class="stat"><div class="v" id="revFull">0</div><div class="l">Full days</div></div>
+      </div>
+      <div class="panel" style="margin-top:0">
+        <h2>Last 6 months</h2>
+        <p class="sub">Consistency over time. This is the number worth watching — it survives a bad week.</p>
+        <div class="revbars" id="revBars"></div>
+      </div>
+      <div class="panel">
+        <h2>Task by task</h2>
+        <p class="sub">This month, lowest first. Tap one to see its own trends.</p>
+        <div class="brk" id="revBreakdown"></div>
+      </div>
+      <div class="sheet-actions" style="margin-top:18px">
+        <button class="btn btn-primary btn-block" id="revClose">Close</button>
+      </div>
+    </div>
+  </div>
+
 <script>
 "use strict";
 (function(){
   const KEY="dailycharge.v1";
   const DAY_LABELS=["S","M","T","W","T","F","S"];
   const DAY_FULL=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const DOW_ORDER=[1,2,3,4,5,6,0];
   const ICAL_DAY=["SU","MO","TU","WE","TH","FR","SA"];
+  const WEIGHT_PTS={1:1,2:2,3:4};
+  const WEIGHT_NAME={1:"Light",2:"Normal",3:"Heavy"};
+  const PRAISE=["Nice — that's the one you usually skip.","Momentum. That's three in a row this week.","Small thing, done. That's how it compounds.","That's the hard one out of the way.","Logged. Future you is grateful.","Good. Consistency beats intensity."];
   const $=s=>document.querySelector(s);
   function $$(s){return Array.from(document.querySelectorAll(s));}
 
-  let state={tasks:[],done:{},reminder:{},theme:"auto",notified:{}};
-  let editingId=null, draftDays=[0,1,2,3,4,5,6], draftRemOn=false, draftRemTime="09:00";
-  let weekOffset=0;
+  let state={tasks:[],done:{},tiny:{},reminder:{},theme:"auto",notified:{},prefs:{}};
+  let editingId=null,detailId=null;
+  let draftDays=[0,1,2,3,4,5,6],draftRemOn=false,draftRemTime="09:00",draftW=2,draftCue="";
+  let weekOffset=0,revOffset=0;
 
   function ensureDefaults(){
     if(!state.tasks)state.tasks=[];
     if(!state.done)state.done={};
+    if(!state.tiny)state.tiny={};
     if(!state.reminder)state.reminder={};
     if(typeof state.reminder.enabled!=="boolean")state.reminder.enabled=false;
     if(!state.reminder.time)state.reminder.time="20:00";
     if(typeof state.reminder.notify!=="boolean")state.reminder.notify=false;
     if(!state.theme)state.theme="auto";
     if(!state.notified)state.notified={};
-    state.tasks.forEach(t=>{if(t.reminderTime===undefined)t.reminderTime="";});
+    if(!state.prefs)state.prefs={};
+    const p=state.prefs;
+    if(typeof p.haptic!=="boolean")p.haptic=true;
+    if(typeof p.confetti!=="boolean")p.confetti=true;
+    if(typeof p.surprise!=="boolean")p.surprise=true;
+    if(typeof p.freeze!=="boolean")p.freeze=true;
+    state.tasks.forEach(t=>{
+      if(t.reminderTime===undefined)t.reminderTime="";
+      if(!t.weight)t.weight=2;
+      if(t.cue===undefined)t.cue="";
+      if(t.tiny===undefined)t.tiny="";
+    });
   }
   function load(){try{const raw=localStorage.getItem(KEY);if(raw)state=JSON.parse(raw);}catch(e){}ensureDefaults();}
   function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
@@ -426,17 +573,88 @@
   function keyFor(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
   function today(){return new Date();}
   function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x;}
+  function pts(t){return WEIGHT_PTS[t.weight||2];}
   function scheduledFor(d){return state.tasks.filter(t=>t.days.includes(d.getDay()));}
   function doneSet(d){return new Set(state.done[keyFor(d)]||[]);}
+  function tinySet(d){return new Set(state.tiny[keyFor(d)]||[]);}
   function isDone(d,id){return doneSet(d).has(id);}
-  function ratio(d){const s=scheduledFor(d);if(s.length===0)return null;const ds=doneSet(d);let c=0;s.forEach(t=>{if(ds.has(t.id))c++;});return c/s.length;}
-  function esc(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+  function statusOf(d,id){return doneSet(d).has(id)?"done":(tinySet(d).has(id)?"tiny":"");}
+  function dayPoints(d){const s=scheduledFor(d);if(!s.length)return null;const ds=doneSet(d),ts=tinySet(d);
+    let tot=0,got=0;
+    s.forEach(t=>{tot+=pts(t);if(ds.has(t.id))got+=pts(t);else if(ts.has(t.id))got+=1;});
+    return {tot,got};}
+  function ratio(d){const p=dayPoints(d);return p?p.got/p.tot:null;}
+  // "covered" = every scheduled task at least at its tiny version. Keeps the chain alive on rough days.
+  function dayCovered(d){const s=scheduledFor(d);if(!s.length)return null;
+    const ds=doneSet(d),ts=tinySet(d);
+    return s.every(t=>ds.has(t.id)||ts.has(t.id));}
+  function dayFull(d){const s=scheduledFor(d);if(!s.length)return null;
+    const ds=doneSet(d);return s.every(t=>ds.has(t.id));}
+  function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
   function fmtTime(t){const p=t.split(":").map(Number),h=p[0],m=p[1];const ap=h<12?"AM":"PM",h12=((h+11)%12)+1;return h12+":"+String(m).padStart(2,"0")+" "+ap;}
 
   function meterColor(p){const hue=30+(150-30)*p;const sat=p>=1?52:58;const light=p>=1?62:71;return "hsl("+hue.toFixed(0)+" "+sat+"% "+light+"%)";}
-  function heatColor(r){if(r<=0)return "var(--line2)";const light=90-30*r,sat=45+18*r;return "hsl(150 "+sat.toFixed(0)+"% "+light.toFixed(0)+"%)";}
+  function heatVar(r){
+    if(r===null)return "var(--line2)";
+    if(r<=0)return "var(--heat0)";
+    if(r<0.34)return "var(--h1)";
+    if(r<0.67)return "var(--h2)";
+    if(r<1)return "var(--h3)";
+    return "var(--h4)";
+  }
 
-  // THEME
+  // ---------- FEEDBACK ----------
+  let hapticReady=false;
+  function haptic(level){
+    if(!state.prefs.haptic)return;
+    const pat={1:[12],2:[18],3:[22,40,22],perfect:[30,50,30,50,60]}[level]||[15];
+    if(navigator.vibrate){try{navigator.vibrate(pat);return;}catch(e){}}
+    const n=level==="perfect"?3:(level===3?2:1);
+    iosHaptic(n);
+  }
+  function iosHaptic(times){
+    const lab=$("#hapticLabel");if(!lab)return;
+    let i=0;
+    const fire=()=>{try{lab.click();}catch(e){}i++;if(i<times)setTimeout(fire,70);};
+    fire();
+  }
+  function toast(txt,color){
+    const el=$("#toast");el.textContent=txt;el.style.color=color||"var(--green-ink)";
+    el.classList.remove("go");void el.offsetWidth;el.classList.add("go");
+  }
+  function confettiBurst(){
+    if(!state.prefs.confetti)return;
+    const c=$("#confetti"),ctx=c.getContext("2d");
+    c.style.display="block";
+    const dpr=window.devicePixelRatio||1;
+    c.width=innerWidth*dpr;c.height=innerHeight*dpr;c.style.width=innerWidth+"px";c.style.height=innerHeight+"px";
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    const cols=["#5cbf95","#a99bff","#f0b48a","#63d3a3","#6857d8","#e8b4d8"];
+    const parts=[];
+    for(let i=0;i<70;i++)parts.push({
+      x:innerWidth/2+(Math.random()-.5)*120, y:innerHeight*0.32,
+      vx:(Math.random()-.5)*7, vy:-Math.random()*9-3,
+      s:4+Math.random()*5, c:cols[(Math.random()*cols.length)|0],
+      rot:Math.random()*6, vr:(Math.random()-.5)*.3, life:0
+    });
+    let frames=0;
+    (function tick(){
+      ctx.clearRect(0,0,innerWidth,innerHeight);
+      let alive=0;
+      parts.forEach(p=>{
+        p.vy+=0.28;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.life++;
+        if(p.y<innerHeight+30){alive++;
+          ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);
+          ctx.globalAlpha=Math.max(0,1-p.life/95);
+          ctx.fillStyle=p.c;ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.62);ctx.restore();}
+      });
+      frames++;
+      if(alive>0&&frames<150)requestAnimationFrame(tick);
+      else{ctx.clearRect(0,0,innerWidth,innerHeight);c.style.display="none";}
+    })();
+  }
+
+  // ---------- THEME ----------
   function resolveTheme(){
     if(state.theme==="dark")return "dark";
     if(state.theme==="light")return "light";
@@ -449,131 +667,370 @@
     $$("#themeSeg button").forEach(b=>b.classList.toggle("on",b.dataset.themeOpt===state.theme));
   }
 
-  // TODAY
+  // ---------- TODAY ----------
   function renderToday(){
     const d=today();
     $("#todayDate").textContent=d.toLocaleDateString(undefined,{month:"long",day:"numeric"});
     $("#todayWeekday").textContent=d.toLocaleDateString(undefined,{weekday:"long"});
-    const sched=scheduledFor(d),ds=doneSet(d);
-    let done=0;sched.forEach(t=>{if(ds.has(t.id))done++;});
-    const total=sched.length,pct=total?done/total:0,pctInt=Math.round(pct*100);
+    const sched=scheduledFor(d),ds=doneSet(d),p=dayPoints(d);
+    const total=p?p.tot:0,got=p?p.got:0,pct=total?got/total:0;
     const fill=$("#fill");fill.style.width=(total?pct*100:0)+"%";
-    const complete=total>0&&done===total;
+    const complete=total>0&&got===total;
     fill.style.background=complete?"var(--green)":meterColor(pct);
-    $("#pctText").innerHTML=pctInt+'<small>%</small>';
+    $("#pctText").innerHTML=Math.round(pct*100)+'<small>%</small>';
     $("#pctText").style.color=complete?"var(--green-ink)":"var(--ink)";
-    $("#countText").textContent=done+" / "+total;
+    $("#countText").textContent=got+" / "+total;
     const was=document.body.classList.contains("complete");
     document.body.classList.toggle("complete",complete);
     if(complete&&!was){document.body.classList.add("pulse");setTimeout(()=>document.body.classList.remove("pulse"),650);}
     const list=$("#todayList");
-    if(total===0){
+    if(!sched.length){
       list.innerHTML=state.tasks.length===0
-        ? '<div class="empty"><h3>No tasks yet</h3><p>Add a few recurring tasks and they’ll show up here each day.</p><button class="btn btn-primary" onclick="document.querySelector(\'[data-nav=tasks]\').click()">Add your first task</button></div>'
+        ? '<div class="empty"><h3>No tasks yet</h3><p>Add a few recurring tasks and they’ll show up here each day.</p><button class="btn btn-primary" id="emptyAdd">Add your first task</button></div>'
         : '<div class="empty"><h3>Nothing scheduled today</h3><p>None of your tasks repeat on '+DAY_FULL[d.getDay()]+'. Enjoy the breather.</p></div>';
+      const ea=$("#emptyAdd");if(ea)ea.onclick=()=>switchView("tasks");
       return;
     }
-    list.innerHTML='<div class="list-label">'+done+' done · '+(total-done)+' to go</div>'+
-      sched.map(t=>'<div class="task '+(ds.has(t.id)?'done':'')+'" data-id="'+t.id+'">'+
-        '<div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>'+
-        '<div style="flex:1"><div class="name">'+esc(t.name)+'</div>'+(t.reminderTime?'<div class="rem">⏰ '+fmtTime(t.reminderTime)+'</div>':'')+'</div>'+
-      '</div>').join("");
-    list.querySelectorAll(".task").forEach(el=>el.addEventListener("click",()=>toggle(el.dataset.id)));
+    // goal-gradient nudge: people push harder the closer the goal looks
+    const gg=$("#goalGrad"),left=total-got;
+    if(!complete&&pct>=0.5&&left>0){gg.textContent=left+" point"+(left>1?"s":"")+" from a full day.";gg.classList.add("show");}
+    else gg.classList.remove("show");
+    renderFreshStart();
+
+    const ts=tinySet(d);
+    const doneN=sched.filter(t=>ds.has(t.id)).length;
+    const tinyN=sched.filter(t=>!ds.has(t.id)&&ts.has(t.id)).length;
+    const head=doneN+' done'+(tinyN?' · '+tinyN+' tiny':'')+' · '+(sched.length-doneN-tinyN)+' to go';
+    list.innerHTML='<div class="list-label">'+head+'</div>'+
+      sched.map(t=>{
+        const st=statusOf(d,t.id);
+        const bits=[];
+        if(st==="tiny")bits.push('<span class="tinytag">TINY VERSION</span>');
+        if(t.cue)bits.push(esc(t.cue));
+        if(t.reminderTime)bits.push("⏰ "+fmtTime(t.reminderTime));
+        const tinyBtn=(t.tiny&&!st)?'<button class="tinybtn" data-tiny="'+t.id+'">TINY</button>':'';
+        return '<div class="task '+st+'" data-id="'+t.id+'">'+
+          '<div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>'+
+          '<div style="flex:1;min-width:0"><div class="name">'+esc(t.name)+'</div>'+
+          (bits.length?'<div class="sub2">'+bits.join(" · ")+'</div>':'')+'</div>'+
+          tinyBtn+'<span class="wchip">'+(st==="tiny"?1:pts(t))+'</span></div>';
+      }).join("");
+    list.querySelectorAll(".task").forEach(el=>el.addEventListener("click",e=>{
+      if(e.target.closest("[data-tiny]"))return;
+      toggle(el.dataset.id);
+    }));
+    list.querySelectorAll("[data-tiny]").forEach(b=>b.addEventListener("click",e=>{
+      e.stopPropagation();markTiny(b.dataset.tiny);
+    }));
+  }
+  function renderFreshStart(){
+    const el=$("#freshStart");
+    const st=computeStreak();
+    let hist=0;Object.keys(state.done).forEach(k=>{if(state.done[k].length)hist++;});
+    if(st.cur===0&&hist>=3){
+      el.innerHTML='<div class="fresh"><h3>Fresh start</h3><p>The chain reset — that\'s normal and it isn\'t lost progress. '+
+        'Your consistency score still holds every day you showed up. Today is a clean first day.</p></div>';
+    }else el.innerHTML="";
+  }
+  function markTiny(id){
+    const k=keyFor(today());
+    const arr=state.tiny[k]?state.tiny[k].slice():[];
+    if(arr.indexOf(id)<0)arr.push(id);
+    if(arr.length)state.tiny[k]=arr;else delete state.tiny[k];
+    save();haptic(1);toast("+1 tiny","var(--amber)");
+    renderToday();
   }
   function toggle(id){
     const k=keyFor(today());const arr=state.done[k]?state.done[k].slice():[];
-    const i=arr.indexOf(id);if(i>=0)arr.splice(i,1);else arr.push(id);
+    const i=arr.indexOf(id);
+    const task=state.tasks.find(t=>t.id===id);
+    const turningOn=i<0;
+    if(i>=0)arr.splice(i,1);else arr.push(id);
     if(arr.length)state.done[k]=arr;else delete state.done[k];
-    save();renderToday();
+    // a full completion supersedes any tiny log for the same task
+    const tarr=(state.tiny[k]||[]).filter(x=>x!==id);
+    if(tarr.length)state.tiny[k]=tarr;else delete state.tiny[k];
+    save();
+    const p=dayPoints(today());
+    const nowComplete=p&&p.got===p.tot;
+    if(turningOn){
+      if(nowComplete){haptic("perfect");confettiBurst();toast("Perfect day");}
+      else{
+        haptic(task?task.weight:2);
+        if(state.prefs.surprise&&Math.random()<0.18)toast(PRAISE[(Math.random()*PRAISE.length)|0],"var(--accent)");
+        else toast("+"+(task?pts(task):1));
+      }
+    }
+    renderToday();
   }
 
-  // WEEK
-  function weekStart(offset){const d=today();const mondayIdx=(d.getDay()+6)%7;return addDays(d,-mondayIdx+offset*7);}
+  // ---------- WEEK ----------
+  function weekStart(offset){const d=today();return addDays(d,-((d.getDay()+6)%7)+offset*7);}
   function renderWeek(){
     const start=weekStart(weekOffset);
     const days=[];for(let i=0;i<7;i++)days.push(addDays(start,i));
-    const end=days[6];
     const fmtMD=x=>x.toLocaleDateString(undefined,{month:"short",day:"numeric"});
-    $("#weekRange").textContent=fmtMD(start)+" – "+fmtMD(end);
-    $("#weekLabel").textContent=weekOffset===0?"This week":weekOffset===-1?"Last week":fmtMD(start)+" – "+fmtMD(end);
+    $("#weekRange").textContent=fmtMD(start)+" – "+fmtMD(days[6]);
+    $("#weekLabel").textContent=weekOffset===0?"This week":weekOffset===-1?"Last week":fmtMD(start)+" – "+fmtMD(days[6]);
     $("#weekNext").disabled=weekOffset>=0;
     const tk=keyFor(today());
-    let totalSched=0,totalDone=0,perfect=0,bestPct=-1,bestDay="—";
+    let totP=0,gotP=0,perfect=0,bestPct=-1,bestDay="—",tasksDone=0;
     const bars=days.map(d=>{
-      const s=scheduledFor(d),ds=doneSet(d);let dn=0;s.forEach(t=>{if(ds.has(t.id))dn++;});
-      const r=s.length?dn/s.length:null;totalSched+=s.length;totalDone+=dn;
+      const p=dayPoints(d),r=p?p.got/p.tot:null;
+      if(p){totP+=p.tot;gotP+=p.got;}
+      const ds=doneSet(d);tasksDone+=scheduledFor(d).filter(t=>ds.has(t.id)).length;
       if(r!==null&&r>=1)perfect++;
       if(r!==null&&r>bestPct){bestPct=r;bestDay=DAY_FULL[d.getDay()];}
       return {d,r,isToday:keyFor(d)===tk};
     });
-    const wk=totalSched?totalDone/totalSched:0;
+    const wk=totP?gotP/totP:0;
     $("#weekPct").innerHTML=Math.round(wk*100)+'<small>%</small>';
-    $("#weekPct").style.color=(totalSched&&totalDone===totalSched)?"var(--green-ink)":"var(--ink)";
-    $("#weekCount").textContent=totalDone+" / "+totalSched;
+    $("#weekPct").style.color=(totP&&gotP===totP)?"var(--green-ink)":"var(--ink)";
+    $("#weekCount").textContent=gotP+" / "+totP;
     $("#wkPerfect").textContent=perfect;
-    $("#wkDone").textContent=totalDone;
+    $("#wkDone").textContent=tasksDone;
     $("#wkBest").textContent=bestPct>0?bestDay:"—";
-    $("#wkBest").style.fontSize=bestPct>0?"18px":"22px";
+    $("#wkBest").style.fontSize=bestPct>0?"18px":"21px";
     $("#weekBars").innerHTML=bars.map(b=>{
-      const pct=b.r===null?0:b.r;
-      const h=b.r===null?0:Math.max(6,Math.round(pct*100));
-      const col=b.r!==null&&b.r>=1?"var(--green)":meterColor(pct);
+      const v=b.r===null?0:b.r;
+      const h=b.r===null?0:Math.max(6,Math.round(v*100));
+      const col=b.r!==null&&b.r>=1?"var(--green)":meterColor(v);
       return '<div class="wkcol '+(b.isToday?'today':'')+'">'+
         '<div class="wktrack"><div class="wkfill" style="height:'+h+'%;background:'+(b.r===null?'transparent':col)+'"></div></div>'+
         '<div class="wklabel">'+DAY_LABELS[b.d.getDay()]+'</div><div class="wknum">'+b.d.getDate()+'</div></div>';
     }).join("");
-    const rows=state.tasks.map(t=>{let sc=0,dn=0;days.forEach(d=>{if(t.days.includes(d.getDay())){sc++;if(isDone(d,t.id))dn++;}});return {name:t.name,rate:sc?dn/sc:null,sc};}).filter(r=>r.sc>0);
+    const rows=state.tasks.map(t=>{let sc=0,dn=0;days.forEach(d=>{if(t.days.includes(d.getDay())){sc++;if(isDone(d,t.id))dn++;}});return {id:t.id,name:t.name,rate:sc?dn/sc:null,sc};}).filter(r=>r.sc>0);
     rows.sort((a,b)=>a.rate-b.rate);
-    $("#weekBreakdown").innerHTML=rows.length?rows.map(r=>{const p=Math.round(r.rate*100);
-      return '<div class="brk-row"><div class="brk-name">'+esc(r.name)+'</div><div class="brk-bar"><i style="width:'+p+'%;background:'+heatColor(r.rate)+'"></i></div><div class="brk-pct">'+p+'%</div></div>';
-    }).join(""):'<p style="font-size:13px;color:var(--muted);margin:4px 0">No tasks were scheduled this week.</p>';
+    $("#weekBreakdown").innerHTML=rows.length?rows.map(brkRow).join(""):'<p style="font-size:13px;color:var(--muted);margin:4px 0">No tasks were scheduled this week.</p>';
+    wireBrk("#weekBreakdown");
+  }
+  function brkRow(r){
+    const p=Math.round(r.rate*100);
+    return '<div class="brk-row" data-tid="'+r.id+'" style="cursor:pointer"><div class="brk-name">'+esc(r.name)+'</div>'+
+      '<div class="brk-bar"><i style="width:'+p+'%;background:'+heatVar(r.rate)+'"></i></div><div class="brk-pct">'+p+'%</div></div>';
+  }
+  function wireBrk(sel){
+    document.querySelectorAll(sel+" .brk-row").forEach(el=>{
+      if(el.dataset.tid)el.onclick=()=>openDetail(el.dataset.tid);
+    });
   }
 
-  // TRENDS
+  // ---------- STREAKS ----------
+  function monthKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");}
+  function computeStreak(){
+    // walk back from today; today doesn't break a streak until the day ends
+    let cur=0,usedByMonth={},freezesUsed=0;
+    const allowFreeze=state.prefs.freeze;
+    for(let i=0;i<400;i++){
+      const d=addDays(today(),-i);
+      const cov=dayCovered(d);
+      if(cov===null)continue;                // nothing scheduled: neutral
+      if(cov){cur++;continue;}               // full or tiny: you showed up
+      if(i===0)continue;                     // today still in progress
+      if(allowFreeze){
+        const mk=monthKey(d);
+        usedByMonth[mk]=(usedByMonth[mk]||0)+1;
+        if(usedByMonth[mk]<=2){freezesUsed++;continue;}
+      }
+      break;
+    }
+    return {cur,freezesUsed};
+  }
+  function bestStreak(){
+    let best=0,run=0,usedByMonth={};
+    for(let i=400;i>=0;i--){
+      const d=addDays(today(),-i),cov=dayCovered(d);
+      if(cov===null)continue;
+      if(cov){run++;if(run>best)best=run;continue;}
+      if(state.prefs.freeze){
+        const mk=monthKey(d);usedByMonth[mk]=(usedByMonth[mk]||0)+1;
+        if(usedByMonth[mk]<=2)continue;
+      }
+      run=0;
+    }
+    return best;
+  }
+  function freezesLeftThisMonth(){
+    const mk=monthKey(today());let used=0;
+    for(let i=0;i<32;i++){const d=addDays(today(),-i);if(monthKey(d)!==mk)break;
+      const cov=dayCovered(d);if(cov===false&&i!==0)used++;}
+    return Math.max(0,2-used);
+  }
+
+  // ---------- TRENDS ----------
   function renderTrends(){
-    let cur=0,best=0,run=0;
-    for(let i=0;i<365;i++){const r=ratio(addDays(today(),-i));if(r===null)continue;if(r>=1)cur++;else break;}
-    for(let i=365;i>=0;i--){const r=ratio(addDays(today(),-i));if(r===null)continue;if(r>=1){run++;if(run>best)best=run;}else run=0;}
-    let sum=0,cnt=0,perfect=0;
-    for(let i=0;i<30;i++){const r=ratio(addDays(today(),-i));if(r===null)continue;sum+=r;cnt++;if(r>=1)perfect++;}
-    $("#stCurrent").innerHTML=cur+'<span class="u">d</span>';
-    $("#stBest").innerHTML=best+'<span class="u">d</span>';
-    $("#stAvg").innerHTML=(cnt?Math.round(sum/cnt*100):0)+'<span class="u">%</span>';
+    let totP=0,gotP=0,perfect=0;
+    for(let i=0;i<30;i++){const d=addDays(today(),-i),p=dayPoints(d);
+      if(!p)continue;totP+=p.tot;gotP+=p.got;if(p.got===p.tot)perfect++;}
+    const st=computeStreak();
+    $("#stConsist").innerHTML=(totP?Math.round(gotP/totP*100):0)+'<span class="u">%</span>';
+    $("#stCurrent").innerHTML=st.cur+'<span class="u">d</span>';
+    $("#stBest").innerHTML=bestStreak()+'<span class="u">d</span>';
     $("#stPerfect").textContent=perfect;
-    const heat=$("#heat");heat.innerHTML="";
-    const months=$("#heatMonths");if(months)months.innerHTML="";
+    const fl=freezesLeftThisMonth();
+    $("#freezeNote").textContent=state.prefs.freeze
+      ? "Grace days left this month: "+fl+" of 2. Consistency is the number that matters most — a streak is just a bonus."
+      : "Grace days are off, so one missed day resets the streak. Consistency % is the steadier measure.";
+
+    const heat=$("#heat"),months=$("#heatMonths");heat.innerHTML="";if(months)months.innerHTML="";
     const WEEKS=12,end=today(),tkEnd=keyFor(end);
-    const mondayThis=addDays(end,-((end.getDay()+6)%7));
-    const firstMonday=addDays(mondayThis,-(WEEKS-1)*7);
+    const firstMonday=addDays(addDays(end,-((end.getDay()+6)%7)),-(WEEKS-1)*7);
     let lastMonth=-1;
     for(let w=0;w<WEEKS;w++){
       const colDate=addDays(firstMonday,w*7);
-      if(months){const ms=document.createElement("span");if(colDate.getMonth()!==lastMonth){ms.textContent=colDate.toLocaleDateString(undefined,{month:"short"});lastMonth=colDate.getMonth();}months.appendChild(ms);}
+      if(months){const ms=document.createElement("span");
+        if(colDate.getMonth()!==lastMonth){ms.textContent=colDate.toLocaleDateString(undefined,{month:"short"});lastMonth=colDate.getMonth();}
+        months.appendChild(ms);}
       const col=document.createElement("div");col.className="heatcol";
       for(let dow=0;dow<7;dow++){
         const date=addDays(firstMonday,w*7+dow);
         const cell=document.createElement("div");cell.className="cell";
-        if(date>end){cell.style.visibility="hidden";}
+        if(date>end)cell.style.visibility="hidden";
         else{
           const r=ratio(date);
-          if(r===null){cell.title=keyFor(date)+" · no tasks";}
-          else if(r===0){cell.classList.add("zero");cell.title=keyFor(date)+" · 0%";}
-          else{cell.style.background=heatColor(r);cell.title=keyFor(date)+" · "+Math.round(r*100)+"%";}
+          cell.style.background=heatVar(r);
+          cell.title=keyFor(date)+(r===null?" · nothing scheduled":" · "+Math.round(r*100)+"%");
           if(keyFor(date)===tkEnd)cell.classList.add("today");
         }
         col.appendChild(cell);
       }
       heat.appendChild(col);
     }
-    const hs=document.querySelector(".heat-scroll");if(hs)hs.scrollLeft=hs.scrollWidth;
-    const rows=state.tasks.map(t=>{let sc=0,dn=0;for(let i=0;i<30;i++){const date=addDays(today(),-i);if(t.days.includes(date.getDay())){sc++;if(isDone(date,t.id))dn++;}}return {name:t.name,rate:sc?dn/sc:null,sc};}).filter(r=>r.sc>0);
+    const hs=document.querySelector("#view-trends .heat-scroll");if(hs)hs.scrollLeft=hs.scrollWidth;
+
+    const rows=state.tasks.map(t=>{let sc=0,dn=0;
+      for(let i=0;i<30;i++){const date=addDays(today(),-i);if(t.days.includes(date.getDay())){sc++;if(isDone(date,t.id))dn++;}}
+      return {id:t.id,name:t.name,rate:sc?dn/sc:null,sc};}).filter(r=>r.sc>0);
     rows.sort((a,b)=>a.rate-b.rate);
-    $("#breakdown").innerHTML=rows.length?rows.map(r=>{const p=Math.round(r.rate*100);
-      return '<div class="brk-row"><div class="brk-name">'+esc(r.name)+'</div><div class="brk-bar"><i style="width:'+p+'%;background:'+heatColor(r.rate)+'"></i></div><div class="brk-pct">'+p+'%</div></div>';
-    }).join(""):'<p style="font-size:13px;color:var(--muted);margin:4px 0">No history yet. Check some tasks off and your patterns will show up here.</p>';
+    $("#breakdown").innerHTML=rows.length?rows.map(brkRow).join(""):'<p style="font-size:13px;color:var(--muted);margin:4px 0">No history yet. Check some tasks off and your patterns will show up here.</p>';
+    wireBrk("#breakdown");
   }
 
-  // MANAGE
+  // ---------- TASK DETAIL ----------
+  function taskStreak(t){
+    let cur=0;
+    for(let i=0;i<400;i++){
+      const d=addDays(today(),-i);
+      if(!t.days.includes(d.getDay()))continue;
+      if(isDone(d,t.id)){cur++;continue;}
+      if(i===0)continue;
+      break;
+    }
+    return cur;
+  }
+  function openDetail(id){
+    const t=state.tasks.find(x=>x.id===id);if(!t)return;
+    detailId=id;
+    $("#dTitle").textContent=t.name;
+    $("#dSchedule").textContent=daysSummary(t.days)+" · "+WEIGHT_NAME[t.weight||2]+" ("+pts(t)+" pts)"+(t.cue?" · "+t.cue:"");
+    let sc=0,dn=0;
+    for(let i=0;i<30;i++){const d=addDays(today(),-i);if(t.days.includes(d.getDay())){sc++;if(isDone(d,t.id))dn++;}}
+    let total=0;Object.keys(state.done).forEach(k=>{if(state.done[k].indexOf(id)>=0)total++;});
+    $("#dStreak").textContent=taskStreak(t);
+    $("#dRate").innerHTML=(sc?Math.round(dn/sc*100):0)+'<span class="u">%</span>';
+    $("#dTotal").textContent=total;
+
+    const heat=$("#dHeat");heat.innerHTML="";
+    const WEEKS=12,end=today();
+    const firstMonday=addDays(addDays(end,-((end.getDay()+6)%7)),-(WEEKS-1)*7);
+    for(let w=0;w<WEEKS;w++){
+      const col=document.createElement("div");col.className="heatcol";
+      for(let dow=0;dow<7;dow++){
+        const date=addDays(firstMonday,w*7+dow);
+        const cell=document.createElement("div");cell.className="cell";
+        if(date>end)cell.style.visibility="hidden";
+        else if(!t.days.includes(date.getDay())){cell.style.background="var(--line2)";cell.title=keyFor(date)+" · not scheduled";}
+        else{const ok=isDone(date,t.id);cell.style.background=ok?"var(--h4)":"var(--heat0)";cell.title=keyFor(date)+(ok?" · done":" · missed");}
+        col.appendChild(cell);
+      }
+      heat.appendChild(col);
+    }
+    const dhs=document.querySelector("#detailOverlay .heat-scroll");if(dhs)dhs.scrollLeft=dhs.scrollWidth;
+
+    const dow=DOW_ORDER.map(w=>{
+      let s=0,c=0;
+      for(let i=0;i<56;i++){const d=addDays(today(),-i);if(d.getDay()===w&&t.days.includes(w)){s++;if(isDone(d,t.id))c++;}}
+      return {w,rate:s?c/s:null,s};
+    });
+    $("#dDow").innerHTML=dow.map(x=>{
+      const h=x.rate===null?0:Math.max(5,Math.round(x.rate*100));
+      return '<div class="dowcol"><div class="dowtrack"><div class="dowfill" style="height:'+h+'%;background:'+(x.rate===null?'transparent':heatVar(x.rate))+'"></div></div>'+
+        '<div class="dowlab">'+DAY_LABELS[x.w]+'</div><div class="dowpct">'+(x.rate===null?"—":Math.round(x.rate*100)+"%")+'</div></div>';
+    }).join("");
+    $("#detailOverlay").classList.add("open");
+  }
+  function closeDetail(){$("#detailOverlay").classList.remove("open");}
+
+  // ---------- MONTHLY REVIEW ----------
+  function monthRange(off){
+    const n=today();
+    const start=new Date(n.getFullYear(),n.getMonth()+off,1);
+    const end=new Date(n.getFullYear(),n.getMonth()+off+1,0);
+    return {start,end};
+  }
+  function monthStats(off){
+    const {start,end}=monthRange(off);
+    const last=end>today()?today():end;
+    let totP=0,gotP=0,showed=0,full=0,tinyOnly=0,days=0;
+    for(let d=new Date(start);d<=last;d=addDays(d,1)){
+      const p=dayPoints(d);if(!p)continue;
+      days++;totP+=p.tot;gotP+=p.got;
+      const cov=dayCovered(d),fl=dayFull(d);
+      if(cov)showed++;
+      if(fl)full++;
+      if(cov&&!fl)tinyOnly++;
+    }
+    return {totP,gotP,showed,full,tinyOnly,days,start,end,
+      consist:totP?gotP/totP:0,label:start.toLocaleDateString(undefined,{month:"long",year:"numeric"})};
+  }
+  function renderReview(){
+    const m=monthStats(revOffset);
+    $("#revLabel").textContent=revOffset===0?"This month":m.label;
+    $("#revNext").disabled=revOffset>=0;
+    $("#revConsist").innerHTML=Math.round(m.consist*100)+'<span class="u">%</span>';
+    $("#revShowed").textContent=m.showed;
+    $("#revFull").textContent=m.full;
+
+    const prev=monthStats(revOffset-1);
+    let sum="";
+    if(m.days===0)sum="No tracked days this month yet.";
+    else{
+      sum="You showed up on <b>"+m.showed+" of "+m.days+"</b> tracked days";
+      if(m.tinyOnly)sum+=", <b>"+m.tinyOnly+"</b> of them on the tiny version — which still counts";
+      sum+=". ";
+      if(prev.days>=5){
+        const diff=Math.round((m.consist-prev.consist)*100);
+        if(diff>2)sum+="Consistency is up <b>"+diff+" points</b> on last month.";
+        else if(diff<-2)sum+="Consistency is down "+Math.abs(diff)+" points on last month — worth a look at which task slipped, not a verdict on the month.";
+        else sum+="Consistency is roughly level with last month.";
+      }else sum+="Not enough history yet to compare months.";
+    }
+    $("#revSummary").innerHTML=sum;
+
+    const bars=[];
+    for(let i=5;i>=0;i--){const s=monthStats(revOffset-i);bars.push(s);}
+    $("#revBars").innerHTML=bars.map(b=>{
+      const h=b.days?Math.max(5,Math.round(b.consist*100)):0;
+      return '<div class="revcol"><div class="revtrack"><div class="revfill" style="height:'+h+'%;background:'+
+        (b.days?heatVar(b.consist):'transparent')+'"></div></div><div class="revlab">'+
+        b.start.toLocaleDateString(undefined,{month:"short"})+'</div></div>';
+    }).join("");
+
+    const {start,end}=monthRange(revOffset);
+    const last=end>today()?today():end;
+    const rows=state.tasks.map(t=>{
+      let sc=0,dn=0;
+      for(let d=new Date(start);d<=last;d=addDays(d,1)){
+        if(t.days.includes(d.getDay())){sc++;if(isDone(d,t.id))dn++;}
+      }
+      return {id:t.id,name:t.name,rate:sc?dn/sc:null,sc};
+    }).filter(r=>r.sc>0);
+    rows.sort((a,b)=>a.rate-b.rate);
+    $("#revBreakdown").innerHTML=rows.length?rows.map(brkRow).join(""):'<p style="font-size:13px;color:var(--muted);margin:4px 0">No tasks scheduled this month.</p>';
+    wireBrk("#revBreakdown");
+  }
+
+  // ---------- MANAGE ----------
   function daysSummary(days){
     if(days.length===7)return "Every day";
     if(days.length===5&&[1,2,3,4,5].every(x=>days.includes(x)))return "Weekdays";
@@ -582,23 +1039,26 @@
   }
   function renderManage(){
     const list=$("#manageList");
-    if(state.tasks.length===0){list.innerHTML='<div class="empty" style="padding:30px 20px"><h3>No tasks yet</h3><p>Create recurring tasks you want to do on a schedule.</p></div>';return;}
+    if(!state.tasks.length){list.innerHTML='<div class="empty" style="padding:30px 20px"><h3>No tasks yet</h3><p>Create recurring tasks you want to do on a schedule.</p></div>';return;}
     list.innerHTML=state.tasks.map((t,i)=>'<div class="mtask" data-id="'+t.id+'">'+
-      '<div class="arrows"><button class="iconbtn arrow" data-move="up" '+(i===0?"disabled style=opacity:.3":"")+'>▲</button>'+
-      '<button class="iconbtn arrow" data-move="down" '+(i===state.tasks.length-1?"disabled style=opacity:.3":"")+'>▼</button></div>'+
-      '<div class="info"><div class="nm">'+esc(t.name)+'</div><div class="dys">'+daysSummary(t.days)+(t.reminderTime?' <span class="rt">· ⏰ '+fmtTime(t.reminderTime)+'</span>':'')+'</div></div>'+
+      '<div class="arrows"><button class="iconbtn" data-move="up" '+(i===0?"disabled style=opacity:.3":"")+'>▲</button>'+
+      '<button class="iconbtn" data-move="down" '+(i===state.tasks.length-1?"disabled style=opacity:.3":"")+'>▼</button></div>'+
+      '<div class="info"><div class="nm">'+esc(t.name)+'</div><div class="dys">'+daysSummary(t.days)+' · '+pts(t)+'pt'+
+      (t.reminderTime?' <span class="rt">· ⏰ '+fmtTime(t.reminderTime)+'</span>':'')+'</div></div>'+
       '<button class="iconbtn" data-act="edit">✎</button><button class="iconbtn" data-act="del">✕</button></div>').join("");
     list.querySelectorAll(".mtask").forEach(el=>{
       const id=el.dataset.id;
+      el.querySelector(".info").onclick=()=>openDetail(id);
       el.querySelector('[data-act=edit]').onclick=()=>openSheet(id);
       el.querySelector('[data-act=del]').onclick=()=>{if(confirm("Delete this task? Its history stays in your data but it won’t appear anymore.")){state.tasks=state.tasks.filter(t=>t.id!==id);save();renderAll();}};
       el.querySelector('[data-move=up]').onclick=()=>move(id,-1);
       el.querySelector('[data-move=down]').onclick=()=>move(id,1);
     });
   }
-  function move(id,dir){const i=state.tasks.findIndex(t=>t.id===id);const j=i+dir;if(j<0||j>=state.tasks.length)return;const a=state.tasks;const tmp=a[i];a[i]=a[j];a[j]=tmp;save();renderManage();}
+  function move(id,dir){const i=state.tasks.findIndex(t=>t.id===id),j=i+dir;
+    if(j<0||j>=state.tasks.length)return;const a=state.tasks,tmp=a[i];a[i]=a[j];a[j]=tmp;save();renderManage();}
 
-  // SHEET
+  // ---------- SHEET ----------
   function buildDayChips(){
     const c=$("#dayChips");c.innerHTML="";
     DAY_LABELS.forEach((lab,idx)=>{const b=document.createElement("button");b.className="dchip";b.textContent=lab;b.dataset.d=idx;
@@ -612,6 +1072,7 @@
     else if(eq([1,2,3,4,5]))$('[data-quick=week]').classList.add("on");
     else if(eq([0,6]))$('[data-quick=end]').classList.add("on");
   }
+  function syncW(){$$("#wSel button").forEach(b=>b.classList.toggle("on",+b.dataset.w===draftW));}
   function syncRem(){
     $("#taskRemToggle").checked=draftRemOn;
     const t=$("#taskRemTime");t.disabled=!draftRemOn;t.value=draftRemTime;
@@ -619,23 +1080,34 @@
   }
   function openSheet(id){
     editingId=id||null;
-    if(id){const t=state.tasks.find(x=>x.id===id);$("#taskName").value=t.name;draftDays=t.days.slice();draftRemOn=!!t.reminderTime;draftRemTime=t.reminderTime||"09:00";$("#sheetTitle").textContent="Edit task";}
-    else{$("#taskName").value="";draftDays=[0,1,2,3,4,5,6];draftRemOn=false;draftRemTime="09:00";$("#sheetTitle").textContent="New task";}
-    syncChips();syncRem();
+    if(id){const t=state.tasks.find(x=>x.id===id);
+      $("#taskName").value=t.name;draftDays=t.days.slice();draftW=t.weight||2;draftCue=t.cue||"";
+      $("#taskTiny").value=t.tiny||"";
+      draftRemOn=!!t.reminderTime;draftRemTime=t.reminderTime||"09:00";$("#sheetTitle").textContent="Edit task";
+    }else{
+      $("#taskName").value="";draftDays=[0,1,2,3,4,5,6];draftW=2;draftCue="";
+      $("#taskTiny").value="";
+      draftRemOn=false;draftRemTime="09:00";$("#sheetTitle").textContent="New task";
+    }
+    $("#taskCue").value=draftCue;
+    syncChips();syncW();syncRem();
     $("#overlay").classList.add("open");
     setTimeout(()=>$("#taskName").focus(),250);
   }
   function closeSheet(){$("#overlay").classList.remove("open");}
   function saveTask(){
     const name=$("#taskName").value.trim();if(!name){$("#taskName").focus();return;}
-    if(draftDays.length===0)draftDays=[0,1,2,3,4,5,6];
+    if(!draftDays.length)draftDays=[0,1,2,3,4,5,6];
+    const cue=$("#taskCue").value.trim();
+    const tinyV=$("#taskTiny").value.trim();
     const remVal=draftRemOn?draftRemTime:"";
-    if(editingId){const t=state.tasks.find(x=>x.id===editingId);t.name=name;t.days=draftDays.slice();t.reminderTime=remVal;}
-    else state.tasks.push({id:"t"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),name:name,days:draftDays.slice(),reminderTime:remVal});
+    if(editingId){const t=state.tasks.find(x=>x.id===editingId);
+      t.name=name;t.days=draftDays.slice();t.reminderTime=remVal;t.weight=draftW;t.cue=cue;t.tiny=tinyV;}
+    else state.tasks.push({id:"t"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),name:name,days:draftDays.slice(),reminderTime:remVal,weight:draftW,cue:cue,tiny:tinyV});
     save();closeSheet();renderAll();
   }
 
-  // DATA
+  // ---------- DATA ----------
   function exportData(){
     const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
     const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="daily-charge-backup-"+keyFor(today())+".json";a.click();
@@ -649,30 +1121,39 @@
     r.readAsText(file);
   }
 
-  // REMINDERS
+  // ---------- REMINDERS ----------
   function reminderCount(){return state.tasks.filter(t=>t.reminderTime).length;}
-  function renderReminder(){$("#remToggle").checked=!!state.reminder.enabled;$("#remTime").value=state.reminder.time||"20:00";updateReminderNote();}
+  function renderReminder(){
+    $("#remToggle").checked=!!state.reminder.enabled;
+    $("#remTime").value=state.reminder.time||"20:00";
+    $("#prefHaptic").checked=state.prefs.haptic;
+    $("#prefConfetti").checked=state.prefs.confetti;
+    $("#prefSurprise").checked=state.prefs.surprise;
+    $("#prefFreeze").checked=state.prefs.freeze;
+    updateReminderNote();
+  }
   function updateReminderNote(){
-    const r=state.reminder,note=$("#remNote"),n=reminderCount();const parts=[];
+    const r=state.reminder,note=$("#remNote"),n=reminderCount(),parts=[];
     if(r.enabled)parts.push("an end-of-day nudge at "+fmtTime(r.time));
     if(n>0)parts.push(n+" per-task reminder"+(n>1?"s":""));
-    if(parts.length===0){note.textContent="No reminders set yet. Turn this on for an end-of-day nudge, or give individual tasks their own time when you add or edit them.";return;}
+    if(!parts.length){note.textContent="No reminders set yet. Turn this on for an end-of-day nudge, or give individual tasks their own time when you add or edit them.";return;}
     let msg="On iPhone, tap “Add all to Calendar” to get "+parts.join(" and ")+" as alerts that fire even when the app is closed. Re-add if you change any times.";
     if(r.notify)msg+=" In-app alerts are also on.";
     note.textContent=msg;
   }
   function icsEvent(uid,startLocal,summary,rrule){
-    const s=summary.replace(/([,;\\])/g,"\\$1");
+    const s=String(summary).replace(/([,;\\])/g,"\\$1");
     return ["BEGIN:VEVENT","UID:"+uid+"@daily.local","DTSTAMP:"+startLocal,"DTSTART:"+startLocal,"DURATION:PT10M","RRULE:"+rrule,"SUMMARY:"+s,
       "BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:"+s,"TRIGGER:PT0S","END:VALARM","END:VEVENT"];
   }
   function downloadIcs(){
     const r=state.reminder,n=reminderCount();
-    if(!r.enabled&&n===0){$("#remNote").textContent="Nothing to add yet — turn on the end-of-day reminder or give a task its own reminder time first.";return;}
+    if(!r.enabled&&!n){$("#remNote").textContent="Nothing to add yet — turn on the end-of-day reminder or give a task its own reminder time first.";return;}
     const now=new Date(),pad=x=>String(x).padStart(2,"0");
     const datePart=""+now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate());
     let lines=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Daily//Reminders//EN","CALSCALE:GREGORIAN"];
-    if(r.enabled){const p=r.time.split(":").map(Number);lines=lines.concat(icsEvent("daily-endofday-"+Date.now(),datePart+"T"+pad(p[0])+pad(p[1])+"00","Finish today's tasks","FREQ=DAILY"));}
+    if(r.enabled){const p=r.time.split(":").map(Number);
+      lines=lines.concat(icsEvent("daily-endofday-"+Date.now(),datePart+"T"+pad(p[0])+pad(p[1])+"00","Finish today's tasks","FREQ=DAILY"));}
     state.tasks.filter(t=>t.reminderTime).forEach((t,i)=>{const p=t.reminderTime.split(":").map(Number);
       const rule=t.days.length===7?"FREQ=DAILY":"FREQ=WEEKLY;BYDAY="+t.days.slice().sort((a,b)=>a-b).map(d=>ICAL_DAY[d]).join(",");
       lines=lines.concat(icsEvent("daily-task-"+i+"-"+Date.now(),datePart+"T"+pad(p[0])+pad(p[1])+"00",t.name,rule));});
@@ -698,11 +1179,13 @@
     const notified=new Set(state.notified[tk]||[]);
     const fire=(id,title,body)=>{if(notified.has(id))return;try{new Notification(title,{body:body});notified.add(id);}catch(e){}};
     sched.forEach(t=>{if(t.reminderTime&&!ds.has(t.id)){const p=t.reminderTime.split(":").map(Number);if(mins>=p[0]*60+p[1])fire(t.id,"Daily","Time for: "+t.name);}});
-    if(state.reminder.enabled){const p=state.reminder.time.split(":").map(Number);const left=sched.filter(t=>!ds.has(t.id)).length;if(mins>=p[0]*60+p[1]&&left>0)fire("_day","Daily","You’ve still got "+left+" task"+(left>1?"s":"")+" to finish today.");}
+    if(state.reminder.enabled){const p=state.reminder.time.split(":").map(Number);
+      const left=sched.filter(t=>!ds.has(t.id)).length;
+      if(mins>=p[0]*60+p[1]&&left>0)fire("_day","Daily","You’ve still got "+left+" task"+(left>1?"s":"")+" to finish today.");}
     if(notified.size){state.notified={};state.notified[tk]=[...notified];save();}
   }
 
-  // WIRE-UP
+  // ---------- WIRE-UP ----------
   function renderAll(){renderToday();renderWeek();renderTrends();renderManage();renderReminder();}
   function switchView(v){
     document.body.dataset.view=v;
@@ -719,22 +1202,37 @@
     $("#saveBtn").onclick=saveTask;
     $("#cancelBtn").onclick=closeSheet;
     $("#overlay").onclick=e=>{if(e.target.id==="overlay")closeSheet();};
+    $("#detailOverlay").onclick=e=>{if(e.target.id==="detailOverlay")closeDetail();};
+    $("#dClose").onclick=closeDetail;
+    $("#reviewBtn").onclick=()=>{revOffset=0;renderReview();$("#reviewOverlay").classList.add("open");};
+    $("#revClose").onclick=()=>$("#reviewOverlay").classList.remove("open");
+    $("#reviewOverlay").onclick=e=>{if(e.target.id==="reviewOverlay")$("#reviewOverlay").classList.remove("open");};
+    $("#revPrev").onclick=()=>{revOffset--;renderReview();};
+    $("#revNext").onclick=()=>{if(revOffset<0){revOffset++;renderReview();}};
+    $("#dEdit").onclick=()=>{const id=detailId;closeDetail();setTimeout(()=>openSheet(id),120);};
     $("#taskName").addEventListener("keydown",e=>{if(e.key==="Enter")saveTask();});
     $("#taskRemToggle").onchange=e=>{draftRemOn=e.target.checked;syncRem();};
     $("#taskRemTime").onchange=e=>{draftRemTime=e.target.value||"09:00";syncRem();};
+    $$("#wSel button").forEach(b=>b.onclick=()=>{draftW=+b.dataset.w;syncW();});
     $$("[data-quick]").forEach(q=>q.onclick=()=>{const map={all:[0,1,2,3,4,5,6],week:[1,2,3,4,5],end:[0,6]};draftDays=map[q.dataset.quick].slice();syncChips();});
     $$("#themeSeg button").forEach(b=>b.onclick=()=>{state.theme=b.dataset.themeOpt;save();applyTheme();});
+    $("#prefHaptic").onchange=e=>{state.prefs.haptic=e.target.checked;save();if(e.target.checked)haptic(2);};
+    $("#prefConfetti").onchange=e=>{state.prefs.confetti=e.target.checked;save();if(e.target.checked)confettiBurst();};
+    $("#prefSurprise").onchange=e=>{state.prefs.surprise=e.target.checked;save();};
+    $("#prefFreeze").onchange=e=>{state.prefs.freeze=e.target.checked;save();renderTrends();};
     $("#weekPrev").onclick=()=>{weekOffset--;renderWeek();};
     $("#weekNext").onclick=()=>{if(weekOffset<0){weekOffset++;renderWeek();}};
     $("#exportBtn").onclick=exportData;
     $("#importBtn").onclick=()=>$("#importFile").click();
     $("#importFile").onchange=e=>{if(e.target.files[0])importData(e.target.files[0]);e.target.value="";};
-    $("#resetBtn").onclick=()=>{if(confirm("Erase all tasks and history on this device? This can’t be undone.")){const theme=state.theme;state={tasks:[],done:{},reminder:{},theme:theme,notified:{}};ensureDefaults();save();applyTheme();renderAll();}};
+    $("#resetBtn").onclick=()=>{if(confirm("Erase all tasks and history on this device? This can’t be undone.")){
+      const theme=state.theme,prefs=state.prefs;state={tasks:[],done:{},tiny:{},reminder:{},theme:theme,notified:{},prefs:prefs};ensureDefaults();save();applyTheme();renderAll();}};
     $("#remToggle").onchange=e=>{state.reminder.enabled=e.target.checked;save();updateReminderNote();};
     $("#remTime").onchange=e=>{state.reminder.time=e.target.value||"20:00";save();updateReminderNote();};
     $("#remCal").onclick=downloadIcs;
     $("#remNotify").onclick=tryNotify;
-    if(window.matchMedia){const mq=window.matchMedia("(prefers-color-scheme: dark)");if(mq.addEventListener)mq.addEventListener("change",()=>{if(state.theme==="auto")applyTheme();});}
+    if(window.matchMedia){const mq=window.matchMedia("(prefers-color-scheme: dark)");
+      if(mq.addEventListener)mq.addEventListener("change",()=>{if(state.theme==="auto")applyTheme();});}
     renderAll();reminderCheck();
     setInterval(()=>{if(document.body.dataset.view==="today")renderToday();reminderCheck();},60000);
   }
