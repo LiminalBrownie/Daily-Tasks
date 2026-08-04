@@ -298,6 +298,77 @@
   .cueq .cq{font-size:14.5px;font-weight:600;margin-bottom:3px}
   .cueq .cs{font-size:12px;color:var(--muted);margin-bottom:10px}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+  /* ---- v4 additions ---- */
+  .tierbadge{font:700 9px var(--mono);letter-spacing:.08em;padding:2px 6px;border-radius:5px;flex:none}
+  .tb-anchor{background:var(--line2);color:var(--muted)}
+  .tb-practice{background:var(--accent-soft);color:var(--accent)}
+  .tb-project{background:var(--good-soft);color:var(--good-ink)}
+
+  .floorrow{display:flex;align-items:center;gap:11px;padding:11px 0;border-top:1px solid var(--line2);cursor:pointer}
+  .floorrow:first-child{border-top:none}
+  .fname{flex:1;min-width:0}
+  .fname .fn{font-size:14px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fname .ff{font:500 10.5px var(--mono);color:var(--faint);margin-top:2px}
+  .pips{display:flex;gap:3px;flex:none}
+  .pip{width:11px;height:11px;border-radius:3px;background:var(--line2)}
+  .pip.on{background:var(--good)}
+  .pip.extra{background:var(--mauve)}
+  .fcount{font:600 12.5px var(--mono);width:34px;text-align:right;color:var(--muted);flex:none}
+
+  .poolbar{height:9px;border-radius:5px;background:var(--line2);overflow:hidden;margin-top:9px}
+  .poolbar i{display:block;height:100%;border-radius:5px;background:var(--mauve)}
+
+  .pick{background:var(--accent-soft);border-radius:13px;padding:12px 14px;margin:14px 0 4px}
+  .pick b{color:var(--accent);font-size:13.5px}
+  .pick span{display:block;font-size:12px;color:var(--ink);opacity:.8;margin-top:3px;line-height:1.45}
+
+  .lvlrow{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .lvlrow .lv{font:700 15px var(--mono);color:var(--accent);min-width:52px}
+  .lvlbtn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line);background:var(--card);
+    color:var(--muted);font-size:15px;cursor:pointer;flex:none}
+  .focusline{font-size:12.5px;color:var(--muted);margin-top:7px;line-height:1.45}
+
+  .wchart{width:100%;height:150px;display:block}
+  .wnow{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+  .wnow b{font:700 34px var(--mono);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .wnow .wu{font:600 14px var(--mono);color:var(--faint)}
+  .wnow .wd{margin-left:auto;font:600 13px var(--mono)}
+  .wraw{font-size:12px;color:var(--faint);margin-top:2px}
+  .wentry{display:flex;gap:9px;margin-top:14px}
+  .wentry input{flex:1;font:600 17px var(--mono);color:var(--ink);background:var(--card);
+    border:1px solid var(--line);border-radius:12px;padding:11px 13px;outline:none;text-align:center}
+  .wband{font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:11px}
+  .wband b{color:var(--ink)}
+
+  .guide{background:var(--card2);border-radius:14px;padding:14px 15px;margin-bottom:18px}
+  .guide h4{font:600 12px var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 9px}
+  .guide dl{margin:0}
+  .guide dt{font-size:13.5px;font-weight:600;margin-top:9px}
+  .guide dt:first-child{margin-top:0}
+  .guide dd{margin:2px 0 0;font-size:12.5px;color:var(--muted);line-height:1.5}
+  .guide dd em{font-style:normal;color:var(--ink);opacity:.85}
+  .guide .rules{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+  .guide .rules p{margin:0 0 6px;font-size:12.5px;color:var(--muted);line-height:1.5}
+  .guide .rules p:last-child{margin:0}
+  .guide .rules b{color:var(--ink)}
+  .gtoggle{font:600 12px var(--sans);color:var(--accent);background:none;border:none;padding:0;cursor:pointer;margin-bottom:14px}
+
+  .tiersel{display:flex;gap:7px;margin-bottom:6px}
+  .tiersel button{flex:1;border:1px solid var(--line);background:var(--card);border-radius:11px;
+    padding:10px 5px;cursor:pointer;color:var(--muted)}
+  .tiersel .tt{display:block;font:600 13px var(--sans)}
+  .tiersel .ts{display:block;font:500 9.5px var(--mono);margin-top:2px;opacity:.8}
+  .tiersel button.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+
+  .gradnote{background:var(--good-soft);border-radius:12px;padding:11px 13px;margin-top:12px;
+    font-size:12.5px;color:var(--good-ink);line-height:1.5}
+  .gradnote button{margin-top:8px}
+  .retired{opacity:.55}
+  .seedbox{background:var(--card);border-radius:16px;padding:16px;margin-top:14px;box-shadow:var(--shadow)}
+  .seedbox h3{font-size:14.5px;margin:0 0 5px;font-weight:600}
+  .seedbox p{font-size:12.5px;color:var(--muted);margin:0 0 12px;line-height:1.5}
+
 </style>
 </head>
 <body data-view="today" data-theme="dark">
@@ -308,15 +379,13 @@
 
 <main class="wrap">
 
-  <!-- ============ TODAY ============ -->
+  <!-- TODAY -->
   <section id="v-today" class="view">
     <header>
-      <div class="kicker" id="tKicker">Today</div>
+      <div class="kicker" id="tKick">Today</div>
       <div class="datewrap"><h1 id="tDate">—</h1><div class="sub-r" id="tDay"></div></div>
     </header>
-
     <div id="transBanner"></div>
-
     <div class="card">
       <div class="rings">
         <div id="toast"></div>
@@ -324,51 +393,50 @@
           <svg width="118" height="118" viewBox="0 0 118 118">
             <circle class="rc" cx="59" cy="59" r="50" stroke="var(--line2)" stroke-width="11"/>
             <circle class="rc" cx="59" cy="59" r="36" stroke="var(--line2)" stroke-width="11"/>
-            <circle class="rc" id="ringE" cx="59" cy="59" r="50" stroke="var(--accent)" stroke-width="11"
-              stroke-dasharray="314" stroke-dashoffset="314"/>
-            <circle class="rc" id="ringM" cx="59" cy="59" r="36" stroke="var(--mauve)" stroke-width="11"
-              stroke-dasharray="226" stroke-dashoffset="226"/>
+            <circle class="rc" id="ringE" cx="59" cy="59" r="50" stroke="var(--accent)" stroke-width="11" stroke-dasharray="314" stroke-dashoffset="314"/>
+            <circle class="rc" id="ringM" cx="59" cy="59" r="36" stroke="var(--mauve)" stroke-width="11" stroke-dasharray="226" stroke-dashoffset="226"/>
           </svg>
-          <div class="ringlbl"><b id="ringPct">0%</b><span>effort</span></div>
+          <div class="ringlbl"><b id="ringPct">0%</b><span id="ringSub">of enough</span></div>
         </div>
         <div class="rmeta">
-          <div class="rrow"><span class="rdot" style="background:var(--accent)"></span>
-            <span class="rt">Effort</span><span class="rv" id="rvE">0/0</span></div>
-          <div class="rrow"><span class="rdot" style="background:var(--mauve)"></span>
-            <span class="rt">Meaning</span><span class="rv" id="rvM">0%</span></div>
+          <div class="rrow"><span class="rdot" style="background:var(--accent)"></span><span class="rt">Effort</span><span class="rv" id="rvE">0/0</span></div>
+          <div class="rrow"><span class="rdot" style="background:var(--mauve)"></span><span class="rt">Meaning</span><span class="rv" id="rvM">0%</span></div>
           <div class="rnote" id="rNote"></div>
         </div>
       </div>
       <div class="goalgrad" id="goalGrad"></div>
     </div>
-
     <div id="freshBox"></div>
-    <div id="todayList"></div>
-    <div id="todayProj"></div>
+    <div id="pickBox"></div>
+    <div id="todayAnchors"></div>
+    <div id="todayPractice"></div>
+    <div id="todayProjects"></div>
   </section>
 
-  <!-- ============ PROJECTS ============ -->
-  <section id="v-proj" class="view">
+  <!-- WEEK -->
+  <section id="v-week" class="view">
     <header>
-      <div class="kicker">No fixed schedule</div>
-      <div class="datewrap"><h1>Projects</h1></div>
+      <div class="kicker">Floors and pool</div>
+      <div class="datewrap"><h1>Week</h1><div class="sub-r" id="wkRange"></div></div>
     </header>
-    <p class="hint" style="margin:8px 4px 0">Things you return to in bursts rather than daily —
-      campaigns, builds, reading. Tracked by rhythm and hours, not completion rate.</p>
-    <div id="projList" style="margin-top:14px"></div>
-    <button class="btn btn-p btn-b" id="addProj" style="margin-top:4px">+ New project</button>
-  </section>
 
-  <!-- ============ TRENDS ============ -->
-  <section id="v-trends" class="view">
-    <header>
-      <div class="kicker">Your data</div>
-      <div class="datewrap"><h1>Trends</h1><div class="sub-r" id="trRange"></div></div>
-    </header>
+    <div class="card">
+      <h2>Weekly floors</h2>
+      <p class="sub">Guaranteed minimums. Green pips are floor sessions, purple are pool.</p>
+      <div id="floorList"></div>
+      <div style="margin-top:15px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between">
+          <span style="font-size:13px;font-weight:600">Shared pool</span>
+          <span class="fcount" id="poolCount" style="width:auto">0/0</span>
+        </div>
+        <div class="poolbar"><i id="poolBar" style="width:0%"></i></div>
+        <p class="hint" id="poolNote"></p>
+      </div>
+    </div>
 
     <div class="stats">
       <div class="stat"><div class="v" id="sCons">0<span class="u">%</span></div><div class="l">Consistency · 30d</div></div>
-      <div class="stat"><div class="v" id="sRec">0<span class="u">%</span></div><div class="l">Bounce-back rate</div></div>
+      <div class="stat"><div class="v" id="sRec">—</div><div class="l">Bounce-back rate</div></div>
       <div class="stat"><div class="v" id="sStreak">0<span class="u">d</span></div><div class="l">Current streak</div></div>
       <div class="stat"><div class="v" id="sBest">0<span class="u">d</span></div><div class="l">Best streak</div></div>
     </div>
@@ -382,8 +450,7 @@
 
     <div class="card">
       <h2>Last 12 weeks</h2>
-      <p class="sub">Columns are weeks, newest right. Rows are days, Monday top. Fill height and colour
-        both show completion, so it reads even in greyscale.</p>
+      <p class="sub">Fill height and colour both show completion, so it reads in greyscale too.</p>
       <div class="heat-wrap">
         <div class="heat-days"><span>M</span><span></span><span>W</span><span></span><span>F</span><span></span><span>S</span></div>
         <div class="heat-scroll"><div class="heat-months" id="heatMonths"></div><div class="heat" id="heat"></div></div>
@@ -401,30 +468,73 @@
 
     <div class="card">
       <h2>Task by task</h2>
-      <p class="sub">Last 30 days, lowest first. Tap for that task's own page.</p>
+      <p class="sub">Last 30 days, lowest first. Tap for that task's page.</p>
       <div id="taskBrk"></div>
     </div>
-
     <button class="btn btn-s btn-b" id="reviewBtn" style="margin-top:14px">Monthly review →</button>
   </section>
 
-  <!-- ============ SETUP ============ -->
+  <!-- BODY -->
+  <section id="v-body" class="view">
+    <header>
+      <div class="kicker">Outcome, not a score</div>
+      <div class="datewrap"><h1>Body</h1></div>
+    </header>
+    <div class="card">
+      <div class="wnow"><b id="wTrend">—</b><span class="wu" id="wUnit">lb</span>
+        <span class="wd" id="wRate"></span></div>
+      <div class="wraw" id="wRaw">No entries yet.</div>
+      <svg class="wchart" id="wChart" viewBox="0 0 320 150" preserveAspectRatio="none"></svg>
+      <div class="wentry">
+        <input type="number" id="wIn" step="0.1" placeholder="today's weight">
+        <button class="btn btn-p" id="wSave">Log</button>
+      </div>
+      <p class="wband" id="wBand"></p>
+    </div>
+    <div class="card">
+      <h2>Why there's no goal line here</h2>
+      <p class="sub" style="margin:0">Daily weight is mostly water. The bold line is a smoothed trend — that's
+        the real signal, and learning to tell it from the noise is the whole point of weighing often.
+        There's deliberately no target, no streak and no colour-coding: those are the tracker features
+        most associated with disordered eating, and none of them make the trend more accurate.</p>
+    </div>
+    <div class="card">
+      <h2>Creatine and the scale</h2>
+      <p class="sub" style="margin:0">Creatine pulls water into muscle, so expect 2–4 lb to appear in the
+        first fortnight. It is not fat. If you started creatine and a deficit together, ignore the scale
+        entirely until week three — the trend line will be meaningless before then.</p>
+    </div>
+  </section>
+
+  <!-- SETUP -->
   <section id="v-setup" class="view">
     <header>
       <div class="kicker">Everything else</div>
       <div class="datewrap"><h1>Setup</h1></div>
     </header>
 
-    <div class="lbl" style="margin-top:16px">Recurring tasks</div>
+    <div id="seedBox"></div>
+
+    <div class="lbl" style="margin-top:18px">Your tasks</div>
     <div id="mngList"></div>
-    <button class="btn btn-p btn-b" id="addTask">+ New recurring task</button>
+    <button class="btn btn-p btn-b" id="addTask">+ New task</button>
+
+    <div class="card">
+      <h2>What counts as enough</h2>
+      <p class="sub">The day is marked complete at this share of the day's points. Requiring 100% means
+        that at 85% per-task adherence you'd see a "perfect day" only about a third of the time —
+        excellent behaviour reading as failure.</p>
+      <div class="seg" id="thrSeg">
+        <button data-thr="0.6">60%</button><button data-thr="0.7">70%</button>
+        <button data-thr="0.8">80%</button><button data-thr="1">All</button>
+      </div>
+    </div>
 
     <div class="card">
       <h2>Transition mode</h2>
-      <p class="sub">For moving to college. Habits are cued by their surroundings — when the
-        surroundings change, the cues stop firing. This walks you through rebuilding them.</p>
-      <div class="trow"><div><div class="tl">Turn on transition mode</div>
-        <div class="td">12 weeks from your move-in date.</div></div>
+      <p class="sub">Habits are cued by their surroundings. When those change, the cues stop firing —
+        that's why routines collapse after a move, not lack of discipline.</p>
+      <div class="trow"><div><div class="tl">Turn on transition mode</div><div class="td">12 weeks from move-in.</div></div>
         <label class="switch"><input type="checkbox" id="trOn"><span class="slider"></span></label></div>
       <div class="fld" id="trDateBox" style="margin:14px 0 0;display:none">
         <label>Move-in date</label><input type="date" id="trDate">
@@ -434,7 +544,7 @@
 
     <div class="card">
       <h2>Appearance</h2>
-      <p class="sub">Catppuccin — Mocha and Latte, Flamingo accent.</p>
+      <p class="sub">Catppuccin Mocha and Latte, Flamingo accent.</p>
       <div class="seg" id="themeSeg">
         <button data-th="light">Latte</button><button data-th="dark">Mocha</button><button data-th="auto">Auto</button>
       </div>
@@ -445,17 +555,18 @@
       <p class="sub">Celebration scales with how much a task means to you, not how hard it was.</p>
       <div class="trow"><div><div class="tl">Haptics</div><div class="td">Real vibration on Android.</div></div>
         <label class="switch"><input type="checkbox" id="pHap"><span class="slider"></span></label></div>
-      <div class="trow"><div><div class="tl">Confetti on a full day</div><div class="td">Short burst when everything's done.</div></div>
+      <div class="trow"><div><div class="tl">Confetti</div><div class="td">When the day clears the threshold.</div></div>
         <label class="switch"><input type="checkbox" id="pConf"><span class="slider"></span></label></div>
       <div class="trow"><div><div class="tl">Surprise encouragement</div><div class="td">Occasional unpredictable note.</div></div>
         <label class="switch"><input type="checkbox" id="pSurp"><span class="slider"></span></label></div>
       <div class="trow"><div><div class="tl">Grace days</div><div class="td">Two missed days a month won't reset the streak.</div></div>
         <label class="switch"><input type="checkbox" id="pFreeze"><span class="slider"></span></label></div>
+      <div class="trow"><div><div class="tl">Offer to retire automatic habits</div><div class="td">Once something runs itself, it stops asking but keeps its point.</div></div>
+        <label class="switch"><input type="checkbox" id="pGrad"><span class="slider"></span></label></div>
     </div>
 
     <div class="card">
       <h2>Reminders</h2>
-      <p class="sub" id="remSub">End-of-day nudge plus any per-task times.</p>
       <div class="trow"><div><div class="tl">End-of-day reminder</div><div class="td">If tasks are still open.</div></div>
         <label class="switch"><input type="checkbox" id="remOn"><span class="slider"></span></label></div>
       <div class="trow"><div class="tl">Remind me at</div><input type="time" id="remTime" value="20:00"
@@ -469,7 +580,7 @@
 
     <div class="card">
       <h2>Your data</h2>
-      <p class="sub">Stored only on this device, in this browser. Export before switching phones —
+      <p class="sub">Stored only in this browser on this device. Export before switching phones —
         it does not travel with a device migration.</p>
       <div class="links">
         <button class="link" id="expBtn">Export backup</button>
@@ -484,17 +595,46 @@
 
 <nav><div class="nav-in">
   <button class="nb on" data-nav="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Today</button>
-  <button class="nb" data-nav="proj"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Projects</button>
-  <button class="nb" data-nav="trends"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>Trends</button>
+  <button class="nb" data-nav="week"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Week</button>
+  <button class="nb" data-nav="body"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 3 4-6 5 5"/></svg>Body</button>
   <button class="nb" data-nav="setup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.14.35.4.64.73.83H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Setup</button>
 </div></nav>
 
 <!-- task editor -->
 <div class="ov" id="ovEdit"><div class="sheet">
   <h2 id="edTitle">New task</h2>
-  <p class="shsub" id="edSub"></p>
+  <button class="gtoggle" id="gToggle">Which kind is this? ▾</button>
+  <div class="guide" id="guideBox" style="display:none">
+    <h4>Choosing a kind</h4>
+    <dl>
+      <dt>Anchor</dt><dd>Small, same trigger every time, and you want it to eventually run itself.
+        Stretching, creatine, lights out. <em>Judge it by: did it happen?</em> These can be daily, and
+        there can be plenty of them — each one is cheap. Retire them once they're automatic.</dd>
+      <dt>Practice</dt><dd>A skill you're trying to get better at. Violin, drawing, writing.
+        It will never become automatic, because complex activities need conscious engagement every
+        time — that's normal, not failure. <em>Judge it by: is the difficulty rising?</em> Give it a
+        weekly floor rather than a daily demand, and a current focus rather than just a name.</dd>
+      <dt>Project</dt><dd>You return to it in bursts, on no fixed schedule. A campaign, a build, a
+        series. <em>Judge it by: am I still in contact with it?</em> Tracked by rhythm and hours,
+        never by completion rate.</dd>
+    </dl>
+    <div class="rules">
+      <p><b>Make it a floor, not a ceiling.</b> "Eat protein" works. "Stay under X" creates pressure
+        to restrict and can only be failed retroactively, after the food is already eaten.</p>
+      <p><b>Be specific enough to start.</b> "Write" is a wish; "300 words on the scenario" is a plan.
+        Vagueness is what turns a pursuit into a chore.</p>
+    </div>
+  </div>
+
+  <div class="fld"><label>Kind</label>
+    <div class="tiersel" id="edTier">
+      <button data-t="anchor"><span class="tt">Anchor</span><span class="ts">daily</span></button>
+      <button data-t="practice"><span class="tt">Practice</span><span class="ts">weekly floor</span></button>
+      <button data-t="project"><span class="tt">Project</span><span class="ts">no schedule</span></button>
+    </div></div>
+
   <div class="fld"><label>Name</label>
-    <input type="text" id="edName" placeholder="e.g. Practice guitar" autocomplete="off"></div>
+    <input type="text" id="edName" placeholder="e.g. Violin" autocomplete="off"></div>
 
   <div class="fld"><label>Effort</label>
     <div class="wsel" id="edW">
@@ -511,31 +651,36 @@
     </div>
     <div class="days" id="edDays"></div></div>
 
+  <div class="fld" id="edFloorBox" style="display:none"><label>Weekly floor</label>
+    <input type="number" id="edFloor" min="1" max="7" placeholder="3">
+    <p class="hint">Sessions per week you want guaranteed. Anything beyond this counts toward the
+      shared pool. Skill decay is slow — half of gains take months to fade — so the floor is about
+      staying in contact, not preventing loss.</p></div>
+
   <div class="fld" id="edGapBox" style="display:none"><label>Aim to return every</label>
-    <input type="number" id="edGap" min="1" max="90" placeholder="7">
-    <p class="hint">Days. A rhythm, not a deadline — used to show when something's drifting,
-      never to mark you late.</p></div>
+    <input type="number" id="edGap" min="1" max="90" placeholder="10">
+    <p class="hint">Days. A rhythm, not a deadline.</p></div>
+
+  <div class="fld" id="edFocusBox" style="display:none"><label>Current focus</label>
+    <input type="text" id="edFocus" placeholder="e.g. third position shifts" autocomplete="off">
+    <p class="hint">Progressive difficulty is what drives improvement — practising at a constant level
+      maintains a skill without moving it. The app nudges you if this hasn't changed in three weeks.</p></div>
 
   <div class="fld"><label>When / where</label>
     <input type="text" id="edCue" placeholder="e.g. after my last lecture" autocomplete="off">
-    <p class="hint">Naming a specific moment raises follow-through more than intending harder does.
-      Anchor to a fixed event rather than a clock time where you can.</p></div>
+    <p class="hint">Naming the moment raises follow-through (d ≈ 0.59 for health behaviours; smaller
+      when measured objectively, but real). Anchor to a fixed event, not a clock time.</p></div>
 
-  <div class="fld"><label>Tiny version</label>
-    <input type="text" id="edTiny" placeholder="e.g. play one scale" autocomplete="off">
-    <p class="hint">A two-minute floor for bad days. Logging it keeps the chain alive and earns 1 point.</p></div>
+  <div class="fld"><label id="edTinyLbl">Tiny version</label>
+    <input type="text" id="edTiny" placeholder="e.g. one scale" autocomplete="off">
+    <p class="hint" id="edTinyHint">A floor for bad days. Keeps the chain alive and earns 1 point.</p></div>
 
   <div class="fld"><label>Why this matters</label>
-    <div class="lik"><div class="lq">The activity itself is enjoyable<em>intrinsic</em></div>
-      <div class="scale" data-c="intrinsic"></div></div>
-    <div class="lik"><div class="lq">It genuinely matters to me — it's who I want to be<em>identified</em></div>
-      <div class="scale" data-c="identified"></div></div>
-    <div class="lik"><div class="lq">I'd feel guilty or ashamed if I didn't<em>introjected</em></div>
-      <div class="scale" data-c="introjected"></div></div>
-    <div class="lik"><div class="lq">Someone else expects it of me<em>external</em></div>
-      <div class="scale" data-c="external"></div></div>
-    <div class="conc"><div class="cv" id="edConcV">—</div><div class="cl" id="edConcL">
-      Rate all four to see where this sits.</div></div>
+    <div class="lik"><div class="lq">The activity itself is enjoyable<em>intrinsic</em></div><div class="scale" data-c="intrinsic"></div></div>
+    <div class="lik"><div class="lq">It genuinely matters to me — it's who I want to be<em>identified</em></div><div class="scale" data-c="identified"></div></div>
+    <div class="lik"><div class="lq">I'd feel guilty or ashamed if I didn't<em>introjected</em></div><div class="scale" data-c="introjected"></div></div>
+    <div class="lik"><div class="lq">Someone else expects it of me<em>external</em></div><div class="scale" data-c="external"></div></div>
+    <div class="conc"><div class="cv" id="edConcV">—</div><div class="cl" id="edConcL">Rate all four to see where this sits.</div></div>
   </div>
 
   <div class="fld"><label>Reminder</label>
@@ -546,63 +691,56 @@
     <button class="btn btn-p" id="edSave">Save</button></div>
 </div></div>
 
-<!-- session logger -->
 <div class="ov" id="ovSess"><div class="sheet">
   <h2 id="ssTitle">Log a session</h2>
-  <p class="shsub" id="ssSub">Fill in what you remember. Everything here is optional.</p>
+  <p class="shsub" id="ssSub">Everything here is optional.</p>
   <div class="fld"><label>How long, roughly</label>
     <div class="chips" id="ssMins"></div>
     <input type="number" id="ssMinsX" min="1" max="1440" placeholder="or type minutes"></div>
+  <div id="ssLvlBox" style="display:none"></div>
   <div id="ssFlowBox">
     <div class="fld"><label>How it felt</label>
       <div class="lik"><div class="lq">How challenging was it?</div><div class="scale" data-s="challenge"></div></div>
       <div class="lik"><div class="lq">How capable did you feel?</div><div class="scale" data-s="skill"></div></div>
     </div>
   </div>
-  <div class="fld" id="ssAutoBox" style="display:none">
-    <label>One quick thing</label>
-    <div class="lik"><div class="lq">How automatic did starting feel?<em>1 = had to force it · 5 = just happened</em></div>
-      <div class="scale" data-s="automaticity"></div></div>
-  </div>
+  <div class="fld" id="ssAutoBox" style="display:none"><label>One quick thing</label>
+    <div class="lik"><div class="lq">How automatic did starting feel?<em>1 = forced it · 5 = just happened</em></div>
+      <div class="scale" data-s="automaticity"></div></div></div>
   <div class="fld"><label>What moved?</label>
     <input type="text" id="ssNote" placeholder="e.g. finally got the bridge clean" autocomplete="off">
-    <p class="hint">One line. These get resurfaced months later — it's how you see skill accumulating
-      when day-to-day it feels like nothing's happening.</p></div>
+    <p class="hint">Resurfaced months later — it's how you see skill accumulating when day to day it
+      feels like nothing is happening.</p></div>
   <div class="sact"><button class="btn btn-s" id="ssCancel">Skip</button>
     <button class="btn btn-p" id="ssSave">Save session</button></div>
 </div></div>
 
-<!-- task detail -->
 <div class="ov" id="ovDetail"><div class="sheet" id="detailSheet"></div></div>
-
-<!-- monthly review -->
 <div class="ov" id="ovReview"><div class="sheet" id="reviewSheet"></div></div>
-
-<!-- cue rebuild -->
 <div class="ov" id="ovCue"><div class="sheet" id="cueSheet"></div></div>
 <script>
 "use strict";
 (function(){
-const KEY="dailycharge.v1";              // same key as v1/v2 — migration is in place
+const KEY="dailycharge.v1";
 const DL=["S","M","T","W","T","F","S"], DF=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const DOW_MON=[1,2,3,4,5,6,0];
 const ICAL=["SU","MO","TU","WE","TH","FR","SA"];
 const PTS={1:1,2:2,3:4}, WN={1:"Light",2:"Normal",3:"Heavy"};
-const PRAISE=["That's the one you usually skip.","Momentum. Good.","Small thing, done — it compounds.",
+const PRAISE=["That's the one you usually skip.","Momentum. Good.","Small thing — it compounds.",
   "Hard one out of the way.","Logged. Future you benefits.","Consistency beats intensity."];
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
 
-let S={};                                 // app state
-let editId=null, editKind="recurring", detailId=null, sessTask=null, revOff=0, heatSel=null;
-let dTask={};                             // task editor draft
-let dSess={};                             // session draft
+let S={};
+let editId=null, editTier="anchor", detailId=null, sessTask=null, revOff=0;
+let dTask={}, dSess={};
 
-/* ---------- storage + migration ---------- */
+/* ---------- storage + migration (v1/v2/v3 -> v4) ---------- */
 function defaults(){
   if(!S.tasks)S.tasks=[];
   if(!S.done)S.done={};
   if(!S.tiny)S.tiny={};
   if(!S.sessions)S.sessions=[];
+  if(!S.weights)S.weights=[];
   if(!S.reminder)S.reminder={};
   if(typeof S.reminder.enabled!=="boolean")S.reminder.enabled=false;
   if(!S.reminder.time)S.reminder.time="20:00";
@@ -616,20 +754,33 @@ function defaults(){
   if(typeof p.confetti!=="boolean")p.confetti=true;
   if(typeof p.surprise!=="boolean")p.surprise=true;
   if(typeof p.freeze!=="boolean")p.freeze=true;
-  // per-task field migration — additive, never destructive
+  if(typeof p.graduate!=="boolean")p.graduate=true;
+  if(typeof p.threshold!=="number")p.threshold=0.7;
+  if(typeof p.pool!=="number")p.pool=3;
+  if(!p.unit)p.unit="lb";
+  if(typeof p.seeded!=="boolean")p.seeded=false;
   S.tasks.forEach(t=>{
-    if(t.kind===undefined)t.kind="recurring";       // v1/v2 tasks were all recurring
+    // v3 used kind:"recurring"|"project"; v1/v2 had no kind at all
+    if(!t.tier){
+      if(t.kind==="project")t.tier="project";
+      else t.tier="anchor";                  // every legacy task was a daily recurring task
+    }
     if(!t.days)t.days=[0,1,2,3,4,5,6];
-    if(!t.weight)t.weight=2;                         // v2 weights carry through untouched
+    if(!t.weight)t.weight=2;
     if(t.cue===undefined)t.cue="";
     if(t.tiny===undefined)t.tiny="";
     if(t.reminderTime===undefined)t.reminderTime="";
-    if(t.conc===undefined)t.conc=null;               // unrated is a valid state
+    if(t.conc===undefined)t.conc=(t.concordance!==undefined?t.concordance:null);
     if(!t.miles)t.miles=[];
-    if(t.gap===undefined)t.gap=7;
-    if(t.cueOK===undefined)t.cueOK=true;             // false = needs rebuild after the move
+    if(t.gap===undefined)t.gap=10;
+    if(t.floor===undefined)t.floor=3;
+    if(t.focus===undefined)t.focus="";
+    if(t.level===undefined)t.level=1;
+    if(t.levelOn===undefined)t.levelOn=null;
+    if(typeof t.retired!=="boolean")t.retired=false;
+    if(t.cueOK===undefined)t.cueOK=true;
   });
-  S.schema=3;
+  S.schema=4;
 }
 function load(){try{const r=localStorage.getItem(KEY);if(r)S=JSON.parse(r);}catch(e){S={};}defaults();}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
@@ -641,72 +792,98 @@ function add(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x;}
 function MK(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");}
 function monStart(off){const d=T();return add(d,-((d.getDay()+6)%7)+off*7);}
 function parseD(s){const p=s.split("-").map(Number);return new Date(p[0],p[1]-1,p[2]);}
-function daysBetween(a,b){return Math.round((b-a)/86400000);}
+function between(a,b){return Math.round((b-a)/86400000);}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function fmtT(t){const p=t.split(":").map(Number);const ap=p[0]<12?"AM":"PM",h=((p[0]+11)%12)+1;
   return h+":"+String(p[1]).padStart(2,"0")+" "+ap;}
 
 /* ---------- task helpers ---------- */
-function recurring(){return S.tasks.filter(t=>t.kind==="recurring");}
-function projects(){return S.tasks.filter(t=>t.kind==="project");}
+function live(){return S.tasks.filter(t=>!t.retired);}
+function anchors(){return live().filter(t=>t.tier==="anchor");}
+function practice(){return live().filter(t=>t.tier==="practice");}
+function projects(){return live().filter(t=>t.tier==="project");}
 function byId(id){return S.tasks.find(t=>t.id===id);}
 function pts(t){return PTS[t.weight||2];}
-function sched(d){return recurring().filter(t=>t.days.includes(d.getDay()));}
 function doneSet(d){return new Set(S.done[K(d)]||[]);}
 function tinySet(d){return new Set(S.tiny[K(d)]||[]);}
 function isDone(d,id){return doneSet(d).has(id);}
 function statusOf(d,id){return doneSet(d).has(id)?"done":(tinySet(d).has(id)?"tiny":"");}
+function anchorsToday(d){return anchors().filter(t=>t.days.includes(d.getDay()));}
 
-/* concordance: (intrinsic + identified) − (introjected + external), −8..+8 */
-function conc(t){
-  if(!t.conc)return null;
-  const c=t.conc;
-  return (c.intrinsic+c.identified)-(c.introjected+c.external);
-}
+function conc(t){if(!t.conc)return null;const c=t.conc;
+  return (c.intrinsic+c.identified)-(c.introjected+c.external);}
 function concLabel(v){
   if(v===null)return "Unrated";
-  if(v>=5)return "Strongly yours";
-  if(v>=2)return "Mostly yours";
-  if(v>=-1)return "Mixed";
-  if(v>=-4)return "Mostly obligation";
-  return "Pure obligation";
+  if(v>=5)return "Strongly yours"; if(v>=2)return "Mostly yours";
+  if(v>=-1)return "Mixed"; if(v>=-4)return "Mostly obligation"; return "Pure obligation";}
+function mW(t){const v=conc(t);return v===null?1:0.25+((v+8)/16)*1.5;}
+function quiet(t){if(!t.conc)return false;const c=t.conc;
+  return c.intrinsic>=4&&c.intrinsic>=c.identified&&c.intrinsic>c.introjected&&c.intrinsic>c.external;}
+
+/* ---------- weekly floors + pool ---------- */
+function weekDays(off){const s=monStart(off||0);return Array.from({length:7},(_,i)=>add(s,i));}
+function doneThisWeek(id,off){
+  return weekDays(off).filter(d=>d<=T()&&isDone(d,id)).length;
 }
-/* meaning weight: maps −8..+8 onto 0.25..1.75 so concordance shades but never zeroes a task */
-function mW(t){const v=conc(t);if(v===null)return 1;return 0.25+((v+8)/16)*1.5;}
-/* derived tracking mode: intrinsic dominant => quiet (don't quantify what you do for love) */
-function quiet(t){
-  if(!t.conc)return false;
-  const c=t.conc;
-  return c.intrinsic>=4 && c.intrinsic>=c.identified && c.intrinsic>c.introjected && c.intrinsic>c.external;
+function floorState(off){
+  const rows=practice().map(t=>{
+    const n=doneThisWeek(t.id,off), f=t.floor||3;
+    return {t,n,floor:f,met:n>=f,toFloor:Math.max(0,f-n),extra:Math.max(0,n-f)};
+  });
+  const remaining=rows.reduce((a,r)=>a+r.toFloor,0);
+  const poolUsed=rows.reduce((a,r)=>a+r.extra,0);
+  return {rows,remaining,poolUsed,poolTarget:S.prefs.pool};
+}
+/* today's practice ask = remaining floors spread over remaining days of the week */
+function practiceAsk(){
+  const fs=floorState(0);
+  const dayIdx=(T().getDay()+6)%7;            // 0=Mon
+  const daysLeft=7-dayIdx;
+  if(fs.remaining<=0)return 0;
+  return Math.max(1,Math.ceil(fs.remaining/daysLeft));
+}
+function practiceDoneToday(){
+  const d=T();return practice().filter(t=>isDone(d,t.id)).length;
 }
 
 /* ---------- day scoring ---------- */
 function dayPts(d){
-  const s=sched(d); if(!s.length)return null;
+  const isToday=K(d)===K(T());
+  const a=anchorsToday(d);
   const ds=doneSet(d), ts=tinySet(d);
   let tot=0,got=0,mtot=0,mgot=0;
-  s.forEach(t=>{
-    const p=pts(t), m=p*mW(t);
-    tot+=p; mtot+=m;
-    if(ds.has(t.id)){got+=p; mgot+=m;}
-    else if(ts.has(t.id)){got+=1; mgot+=1*mW(t);}
-  });
-  return {tot,got,mtot,mgot};
-}
-function ratio(d){const p=dayPts(d);return p?p.got/p.tot:null;}
-function covered(d){const s=sched(d);if(!s.length)return null;
-  const ds=doneSet(d),ts=tinySet(d);return s.every(t=>ds.has(t.id)||ts.has(t.id));}
-function full(d){const s=sched(d);if(!s.length)return null;
-  const ds=doneSet(d);return s.every(t=>ds.has(t.id));}
-
-/* transition rebaseline: never count days before the move against the new context */
-function baseDate(){
-  if(S.transition.on&&S.transition.date){
-    const m=parseD(S.transition.date);
-    if(m<=T())return m;
+  a.forEach(t=>{const p=pts(t),m=p*mW(t);tot+=p;mtot+=m;
+    if(ds.has(t.id)){got+=p;mgot+=m;}else if(ts.has(t.id)){got+=1;mgot+=mW(t);}});
+  // practice contributes: today by ask, past days by what was actually scheduled-equivalent
+  const pl=practice();
+  const donePr=pl.filter(t=>ds.has(t.id));
+  const tinyPr=pl.filter(t=>!ds.has(t.id)&&ts.has(t.id));
+  let ask;
+  if(isToday) ask=Math.max(practiceAsk(),donePr.length+tinyPr.length);
+  else ask=Math.max(1,donePr.length+tinyPr.length);
+  if(pl.length){
+    const avgP=pl.reduce((x,t)=>x+pts(t),0)/pl.length;
+    const avgM=pl.reduce((x,t)=>x+pts(t)*mW(t),0)/pl.length;
+    tot+=ask*avgP; mtot+=ask*avgM;
+    donePr.forEach(t=>{got+=pts(t);mgot+=pts(t)*mW(t);});
+    tinyPr.forEach(t=>{got+=1;mgot+=mW(t);});
   }
-  return null;
+  if(tot===0)return null;
+  return {tot:Math.round(tot*10)/10,got:Math.round(got*10)/10,mtot,mgot};
 }
+function ratio(d){const p=dayPts(d);return p?Math.min(1,p.got/p.tot):null;}
+function enough(d){const r=ratio(d);return r===null?null:r>=S.prefs.threshold;}
+function covered(d){
+  const a=anchorsToday(d);
+  if(!a.length&&!practice().length)return null;
+  const r=ratio(d);
+  return r===null?null:r>=S.prefs.threshold;
+}
+function fullDay(d){const r=ratio(d);return r===null?null:r>=1;}
+
+function baseDate(){
+  if(S.transition.on&&S.transition.date){const m=parseD(S.transition.date);if(m<=T())return m;}
+  return null;}
 function withinBase(d){const b=baseDate();return !b||d>=b;}
 
 /* ---------- streaks ---------- */
@@ -718,7 +895,7 @@ function streak(){
     const c=covered(d);
     if(c===null)continue;
     if(c){cur++;continue;}
-    if(i===0)continue;                       // today isn't over
+    if(i===0)continue;
     if(S.prefs.freeze){const k=MK(d);used[k]=(used[k]||0)+1;if(used[k]<=2)continue;}
     break;
   }
@@ -743,17 +920,12 @@ function gracesLeft(){
     if(covered(d)===false&&i!==0)used++;}
   return Math.max(0,2-used);
 }
-/* bounce-back: P(covered tomorrow | missed today). Predicts persistence better than streak length. */
 function recovery(){
   let miss=0,back=0;
   for(let i=1;i<120;i++){
     const d=add(T(),-i);
     if(!withinBase(d))break;
-    if(covered(d)===false){
-      miss++;
-      const n=add(d,1);
-      if(covered(n)===true)back++;
-    }
+    if(covered(d)===false){miss++;if(covered(add(d,1))===true)back++;}
   }
   return miss>=3?{rate:back/miss,n:miss}:null;
 }
@@ -761,7 +933,7 @@ function consistency(days){
   let tot=0,got=0;
   for(let i=0;i<days;i++){const d=add(T(),-i);if(!withinBase(d))break;
     const p=dayPts(d);if(!p)continue;tot+=p.tot;got+=p.got;}
-  return tot?got/tot:0;
+  return tot?Math.min(1,got/tot):0;
 }
 
 /* ---------- sessions ---------- */
@@ -772,14 +944,42 @@ function totalMins(id){return sessionsFor(id).reduce((a,s)=>a+(s.minutes||0),0);
 function medianGap(id){
   const ds=[...new Set(sessionsFor(id).map(s=>s.date))].sort();
   if(ds.length<3)return null;
-  const gaps=[];
-  for(let i=1;i<ds.length;i++)gaps.push(daysBetween(parseD(ds[i-1]),parseD(ds[i])));
-  gaps.sort((a,b)=>a-b);
-  return gaps[Math.floor(gaps.length/2)];
+  const g=[];for(let i=1;i<ds.length;i++)g.push(between(parseD(ds[i-1]),parseD(ds[i])));
+  g.sort((a,b)=>a-b);return g[Math.floor(g.length/2)];
 }
-function daysSince(id){
-  const l=lastSession(id);
-  return l===null?null:daysBetween(parseD(l),T());
+function daysSince(id){const l=lastSession(id);return l===null?null:between(parseD(l),T());}
+
+/* ---------- graduation ---------- */
+function gradCandidate(t){
+  if(!S.prefs.graduate||t.retired||t.tier!=="anchor")return false;
+  let sc=0,dn=0;
+  for(let i=0;i<28;i++){const d=add(T(),-i);
+    if(t.days.includes(d.getDay())){sc++;if(isDone(d,t.id))dn++;}}
+  if(sc<20)return false;
+  const rate=dn/sc;
+  if(rate<0.9)return false;
+  const au=sessionsFor(t.id).filter(s=>s.automaticity);
+  const plateaued=au.length>=3?au.slice(-3).every(s=>s.automaticity>=4):true;
+  return plateaued;
+}
+function retiredPoints(){                 // retired anchors keep giving their head start
+  return S.tasks.filter(t=>t.retired&&t.tier==="anchor").reduce((a,t)=>a+pts(t),0);
+}
+
+/* ---------- weight trend (EWMA) ---------- */
+function weightSeries(){
+  const w=S.weights.slice().sort((a,b)=>a.date<b.date?-1:1);
+  const alpha=0.12;                        // ~10-day smoothing, Hacker's-Diet style
+  let ew=null;
+  return w.map(e=>{ew=ew===null?e.v:ew+alpha*(e.v-ew);return {date:e.date,v:e.v,t:ew};});
+}
+function trendRate(){                      // units per week from the smoothed line
+  const s=weightSeries();
+  if(s.length<8)return null;
+  const last=s[s.length-1], first=s[Math.max(0,s.length-22)];
+  const days=between(parseD(first.date),parseD(last.date));
+  if(days<7)return null;
+  return {perWeek:(last.t-first.t)/days*7,days:days,n:s.length};
 }
 
 /* ---------- colours ---------- */
@@ -798,14 +998,12 @@ function haptic(kind){
   if(!S.prefs.haptic)return;
   const pat={soft:[12],mid:[20],big:[26,45,26],huge:[30,50,30,50,70]}[kind]||[15];
   if(navigator.vibrate){try{navigator.vibrate(pat);return;}catch(e){}}
-  const n=kind==="huge"?3:(kind==="big"?2:1);   // iOS fallback (Safari has no Vibration API)
+  const n=kind==="huge"?3:(kind==="big"?2:1);
   const lab=$("#hapLbl");if(!lab)return;
   let i=0;const go=()=>{try{lab.click();}catch(e){}if(++i<n)setTimeout(go,70);};go();
 }
-function toast(txt,col){
-  const e=$("#toast");e.textContent=txt;e.style.color=col||"var(--good-ink)";
-  e.classList.remove("go");void e.offsetWidth;e.classList.add("go");
-}
+function toast(txt,col){const e=$("#toast");e.textContent=txt;e.style.color=col||"var(--good-ink)";
+  e.classList.remove("go");void e.offsetWidth;e.classList.add("go");}
 function confetti(){
   if(!S.prefs.confetti)return;
   const c=$("#confetti"),x=c.getContext("2d");c.style.display="block";
@@ -828,91 +1026,116 @@ function confetti(){
     else{x.clearRect(0,0,innerWidth,innerHeight);c.style.display="none";}
   })();
 }
-
-/* ---------- theme ---------- */
 function resolveTheme(){
-  if(S.theme==="dark")return "dark";
-  if(S.theme==="light")return "light";
-  return (matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";
-}
+  if(S.theme==="dark")return "dark"; if(S.theme==="light")return "light";
+  return (matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light";}
 function applyTheme(){
-  const t=resolveTheme();
-  document.body.dataset.theme=t;
+  const t=resolveTheme();document.body.dataset.theme=t;
   const m=$("#themeColorMeta");if(m)m.setAttribute("content",t==="dark"?"#1e1e2e":"#eff1f5");
-  $$("#themeSeg button").forEach(b=>b.classList.toggle("on",b.dataset.th===S.theme));
-}
+  $$("#themeSeg button").forEach(b=>b.classList.toggle("on",b.dataset.th===S.theme));}
 
 /* ---------- TODAY ---------- */
+function taskRow(t,d,extra){
+  const st=statusOf(d,t.id),bits=[];
+  if(st==="tiny")bits.push('<span class="hi">TINY</span>');
+  if(!t.cueOK)bits.push('<span class="hi">needs a new cue</span>');
+  else if(t.cue)bits.push(esc(t.cue));
+  if(t.tier==="practice"&&t.focus)bits.push("L"+t.level+" · "+esc(t.focus));
+  if(extra)bits.push(extra);
+  if(t.reminderTime)bits.push("⏰ "+fmtT(t.reminderTime));
+  return '<div class="task '+st+'" data-id="'+t.id+'">'+
+    '<div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>'+
+    '<div class="tbody"><div class="tname">'+esc(t.name)+'</div>'+
+    (bits.length?'<div class="tsub">'+bits.join(" · ")+'</div>':'')+'</div>'+
+    (t.tiny&&!st?'<button class="tinybtn" data-tiny="'+t.id+'">TINY</button>':'')+
+    '<span class="pts">'+(st==="tiny"?1:pts(t))+'</span></div>';
+}
+function wireRows(scope){
+  scope.querySelectorAll(".task").forEach(el=>el.onclick=e=>{
+    if(e.target.closest("[data-tiny]"))return;toggle(el.dataset.id);});
+  scope.querySelectorAll("[data-tiny]").forEach(b=>b.onclick=e=>{
+    e.stopPropagation();markTiny(b.dataset.tiny);});
+}
 function renderToday(){
   const d=T();
   $("#tDate").textContent=d.toLocaleDateString(undefined,{month:"long",day:"numeric"});
   $("#tDay").textContent=d.toLocaleDateString(undefined,{weekday:"long"});
   renderTransBanner();
 
-  const s=sched(d),ds=doneSet(d),ts=tinySet(d),p=dayPts(d);
-  const tot=p?p.tot:0,got=p?p.got:0,pct=tot?got/tot:0;
-  const mp=p&&p.mtot?p.mgot/p.mtot:0;
-  const isFull=tot>0&&got===tot;
+  const p=dayPts(d);
+  const thr=S.prefs.threshold;
+  const raw=p?Math.min(1,p.got/p.tot):0;
+  const shown=thr>=1?raw:Math.min(1,raw/thr);      // ring fills to "enough", not to perfection
+  const mp=p&&p.mtot?Math.min(1,p.mgot/p.mtot):0;
+  const ok=p&&raw>=thr;
 
-  const cE=2*Math.PI*50, cM=2*Math.PI*36;
-  $("#ringE").style.strokeDashoffset=cE*(1-pct);
-  $("#ringE").style.stroke=isFull?"var(--good)":"var(--accent)";
+  const cE=2*Math.PI*50,cM=2*Math.PI*36;
+  $("#ringE").style.strokeDashoffset=cE*(1-shown);
+  $("#ringE").style.stroke=ok?"var(--good)":"var(--accent)";
   $("#ringM").style.strokeDashoffset=cM*(1-mp);
-  $("#ringPct").textContent=Math.round(pct*100)+"%";
-  $("#ringPct").style.color=isFull?"var(--good-ink)":"var(--ink)";
-  $("#rvE").textContent=got+"/"+tot;
+  $("#ringPct").textContent=Math.round(shown*100)+"%";
+  $("#ringPct").style.color=ok?"var(--good-ink)":"var(--ink)";
+  $("#ringSub").textContent=thr>=1?"of all":"of enough";
+  $("#rvE").textContent=(p?p.got:0)+"/"+(p?p.tot:0);
   $("#rvM").textContent=Math.round(mp*100)+"%";
-
   const note=$("#rNote");
-  if(!tot)note.textContent="";
-  else if(mp>pct+0.12)note.textContent="You're ahead on the things that matter to you.";
-  else if(pct>mp+0.12)note.textContent="Effort's landing on the lower-meaning tasks today.";
+  if(!p)note.textContent="";
+  else if(mp>raw+0.12)note.textContent="You're ahead on the things that matter to you.";
+  else if(raw>mp+0.12)note.textContent="Today's effort is landing on the lower-meaning tasks.";
   else note.textContent="";
 
-  const gg=$("#goalGrad"),left=tot-got;
-  if(!isFull&&pct>=.5&&left>0){gg.textContent=left+" point"+(left>1?"s":"")+" from a full day.";gg.classList.add("show");}
-  else gg.classList.remove("show");
-
+  const gg=$("#goalGrad");
+  if(p&&!ok){
+    const need=Math.max(0,Math.ceil((p.tot*thr-p.got)*10)/10);
+    if(need>0&&raw>=0.35){gg.textContent=need+" point"+(need>1?"s":"")+" from enough.";gg.classList.add("show");}
+    else gg.classList.remove("show");
+  }else gg.classList.remove("show");
   renderFresh();
 
-  const list=$("#todayList");
-  if(!s.length){
-    list.innerHTML=recurring().length===0
-      ? '<div class="empty"><h3>No recurring tasks yet</h3><p>Add the things you want to happen on a schedule.</p><button class="btn btn-p" id="eAdd">Add one</button></div>'
-      : '<div class="empty"><h3>Nothing scheduled today</h3><p>None of your tasks repeat on '+DF[d.getDay()]+'.</p></div>';
-    const e=$("#eAdd");if(e)e.onclick=()=>go("setup");
-  }else{
-    const dn=s.filter(t=>ds.has(t.id)).length, tn=s.filter(t=>!ds.has(t.id)&&ts.has(t.id)).length;
-    list.innerHTML='<div class="lbl">'+dn+' done'+(tn?' · '+tn+' tiny':'')+' · '+(s.length-dn-tn)+' to go</div>'+
-      s.map(t=>{
-        const st=statusOf(d,t.id),bits=[];
-        if(st==="tiny")bits.push('<span class="hi">TINY</span>');
-        if(!t.cueOK)bits.push('<span class="hi">needs a new cue</span>');
-        else if(t.cue)bits.push(esc(t.cue));
-        if(t.reminderTime)bits.push("⏰ "+fmtT(t.reminderTime));
-        return '<div class="task '+st+'" data-id="'+t.id+'">'+
-          '<div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>'+
-          '<div class="tbody"><div class="tname">'+esc(t.name)+'</div>'+
-          (bits.length?'<div class="tsub">'+bits.join(" · ")+'</div>':'')+'</div>'+
-          (t.tiny&&!st?'<button class="tinybtn" data-tiny="'+t.id+'">TINY</button>':'')+
-          '<span class="pts">'+(st==="tiny"?1:pts(t))+'</span></div>';
-      }).join("");
-    list.querySelectorAll(".task").forEach(el=>el.onclick=e=>{
-      if(e.target.closest("[data-tiny]"))return;toggle(el.dataset.id);});
-    list.querySelectorAll("[data-tiny]").forEach(b=>b.onclick=e=>{e.stopPropagation();markTiny(b.dataset.tiny);});
-  }
+  // anchors
+  const a=anchorsToday(d),ds=doneSet(d),ts=tinySet(d);
+  const box=$("#todayAnchors");
+  if(a.length){
+    const dn=a.filter(t=>ds.has(t.id)).length;
+    const rp=retiredPoints();
+    box.innerHTML='<div class="lbl">Anchors · '+dn+' of '+a.length+
+      (rp?' <span style="text-transform:none;letter-spacing:0">(+'+rp+' banked from retired)</span>':'')+'</div>'+
+      a.map(t=>taskRow(t,d)).join("");
+    wireRows(box);
+  }else box.innerHTML="";
 
-  // projects that are drifting
+  // practice — show all, ask for N
+  const pl=practice(),fs=floorState(0),ask=practiceAsk(),didT=practiceDoneToday();
+  const pk=$("#pickBox");
+  if(pl.length&&ask>0&&didT<ask){
+    pk.innerHTML='<div class="pick"><b>Pick '+(ask-didT)+' practice session'+((ask-didT)>1?"s":"")+' today</b>'+
+      '<span>'+fs.remaining+' floor session'+(fs.remaining===1?"":"s")+' left this week, spread across the days remaining. '+
+      'Which one is up to you.</span></div>';
+  }else if(pl.length&&fs.remaining===0){
+    pk.innerHTML='<div class="pick"><b>All floors met</b><span>Anything more this week goes to the shared pool. '+
+      'Follow whatever you actually feel like.</span></div>';
+  }else pk.innerHTML="";
+
+  const pb=$("#todayPractice");
+  if(pl.length){
+    pb.innerHTML='<div class="lbl">Practice</div>'+pl.map(t=>{
+      const r=fs.rows.find(x=>x.t.id===t.id);
+      const tag=r.met?("floor met"+(r.extra?" +"+r.extra:"")):(r.n+"/"+r.floor+" this week");
+      return taskRow(t,d,tag);
+    }).join("");
+    wireRows(pb);
+  }else pb.innerHTML="";
+
+  // projects drifting
   const due=projects().map(t=>({t,since:daysSince(t.id)}))
-    .filter(o=>o.since===null||o.since>=(o.t.gap||7));
-  $("#todayProj").innerHTML=due.length
+    .filter(o=>o.since===null||o.since>=(o.t.gap||10));
+  $("#todayProjects").innerHTML=due.length
     ? '<div class="lbl">Worth returning to</div>'+due.map(o=>
-        '<div class="task" data-proj="'+o.t.id+'"><div class="tbody">'+
-        '<div class="tname">'+esc(o.t.name)+'</div><div class="tsub">'+
-        (o.since===null?"not started yet":o.since+" days since last session")+'</div></div>'+
-        '<span class="pts">log</span></div>').join("")
+        '<div class="task" data-proj="'+o.t.id+'"><div class="tbody"><div class="tname">'+esc(o.t.name)+
+        '</div><div class="tsub">'+(o.since===null?"not started yet":o.since+" days since last session")+
+        '</div></div><span class="pts">log</span></div>').join("")
     : "";
-  $("#todayProj").querySelectorAll("[data-proj]").forEach(el=>
+  $("#todayProjects").querySelectorAll("[data-proj]").forEach(el=>
     el.onclick=()=>openSession(el.dataset.proj));
 }
 function renderFresh(){
@@ -920,8 +1143,8 @@ function renderFresh(){
   let hist=0;Object.keys(S.done).forEach(k=>{if(S.done[k].length)hist++;});
   if(streak()===0&&hist>=3){
     box.innerHTML='<div class="fresh"><h3>Fresh start</h3><p>The chain reset. That isn\'t lost progress — '+
-      'your consistency score still counts every day you showed up, and missing one opportunity doesn\'t '+
-      'meaningfully affect how a habit forms. Today is a clean first day.</p></div>';
+      'consistency still counts every day you showed up, and missing one opportunity doesn\'t meaningfully '+
+      'affect how a habit forms. Today is a clean first day.</p></div>';
   }else box.innerHTML="";
 }
 function toggle(id){
@@ -932,17 +1155,22 @@ function toggle(id){
   if(ta.length)S.tiny[k]=ta;else delete S.tiny[k];
   save();
   if(on){
-    const p=dayPts(T()),done=p&&p.got===p.tot;
-    if(done){haptic("huge");confetti();toast("Full day");}
+    const wasOk=false,p=dayPts(T()),nowOk=p&&(p.got/p.tot)>=S.prefs.threshold;
+    const c=conc(t);
+    if(nowOk&&!wasOk&&justCrossed()){haptic("huge");confetti();toast("Enough for today");}
     else{
-      const c=conc(t);
       haptic(c!==null&&c>=4?"big":(c!==null&&c<=-2?"soft":"mid"));
       if(S.prefs.surprise&&Math.random()<.18)toast(PRAISE[(Math.random()*PRAISE.length)|0],"var(--accent)");
       else toast("+"+pts(t),c!==null&&c>=4?"var(--mauve)":"var(--good-ink)");
     }
-    if(t.kind==="recurring"&&!quiet(t))maybeSession(id);
+    if(t.tier!=="anchor"||!quiet(t))maybeSession(id);
   }
   renderToday();
+}
+let lastOk=false;
+function justCrossed(){
+  const p=dayPts(T());const ok=p&&(p.got/p.tot)>=S.prefs.threshold;
+  const crossed=ok&&!lastOk;lastOk=ok;return crossed;
 }
 function markTiny(id){
   const k=K(T()),arr=(S.tiny[k]||[]).slice();
@@ -950,47 +1178,37 @@ function markTiny(id){
   S.tiny[k]=arr;save();haptic("soft");toast("+1 tiny","var(--warn)");renderToday();
 }
 function maybeSession(id){
-  const t=byId(id);
-  if(!t)return;
-  // ask occasionally, not every time — measurement fatigue is real
-  if(Math.random()<0.28)setTimeout(()=>openSession(id),420);
+  const t=byId(id);if(!t)return;
+  const pr=t.tier==="practice"?0.75:0.25;
+  if(Math.random()<pr)setTimeout(()=>openSession(id),420);
 }
 
-/* ---------- PROJECTS ---------- */
-function renderProjects(){
-  const ps=projects(),box=$("#projList");
-  if(!ps.length){
-    box.innerHTML='<div class="empty"><h3>No projects yet</h3><p>For things you return to in bursts — '+
-      'a campaign, a build, a series you\'re working through.</p></div>';return;
-  }
-  box.innerHTML=ps.map(t=>{
-    const since=daysSince(t.id),gap=t.gap||7,med=medianGap(t.id);
-    const mins=totalMins(t.id),ss=sessionsFor(t.id).length;
-    let chip,cls;
-    if(since===null){chip="not started";cls="due-late";}
-    else if(since<=gap*0.6){chip=since+"d ago";cls="due-ok";}
-    else if(since<=gap){chip=since+"d ago";cls="due-soon";}
-    else{chip=since+"d ago";cls="due-late";}
-    const prog=since===null?1:Math.min(1,since/gap);
-    const hrs=mins>=60?(mins/60).toFixed(1)+"h":mins+"m";
-    const bits=[ss+" session"+(ss===1?"":"s"),hrs+" total"];
-    if(med)bits.push("usual gap "+med+"d");
-    return '<div class="proj" data-id="'+t.id+'"><div class="ptop">'+
-      '<div class="pn">'+esc(t.name)+'</div><span class="duechip '+cls+'">'+chip+'</span></div>'+
-      '<div class="pstat">'+bits.join(" · ")+'</div>'+
-      '<div class="pbar"><i style="width:'+(prog*100)+'%;background:'+
-        (prog>=1?"var(--warn)":"var(--accent)")+'"></i></div>'+
-      '<div class="pact"><button class="bp" data-log="'+t.id+'">Log a session</button>'+
-      '<button class="bs" data-open="'+t.id+'">Details</button></div></div>';
-  }).join("");
-  box.querySelectorAll("[data-log]").forEach(b=>b.onclick=()=>openSession(b.dataset.log));
-  box.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openDetail(b.dataset.open));
-}
+/* ---------- WEEK ---------- */
+function renderWeek(){
+  const days=weekDays(0);
+  const f=x=>x.toLocaleDateString(undefined,{month:"short",day:"numeric"});
+  $("#wkRange").textContent=f(days[0])+" – "+f(days[6]);
 
-/* ---------- TRENDS ---------- */
-function renderTrends(){
-  const b=baseDate();
-  $("#trRange").textContent=b?("since "+parseD(S.transition.date).toLocaleDateString(undefined,{month:"short",day:"numeric"})):"";
+  const fs=floorState(0);
+  $("#floorList").innerHTML=fs.rows.length?fs.rows.map(r=>{
+    const pips=Array.from({length:Math.max(r.floor,r.n)},(_,i)=>
+      '<span class="pip '+(i<r.n?(i<r.floor?"on":"extra"):"")+'"></span>').join("");
+    return '<div class="floorrow" data-tid="'+r.t.id+'"><div class="fname">'+
+      '<div class="fn">'+esc(r.t.name)+'</div><div class="ff">'+
+      (r.met?"floor met":r.toFloor+" to go")+(r.t.focus?" · L"+r.t.level+" "+esc(r.t.focus):"")+
+      '</div></div><div class="pips">'+pips+'</div>'+
+      '<div class="fcount">'+r.n+"/"+r.floor+'</div></div>';
+  }).join(""):'<p class="hint" style="margin:0">No practice tasks yet.</p>';
+  $("#floorList").querySelectorAll(".floorrow").forEach(el=>
+    el.onclick=()=>openDetail(el.dataset.tid));
+
+  const pt=fs.poolTarget;
+  $("#poolCount").textContent=fs.poolUsed+"/"+pt;
+  $("#poolBar").style.width=Math.min(100,pt?fs.poolUsed/pt*100:0)+"%";
+  $("#poolNote").textContent=fs.remaining>0
+    ? "Pool opens once floors are met. "+fs.remaining+" floor session"+(fs.remaining===1?"":"s")+" left."
+    : "Floors are met — pool sessions are surplus, never a target.";
+
   $("#sCons").innerHTML=Math.round(consistency(30)*100)+'<span class="u">%</span>';
   const rec=recovery();
   $("#sRec").innerHTML=rec?Math.round(rec.rate*100)+'<span class="u">%</span>':'—';
@@ -998,21 +1216,19 @@ function renderTrends(){
   $("#sStreak").innerHTML=streak()+'<span class="u">d</span>';
   $("#sBest").innerHTML=bestStreak()+'<span class="u">d</span>';
   $("#graceNote").textContent=S.prefs.freeze
-    ? "Grace days left this month: "+gracesLeft()+" of 2. Consistency is the number that matters; the streak is a bonus."
-    : "Grace days are off, so one miss resets the streak. Consistency is the steadier measure.";
+    ? "Grace days left this month: "+gracesLeft()+" of 2. Consistency is the number that matters."
+    : "Grace days are off, so one miss resets the streak.";
 
-  // week bars
-  const st=monStart(0),tk=K(T());
-  $("#wkBars").innerHTML=Array.from({length:7},(_,i)=>{
-    const d=add(st,i),p=dayPts(d),r=p?p.got/p.tot:null;
+  const tk=K(T());
+  $("#wkBars").innerHTML=days.map(d=>{
+    const r=d>T()?null:ratio(d);
     const h=r===null?0:Math.max(6,Math.round(r*100));
     return '<div class="wkcol '+(K(d)===tk?"now":"")+'">'+
       '<div class="wktrack"><div class="wkfill" style="height:'+h+'%;background:'+
-        (r===null?"transparent":meterCol(r))+'"></div></div>'+
-      '<div class="wklab">'+DL[d.getDay()]+'</div><div class="wknum">'+d.getDate()+'</div></div>';
+      (r===null?"transparent":meterCol(r))+'"></div></div><div class="wklab">'+DL[d.getDay()]+
+      '</div><div class="wknum">'+d.getDate()+'</div></div>';
   }).join("");
 
-  // heatmap
   const heat=$("#heat"),mo=$("#heatMonths");heat.innerHTML="";mo.innerHTML="";
   const W=12,end=T(),first=add(add(end,-((end.getDay()+6)%7)),-(W-1)*7);
   let lm=-1;
@@ -1027,28 +1243,25 @@ function renderTrends(){
       else{
         const r=ratio(date);
         if(r===null)cell.classList.add("nos");
-        else{
-          const i=document.createElement("i");
+        else{const i=document.createElement("i");
           i.style.height=(r<=0?14:Math.max(14,Math.round(r*100)))+"%";
           i.style.background=heatVar(r);cell.appendChild(i);
-          cell.onclick=()=>pickDay(date,cell);
-        }
+          cell.onclick=()=>pickDay(date,cell);}
         if(K(date)===K(end))cell.classList.add("now");
       }
       col.appendChild(cell);
     }
     heat.appendChild(col);
   }
-  const hs=$("#v-trends .heat-scroll");if(hs)hs.scrollLeft=hs.scrollWidth;
+  const hs=$("#v-week .heat-scroll");if(hs)hs.scrollLeft=hs.scrollWidth;
 
-  // per-task breakdown
-  const rows=recurring().map(t=>{
+  const rows=live().filter(t=>t.tier!=="project").map(t=>{
     let sc=0,dn=0;
-    for(let i=0;i<30;i++){const d=add(T(),-i);if(t.days.includes(d.getDay())){sc++;if(isDone(d,t.id))dn++;}}
+    for(let i=0;i<30;i++){const d=add(T(),-i);
+      if(t.tier==="anchor"?t.days.includes(d.getDay()):true){sc++;if(isDone(d,t.id))dn++;}}
     return {id:t.id,name:t.name,rate:sc?dn/sc:0,sc};
   }).filter(r=>r.sc>0).sort((a,b)=>a.rate-b.rate);
-  $("#taskBrk").innerHTML=rows.length?rows.map(brkRow).join("")
-    :'<p class="hint" style="margin:0">No history yet.</p>';
+  $("#taskBrk").innerHTML=rows.length?rows.map(brkRow).join(""):'<p class="hint" style="margin:0">No history yet.</p>';
   wireBrk("#taskBrk");
 }
 function brkRow(r){
@@ -1060,20 +1273,80 @@ function brkRow(r){
 function wireBrk(sel){document.querySelectorAll(sel+" .brow").forEach(el=>{
   if(el.dataset.tid)el.onclick=()=>openDetail(el.dataset.tid);});}
 function pickDay(date,cell){
-  $$("#heat .cell").forEach(c=>c.classList.remove("sel"));
-  const p=dayPts(date),ds=doneSet(date),ts=tinySet(date),s=sched(date);
-  const f=s.filter(t=>ds.has(t.id)).length,tn=s.filter(t=>!ds.has(t.id)&&ts.has(t.id)).length;
-  let txt="<b>"+date.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"})+
-    "</b> · "+Math.round(p.got/p.tot*100)+"% · "+f+" of "+s.length+" tasks";
-  if(tn)txt+=" (+"+tn+" tiny)";
-  $("#heatRead").innerHTML=txt;
+  const p=dayPts(date),ds=doneSet(date);
+  const a=anchorsToday(date),pl=practice();
+  const da=a.filter(t=>ds.has(t.id)).length, dp=pl.filter(t=>ds.has(t.id)).length;
+  $("#heatRead").innerHTML="<b>"+date.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"})+
+    "</b> · "+Math.round(p.got/p.tot*100)+"% · "+da+"/"+a.length+" anchors · "+dp+" practice";
 }
 
-/* ---------- insights engine (all with visible n) ---------- */
+/* ---------- BODY ---------- */
+function renderBody(){
+  const s=weightSeries(),u=S.prefs.unit;
+  $("#wUnit").textContent=u;
+  if(!s.length){
+    $("#wTrend").textContent="—";$("#wRaw").textContent="No entries yet.";
+    $("#wRate").textContent="";$("#wChart").innerHTML="";$("#wBand").textContent="";
+    return;
+  }
+  const last=s[s.length-1];
+  $("#wTrend").textContent=last.t.toFixed(1);
+  $("#wRaw").textContent="Last entry "+last.v.toFixed(1)+" "+u+" on "+
+    parseD(last.date).toLocaleDateString(undefined,{month:"short",day:"numeric"})+
+    " · "+s.length+" entries";
+  const tr=trendRate();
+  if(tr){
+    const sign=tr.perWeek<0?"−":"+";
+    $("#wRate").textContent=sign+Math.abs(tr.perWeek).toFixed(2)+" "+u+"/wk";
+    $("#wRate").style.color=tr.perWeek<0?"var(--good-ink)":"var(--muted)";
+    const pctWk=Math.abs(tr.perWeek)/last.t*100;
+    let band;
+    if(tr.perWeek>=0)band="The trend isn't falling yet. Give it two more weeks before changing anything — "+
+      "water shifts easily swamp a real deficit over short windows.";
+    else if(pctWk<0.35)band="That's gentler than the usual band. Fine if it's sustainable, but slow enough that "+
+      "you may not see much for a while.";
+    else if(pctWk<=0.8)band="<b>Inside the 0.5–0.75%/week band</b> associated with the best lean-mass retention. "+
+      "Nothing to change.";
+    else band="Faster than 0.8%/week. Lean-mass loss rises as the deficit grows — worth easing off "+
+      "unless this is early water weight.";
+    $("#wBand").innerHTML=band+" <span style='color:var(--faint)'>Based on "+tr.days+" days, n="+tr.n+".</span>";
+  }else{
+    $("#wRate").textContent="";
+    $("#wBand").innerHTML="Needs about 8 entries over 7+ days before a trend means anything. "+
+      "Before that you're reading noise.";
+  }
+  drawWeight(s);
+}
+function drawWeight(s){
+  const W=320,H=150,pad=8;
+  const vals=s.flatMap(e=>[e.v,e.t]);
+  let lo=Math.min.apply(null,vals),hi=Math.max.apply(null,vals);
+  if(hi-lo<2){const m=(hi+lo)/2;lo=m-1;hi=m+1;}
+  const span=hi-lo;
+  const n=s.length;
+  const x=i=>pad+(n<2?0:(i/(n-1))*(W-pad*2));
+  const y=v=>H-pad-((v-lo)/span)*(H-pad*2);
+  const dots=s.map((e,i)=>'<circle cx="'+x(i).toFixed(1)+'" cy="'+y(e.v).toFixed(1)+
+    '" r="2" fill="var(--faint)" opacity=".55"/>').join("");
+  const line=s.map((e,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(e.t).toFixed(1)).join(" ");
+  $("#wChart").innerHTML=dots+
+    '<path d="'+line+'" fill="none" stroke="var(--accent)" stroke-width="2.5" '+
+    'stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>';
+}
+function logWeight(){
+  const v=parseFloat($("#wIn").value);
+  if(!(v>0)){$("#wIn").focus();return;}
+  const k=K(T());
+  S.weights=S.weights.filter(e=>e.date!==k);
+  S.weights.push({date:k,v:v});
+  save();$("#wIn").value="";haptic("soft");renderBody();
+}
+
+/* ---------- insights ---------- */
 function taskStreak(t){
   let c=0;
   for(let i=0;i<400;i++){const d=add(T(),-i);
-    if(!t.days.includes(d.getDay()))continue;
+    if(t.tier==="anchor"&&!t.days.includes(d.getDay()))continue;
     if(isDone(d,t.id)){c++;continue;}
     if(i===0)continue;break;}
   return c;
@@ -1082,40 +1355,31 @@ function dowStats(t,weeks){
   return DOW_MON.map(w=>{
     let s=0,c=0;
     for(let i=0;i<weeks*7;i++){const d=add(T(),-i);
-      if(d.getDay()===w&&t.days.includes(w)){s++;if(isDone(d,t.id))c++;}}
-    return {w,rate:s?c/s:null,n:s};
-  });
+      if(d.getDay()===w&&(t.tier!=="anchor"||t.days.includes(w))){s++;if(isDone(d,t.id))c++;}}
+    return {w,rate:s?c/s:null,n:s};});
 }
 function contextStability(t){
   const ss=sessionsFor(t.id).filter(s=>s.at);
   if(ss.length<5)return null;
-  const buckets={};
-  ss.forEach(s=>{const h=parseInt(s.at.split(":")[0],10);const b=Math.floor(h/3);buckets[b]=(buckets[b]||0)+1;});
-  const counts=Object.values(buckets).sort((a,b)=>b-a);
-  const top=counts[0]/ss.length;
-  return {share:top,windows:counts.length,n:ss.length};
+  const b={};ss.forEach(s=>{const h=parseInt(s.at.split(":")[0],10);const k=Math.floor(h/3);b[k]=(b[k]||0)+1;});
+  const c=Object.values(b).sort((a,b)=>b-a);
+  return {share:c[0]/ss.length,windows:c.length,n:ss.length};
 }
 function autoCurve(t){
   const ss=sessionsFor(t.id).filter(s=>s.automaticity).sort((a,b)=>a.date<b.date?-1:1);
   if(ss.length<4)return null;
-  return {pts:ss.map((s,i)=>({i,v:s.automaticity})),n:ss.length,
-    latest:ss[ss.length-1].automaticity,
-    first:ss[0].automaticity};
+  return {n:ss.length,latest:ss[ss.length-1].automaticity,first:ss[0].automaticity};
 }
-function flowPoints(t){
-  return sessionsFor(t.id).filter(s=>s.challenge&&s.skill)
-    .map(s=>({c:s.challenge,k:s.skill}));
-}
+function flowPoints(t){return sessionsFor(t.id).filter(s=>s.challenge&&s.skill).map(s=>({c:s.challenge,k:s.skill}));}
 function stackingFor(t){
-  // co-occurrence lift vs base rate; only for recurring pairs with enough shared days
-  const out=[];
-  const days=[];
-  for(let i=0;i<90;i++){const d=add(T(),-i);if(t.days.includes(d.getDay()))days.push(d);}
+  const out=[],days=[];
+  for(let i=0;i<90;i++){const d=add(T(),-i);
+    if(t.tier!=="anchor"||t.days.includes(d.getDay()))days.push(d);}
   if(days.length<12)return out;
   const base=days.filter(d=>isDone(d,t.id)).length/days.length;
-  recurring().forEach(o=>{
-    if(o.id===t.id)return;
-    const shared=days.filter(d=>o.days.includes(d.getDay()));
+  live().forEach(o=>{
+    if(o.id===t.id||o.tier==="project")return;
+    const shared=days.filter(d=>o.tier!=="anchor"||o.days.includes(d.getDay()));
     if(shared.length<10)return;
     const withO=shared.filter(d=>isDone(d,o.id));
     if(withO.length<5)return;
@@ -1125,139 +1389,160 @@ function stackingFor(t){
   return out.sort((a,b)=>(b.rate-b.base)-(a.rate-a.base)).slice(0,2);
 }
 function trendDelta(t){
-  const r=(days)=>{let s=0,c=0;
-    for(let i=0;i<days;i++){const d=add(T(),-i);if(t.days.includes(d.getDay())){s++;if(isDone(d,t.id))c++;}}
+  const r=days=>{let s=0,c=0;
+    for(let i=0;i<days;i++){const d=add(T(),-i);
+      if(t.tier!=="anchor"||t.days.includes(d.getDay())){s++;if(isDone(d,t.id))c++;}}
     return s>=5?c/s:null;};
-  const recent=r(14),longer=r(60);
-  if(recent===null||longer===null)return null;
-  return {recent,longer,drop:longer-recent};
+  const a=r(14),b=r(60);
+  return (a===null||b===null)?null:{recent:a,longer:b,drop:b-a};
+}
+function levelStale(t){
+  if(t.tier!=="practice"||!t.levelOn)return null;
+  const d=between(parseD(t.levelOn),T());
+  return d>=21?d:null;
 }
 
 /* ---------- task detail ---------- */
 function openDetail(id){
   const t=byId(id);if(!t)return;detailId=id;
-  const isProj=t.kind==="project";
   const c=conc(t);
+  const tierName={anchor:"Anchor",practice:"Practice",project:"Project"}[t.tier];
   let h='<h2>'+esc(t.name)+'</h2><p class="shsub">'+
-    (isProj?"Project":daysSummary(t.days))+' · '+WN[t.weight||2]+' ('+pts(t)+' pts)'+
-    (c!==null?' · '+concLabel(c)+' ('+(c>0?"+":"")+c+')':' · not yet rated')+'</p>';
+    '<span class="tierbadge tb-'+t.tier+'">'+tierName.toUpperCase()+'</span> · '+
+    (t.tier==="anchor"?daysSummary(t.days):t.tier==="practice"?(t.floor+"×/week floor"):("every ~"+t.gap+" days"))+
+    ' · '+WN[t.weight||2]+' ('+pts(t)+' pts)'+
+    (c!==null?' · '+concLabel(c)+' ('+(c>0?"+":"")+c+')':' · not yet rated')+
+    (t.retired?' · <b>retired</b>':'')+'</p>';
 
-  // headline stats
-  if(isProj){
+  if(t.tier==="practice"){
+    h+='<div class="card" style="margin-top:0"><h2>Current focus</h2>'+
+      '<p class="sub" style="margin:0 0 4px">'+(t.focus?esc(t.focus):"Nothing set — a named focus is what makes a session progress rather than maintenance.")+'</p>'+
+      '<div class="lvlrow"><button class="lvlbtn" data-lvl="-1">−</button>'+
+      '<span class="lv">L'+t.level+'</span><button class="lvlbtn" data-lvl="1">+</button>'+
+      '<span class="focusline" style="flex:1">'+(t.levelOn?("last changed "+between(parseD(t.levelOn),T())+"d ago"):"never changed")+'</span></div>';
+    const st=levelStale(t);
+    if(st)h+='<p class="hint" style="color:var(--warn)">Difficulty hasn\'t moved in '+st+' days. '+
+      'Progressive practice produced roughly twice the performance of constant-difficulty practice in a '+
+      'six-week trial — attendance protects a skill, progression improves it.</p>';
+    h+='</div>';
+  }
+
+  if(t.tier==="project"){
     const ss=sessionsFor(id),mins=totalMins(id),med=medianGap(id),since=daysSince(id);
     h+='<div class="dstat"><div class="stat"><div class="v">'+ss.length+'</div><div class="l">Sessions</div></div>'+
       '<div class="stat"><div class="v">'+(mins>=60?(mins/60).toFixed(1)+'<span class="u">h</span>':mins+'<span class="u">m</span>')+'</div><div class="l">Total time</div></div>'+
       '<div class="stat"><div class="v">'+(since===null?"—":since+'<span class="u">d</span>')+'</div><div class="l">Since last</div></div></div>';
-    if(med)h+='<p class="hint" style="margin:-6px 0 14px">Your usual gap is about '+med+' days between sessions.</p>';
+    if(med)h+='<p class="hint" style="margin:-6px 0 14px">Usual gap is about '+med+' days.</p>';
   }else{
     let sc=0,dn=0;
-    for(let i=0;i<30;i++){const d=add(T(),-i);if(t.days.includes(d.getDay())){sc++;if(isDone(d,t.id))dn++;}}
+    for(let i=0;i<30;i++){const d=add(T(),-i);
+      if(t.tier!=="anchor"||t.days.includes(d.getDay())){sc++;if(isDone(d,t.id))dn++;}}
     let tot=0;Object.keys(S.done).forEach(k=>{if(S.done[k].indexOf(id)>=0)tot++;});
+    const mins=totalMins(id);
     h+='<div class="dstat"><div class="stat"><div class="v">'+taskStreak(t)+'</div><div class="l">Streak</div></div>'+
       '<div class="stat"><div class="v">'+(sc?Math.round(dn/sc*100):0)+'<span class="u">%</span></div><div class="l">30-day rate</div></div>'+
-      '<div class="stat"><div class="v">'+tot+'</div><div class="l">Total done</div></div></div>';
+      '<div class="stat"><div class="v">'+(mins>=60?(mins/60).toFixed(0)+'<span class="u">h</span>':tot)+'</div><div class="l">'+(mins>=60?"Total time":"Total done")+'</div></div></div>';
   }
 
-  // insights
+  if(gradCandidate(t)){
+    h+='<div class="gradnote">This has run above 90% for a month and feels automatic. Retiring it keeps '+
+      'its point in your daily total — so you keep the head start — but it stops asking. It comes back '+
+      'automatically if it slips below 75%.<br><button class="btn btn-p" id="gradBtn" style="padding:9px 14px">Retire it</button></div>';
+  }
+  if(t.retired){
+    h+='<div class="gradnote">Retired — still contributing '+pts(t)+' point'+(pts(t)>1?"s":"")+
+      ' to each day.<br><button class="btn btn-s" id="unretireBtn" style="padding:9px 14px">Bring it back</button></div>';
+  }
+
   const ins=[];
   const cs=contextStability(t);
-  if(cs){
-    ins.push({i:"⏱",txt:cs.share>=.6
-      ? "<b>"+Math.round(cs.share*100)+"%</b> of sessions land in the same 3-hour window. That's a stable context — the strongest accelerator there is."
-      : "Sessions are spread across <b>"+cs.windows+" different time windows</b>. Unstable timing is usually the bottleneck, not commitment.",n:cs.n});
-  }
-  if(!isProj){
+  if(cs)ins.push({i:"⏱",n:cs.n,txt:cs.share>=.6
+    ? "<b>"+Math.round(cs.share*100)+"%</b> of sessions fall in the same 3-hour window. Stable context is the strongest accelerator there is."
+    : "Sessions spread across <b>"+cs.windows+" time windows</b>. Unstable timing is usually the bottleneck, not commitment."});
+  if(t.tier!=="project"){
     const dw=dowStats(t,8).filter(x=>x.rate!==null&&x.n>=4);
-    if(dw.length>=3){
-      const worst=dw.slice().sort((a,b)=>a.rate-b.rate)[0];
-      if(worst.rate<=.5)ins.push({i:"📉",txt:"You miss this most on <b>"+DF[worst.w]+"s</b> — "+
-        Math.round(worst.rate*100)+"% there.",n:worst.n});
-    }
-    stackingFor(t).forEach(s=>ins.push({i:"🔗",
-      txt:"You complete this <b>"+Math.round(s.rate*100)+"%</b> of days you also do "+esc(s.name)+
-      ", vs "+Math.round(s.base*100)+"% overall. Worth anchoring one to the other.",n:s.n}));
+    if(dw.length>=3){const worst=dw.slice().sort((a,b)=>a.rate-b.rate)[0];
+      if(worst.rate<=.5)ins.push({i:"📉",n:worst.n,
+        txt:"Missed most on <b>"+DF[worst.w]+"s</b> — "+Math.round(worst.rate*100)+"% there."});}
+    stackingFor(t).forEach(s=>ins.push({i:"🔗",n:s.n,
+      txt:"Done <b>"+Math.round(s.rate*100)+"%</b> of days you also do "+esc(s.name)+", vs "+
+      Math.round(s.base*100)+"% overall. Worth anchoring one to the other."}));
     const td=trendDelta(t);
-    if(td&&td.drop>=.25)ins.push({i:"⚠️",
-      txt:"Down from <b>"+Math.round(td.longer*100)+"%</b> to "+Math.round(td.recent*100)+"% in the last fortnight.",n:14});
+    if(td&&td.drop>=.25)ins.push({i:"⚠️",n:14,
+      txt:"Down from <b>"+Math.round(td.longer*100)+"%</b> to "+Math.round(td.recent*100)+"% this fortnight."});
   }
   const ac=autoCurve(t);
-  if(ac){
-    ins.push({i:"🌀",txt:ac.latest>ac.first
-      ? "Starting this feels more automatic than when you began (<b>"+ac.first+" → "+ac.latest+"</b> of 5)."
-      : "Automaticity hasn't risen yet. That's common — plateaus are long, and unstable context is the usual cause.",n:ac.n});
-  }
-  if(ins.length){
-    h+='<div class="card" style="margin-top:0"><h2>What your data says</h2><p class="sub">Only shown once there\'s enough to be worth saying.</p>';
-    h+=ins.map(o=>'<div class="insight"><span class="ic">'+o.i+'</span><span>'+o.txt+
-      '<span class="n">n = '+o.n+'</span></span></div>').join("");
-    h+='</div>';
-  }else{
-    h+='<div class="card" style="margin-top:0"><h2>What your data says</h2>'+
-      '<p class="hint" style="margin:0">Not enough logged yet. Patterns need roughly 2 weeks for day-of-week, '+
-      '4–6 for timing, longer for automaticity. Anything sooner would be noise.</p></div>';
-  }
+  if(ac)ins.push({i:"🌀",n:ac.n,txt:ac.latest>ac.first
+    ? "Starting feels more automatic than when you began (<b>"+ac.first+" → "+ac.latest+"</b> of 5)."
+    : "Automaticity hasn't risen yet. Common, and usually a context problem rather than a willpower one."});
 
-  // flow map
+  h+='<div class="card"><h2>What your data says</h2>';
+  h+=ins.length
+    ? '<p class="sub">Only shown once there\'s enough to be worth saying.</p>'+ins.map(o=>
+        '<div class="insight"><span class="ic">'+o.i+'</span><span>'+o.txt+
+        '<span class="n">n = '+o.n+'</span></span></div>').join("")
+    : '<p class="hint" style="margin:0">Not enough logged yet. Day-of-week needs ~2 weeks, timing 4–6, '+
+      'automaticity longer. Anything sooner would be noise.</p>';
+  h+='</div>';
+
   const fp=flowPoints(t);
   if(fp.length>=4){
     h+='<div class="card"><h2>Challenge vs skill</h2><p class="sub">Above the line is anxiety, below is boredom, '+
       'along it is flow. n = '+fp.length+'.</p><div class="flowmap">'+
-      '<svg class="diag" viewBox="0 0 100 100" preserveAspectRatio="none">'+
-      '<line x1="0" y1="100" x2="100" y2="0" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="3 3"/></svg>'+
+      '<svg class="diag" viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="0" y1="100" x2="100" y2="0" '+
+      'stroke="var(--line)" stroke-width="1.5" stroke-dasharray="3 3"/></svg>'+
       fp.map(p=>'<div class="pt" style="left:'+((p.k-1)/4*84+8)+'%;bottom:'+((p.c-1)/4*84+8)+'%"></div>').join("")+
       '<span class="zl" style="left:8px;top:8px">anxiety</span>'+
       '<span class="zl" style="right:8px;bottom:8px">boredom</span></div>';
-    const avgC=fp.reduce((a,p)=>a+p.c,0)/fp.length, avgK=fp.reduce((a,p)=>a+p.k,0)/fp.length;
-    const gapv=avgK-avgC;
-    h+='<p class="hint">'+(gapv>=1?"Your skill has outgrown the challenge — time to make this harder if you want it to stay interesting."
-      :gapv<=-1?"Challenge is running ahead of skill. Breaking it into smaller pieces usually helps more than pushing."
-      :"Sitting close to the flow channel. That's where this should be.")+'</p></div>';
+    const aC=fp.reduce((a,p)=>a+p.c,0)/fp.length,aK=fp.reduce((a,p)=>a+p.k,0)/fp.length,g=aK-aC;
+    h+='<p class="hint">'+(g>=1?"Skill has outgrown the challenge — bump the level if you want this to stay interesting."
+      :g<=-1?"Challenge is ahead of skill. Breaking it into smaller pieces beats pushing harder."
+      :"Close to the flow channel. That's where this should sit.")+'</p></div>';
   }
 
-  // 12-week grid
   h+='<div class="card"><h2>Last 12 weeks</h2><p class="sub">'+
-    (isProj?"Days with a logged session.":"Only the days this was scheduled.")+'</p>'+
+    (t.tier==="project"?"Days with a logged session.":"Days this was on.")+'</p>'+
     '<div class="heat-wrap"><div class="heat-days"><span>M</span><span></span><span>W</span><span></span><span>F</span><span></span><span>S</span></div>'+
     '<div class="heat-scroll"><div class="heat" id="dHeat"></div></div></div></div>';
 
-  // day of week
-  if(!isProj){
+  if(t.tier!=="project"){
     const dw=dowStats(t,8);
     h+='<div class="card"><h2>By day of week</h2><p class="sub">Last 8 weeks.</p><div class="dow">'+
       dw.map(x=>{const hh=x.rate===null?0:Math.max(5,Math.round(x.rate*100));
         return '<div class="dowc"><div class="dowt"><div class="dowf" style="height:'+hh+'%;background:'+
-          (x.rate===null?"transparent":heatVar(x.rate))+'"></div></div><div class="dowl">'+DL[x.w]+
-          '</div><div class="dowp">'+(x.rate===null?"—":Math.round(x.rate*100)+"%")+'</div></div>';}).join("")+
+        (x.rate===null?"transparent":heatVar(x.rate))+'"></div></div><div class="dowl">'+DL[x.w]+
+        '</div><div class="dowp">'+(x.rate===null?"—":Math.round(x.rate*100)+"%")+'</div></div>';}).join("")+
       '</div></div>';
   }
 
-  // progress log
   const notes=sessionsFor(id).filter(s=>s.note).sort((a,b)=>a.date<b.date?1:-1);
-  h+='<div class="card"><h2>Progress log</h2><p class="sub">What actually moved. Newest first.</p>';
-  h+=notes.length?notes.slice(0,12).map(s=>'<div class="noteitem"><span class="nd">'+
-    parseD(s.date).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})+
-    '</span>'+esc(s.note)+'</div>').join("")
-    :'<p class="hint" style="margin:0">Nothing logged yet. One line after a session is enough.</p>';
-  h+='</div>';
+  h+='<div class="card"><h2>Progress log</h2><p class="sub">What actually moved. Newest first.</p>'+
+    (notes.length?notes.slice(0,12).map(s=>'<div class="noteitem"><span class="nd">'+
+      parseD(s.date).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})+
+      (s.level?" · L"+s.level:"")+'</span>'+esc(s.note)+'</div>').join("")
+     :'<p class="hint" style="margin:0">Nothing yet. One line after a session is enough.</p>')+'</div>';
 
-  // milestones
-  h+='<div class="card"><h2>Milestones</h2><p class="sub">The markers that make a hobby feel like it\'s going somewhere.</p>';
-  h+=(t.miles||[]).map((m,i)=>'<div class="mile '+(m.doneOn?"hit":"")+'"><div class="mx" data-mile="'+i+'">'+
-    (m.doneOn?"✓":"")+'</div><div class="mt">'+esc(m.text)+'</div>'+
-    '<button class="ib" data-milex="'+i+'">✕</button></div>').join("");
-  h+='<div class="rin" style="margin-top:10px"><input type="text" id="mileNew" placeholder="Add a milestone" '+
+  h+='<div class="card"><h2>Milestones</h2><p class="sub">The markers that make something feel like it\'s going somewhere.</p>'+
+    (t.miles||[]).map((m,i)=>'<div class="mile '+(m.doneOn?"hit":"")+'"><div class="mx" data-mile="'+i+'">'+
+      (m.doneOn?"✓":"")+'</div><div class="mt">'+esc(m.text)+'</div>'+
+      '<button class="ib" data-milex="'+i+'">✕</button></div>').join("")+
+    '<div class="rin" style="margin-top:10px"><input type="text" id="mileNew" placeholder="Add a milestone" '+
     'style="flex:1;font:500 14px var(--sans);color:var(--ink);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:9px 12px;outline:none">'+
     '<button class="btn btn-p" id="mileAdd" style="padding:9px 14px">Add</button></div></div>';
 
   h+='<div class="sact" style="margin-top:16px"><button class="btn btn-s" id="dClose">Close</button>'+
-    '<button class="btn btn-p" id="dEdit">Edit</button></div>';
-  if(isProj)h+='<button class="btn btn-p btn-b" id="dLog" style="margin-top:9px">Log a session</button>';
+    '<button class="btn btn-p" id="dEdit">Edit</button></div>'+
+    '<button class="btn btn-p btn-b" id="dLog" style="margin-top:9px">Log a session</button>';
 
   $("#detailSheet").innerHTML=h;
   drawTaskHeat(t);
   $("#dClose").onclick=()=>$("#ovDetail").classList.remove("open");
   $("#dEdit").onclick=()=>{$("#ovDetail").classList.remove("open");setTimeout(()=>openEdit(id),140);};
-  const dl=$("#dLog");if(dl)dl.onclick=()=>{$("#ovDetail").classList.remove("open");setTimeout(()=>openSession(id),140);};
+  $("#dLog").onclick=()=>{$("#ovDetail").classList.remove("open");setTimeout(()=>openSession(id),140);};
+  const gb=$("#gradBtn");if(gb)gb.onclick=()=>{t.retired=true;save();haptic("big");openDetail(id);renderAll();};
+  const ub=$("#unretireBtn");if(ub)ub.onclick=()=>{t.retired=false;save();openDetail(id);renderAll();};
+  $("#detailSheet").querySelectorAll("[data-lvl]").forEach(b=>b.onclick=()=>{
+    t.level=Math.max(1,(t.level||1)+ +b.dataset.lvl);t.levelOn=K(T());save();haptic("mid");openDetail(id);});
   $("#mileAdd").onclick=()=>{const v=$("#mileNew").value.trim();if(!v)return;
     t.miles.push({text:v,doneOn:null});save();openDetail(id);};
   $("#detailSheet").querySelectorAll("[data-mile]").forEach(el=>el.onclick=()=>{
@@ -1270,18 +1555,16 @@ function openDetail(id){
 function drawTaskHeat(t){
   const heat=$("#dHeat");if(!heat)return;heat.innerHTML="";
   const W=12,end=T(),first=add(add(end,-((end.getDay()+6)%7)),-(W-1)*7);
-  const sdays=new Set(sessionsFor(t.id).map(s=>s.date));
+  const sd=new Set(sessionsFor(t.id).map(s=>s.date));
   for(let w=0;w<W;w++){
     const col=document.createElement("div");col.className="heatcol";
     for(let k=0;k<7;k++){
       const d=add(first,w*7+k),cell=document.createElement("div");cell.className="cell";
       if(d>end)cell.style.visibility="hidden";
-      else if(t.kind==="project"){
-        if(sdays.has(K(d))){const i=document.createElement("i");i.style.height="100%";
-          i.style.background="var(--h4)";cell.appendChild(i);}
-        else cell.classList.add("nos");
-      }
-      else if(!t.days.includes(d.getDay()))cell.classList.add("nos");
+      else if(t.tier==="project"){
+        if(sd.has(K(d))){const i=document.createElement("i");i.style.height="100%";
+          i.style.background="var(--h4)";cell.appendChild(i);}else cell.classList.add("nos");
+      }else if(t.tier==="anchor"&&!t.days.includes(d.getDay()))cell.classList.add("nos");
       else{
         const ok=isDone(d,t.id),tn=tinySet(d).has(t.id),i=document.createElement("i");
         i.style.height=ok?"100%":(tn?"40%":"14%");
@@ -1307,15 +1590,22 @@ function openSession(id){
   dSess={minutes:null,challenge:null,skill:null,automaticity:null};
   $("#ssTitle").textContent=t.name;
   const q=quiet(t);
-  $("#ssSub").textContent=q
-    ? "Just logging that it happened. No scores, nothing to hit."
-    : "Fill in what you remember — all of it is optional.";
+  $("#ssSub").textContent=q?"Just logging that it happened. No scores.":"Everything here is optional.";
   $("#ssFlowBox").style.display=q?"none":"";
-  // Ask often enough early to actually build a curve (needs 4+ points), then taper off.
   const have=sessionsFor(id).filter(s=>s.automaticity).length;
-  const ask=!q && Math.random()<(have<6?0.55:0.12);
-  $("#ssAutoBox").style.display=ask?"":"none";
-  $("#ssMins").innerHTML=[10,20,30,45,60,90,120].map(m=>
+  $("#ssAutoBox").style.display=(!q&&Math.random()<(have<6?0.55:0.12))?"":"none";
+  const lb=$("#ssLvlBox");
+  if(t.tier==="practice"){
+    lb.style.display="";
+    lb.innerHTML='<div class="fld"><label>Level</label><div class="lvlrow">'+
+      '<button class="lvlbtn" id="ssLvlDown">−</button><span class="lv" id="ssLvl">L'+t.level+'</span>'+
+      '<button class="lvlbtn" id="ssLvlUp">+</button>'+
+      '<span class="focusline" style="flex:1">'+(t.focus?esc(t.focus):"no focus set")+'</span></div>'+
+      '<p class="hint">Bump it when it starts feeling easy. That ratchet is what turns practice into progress.</p></div>';
+    $("#ssLvlUp").onclick=()=>{t.level=(t.level||1)+1;t.levelOn=K(T());save();$("#ssLvl").textContent="L"+t.level;haptic("mid");};
+    $("#ssLvlDown").onclick=()=>{t.level=Math.max(1,(t.level||1)-1);t.levelOn=K(T());save();$("#ssLvl").textContent="L"+t.level;};
+  }else lb.style.display="none";
+  $("#ssMins").innerHTML=[10,15,20,30,45,60,90].map(m=>
     '<button class="chip" data-m="'+m+'">'+(m<60?m+"m":(m/60)+"h")+'</button>').join("");
   $("#ssMins").querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{
     dSess.minutes=+b.dataset.m;$("#ssMinsX").value="";
@@ -1326,59 +1616,63 @@ function openSession(id){
 }
 function saveSession(){
   const t=byId(sessTask);if(!t){$("#ovSess").classList.remove("open");return;}
-  const x=parseInt($("#ssMinsX").value,10);
-  const mins=x>0?x:dSess.minutes;
-  const now=T();
+  const x=parseInt($("#ssMinsX").value,10),mins=x>0?x:dSess.minutes,now=T();
   S.sessions.push({taskId:sessTask,date:K(now),
     at:String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0"),
     minutes:mins||null,challenge:dSess.challenge,skill:dSess.skill,
-    automaticity:dSess.automaticity,note:$("#ssNote").value.trim()||null});
-  save();$("#ovSess").classList.remove("open");
-  haptic("mid");
-  renderAll();
+    automaticity:dSess.automaticity,note:$("#ssNote").value.trim()||null,level:t.level||null});
+  // logging a session for a project or unchecked task also marks it done today
+  const k=K(now),arr=(S.done[k]||[]).slice();
+  if(arr.indexOf(sessTask)<0){arr.push(sessTask);S.done[k]=arr;}
+  save();$("#ovSess").classList.remove("open");haptic("mid");renderAll();
 }
-
-/* ---------- likert builder ---------- */
 function buildScales(scope,attr,cb){
   document.querySelectorAll(scope+" .scale").forEach(sc=>{
     const key=sc.dataset[attr==="s"?"s":"c"];
     sc.innerHTML=[1,2,3,4,5].map(n=>'<button data-v="'+n+'">'+n+'</button>').join("");
     sc.querySelectorAll("button").forEach(b=>b.onclick=()=>{
-      sc.querySelectorAll("button").forEach(o=>o.classList.toggle("on",o===b));
-      cb(key,+b.dataset.v);});
+      sc.querySelectorAll("button").forEach(o=>o.classList.toggle("on",o===b));cb(key,+b.dataset.v);});
   });
 }
 
-/* ---------- task editor ---------- */
-function openEdit(id,kind){
+/* ---------- editor ---------- */
+function openEdit(id,tier){
   editId=id||null;
   const t=id?byId(id):null;
-  editKind=t?t.kind:(kind||"recurring");
+  editTier=t?t.tier:(tier||"anchor");
   dTask=t?{days:t.days.slice(),w:t.weight||2,conc:t.conc?Object.assign({},t.conc):{},
            remOn:!!t.reminderTime,remT:t.reminderTime||"09:00"}
-          :{days:[0,1,2,3,4,5,6],w:2,conc:{},remOn:false,remT:"09:00"};
-  $("#edTitle").textContent=t?"Edit":(editKind==="project"?"New project":"New recurring task");
-  $("#edSub").textContent=editKind==="project"
-    ? "Something you return to in bursts. No weekly schedule — just a rhythm."
-    : "Something you want to happen on set days.";
+         :{days:[0,1,2,3,4,5,6],w:2,conc:{},remOn:false,remT:"09:00"};
+  $("#edTitle").textContent=t?"Edit":"New task";
   $("#edName").value=t?t.name:"";
   $("#edCue").value=t?(t.cue||""):"";
   $("#edTiny").value=t?(t.tiny||""):"";
-  $("#edGap").value=t?(t.gap||7):7;
-  $("#edDaysBox").style.display=editKind==="project"?"none":"";
-  $("#edGapBox").style.display=editKind==="project"?"":"none";
-  buildDays();syncDays();syncW();
+  $("#edFloor").value=t?(t.floor||3):3;
+  $("#edGap").value=t?(t.gap||10):10;
+  $("#edFocus").value=t?(t.focus||""):"";
+  syncTier();buildDays();syncDays();syncW();
   buildScales("#ovEdit","c",(k,v)=>{dTask.conc[k]=v;syncConc();});
   ["intrinsic","identified","introjected","external"].forEach(k=>{
     const sc=document.querySelector('#ovEdit .scale[data-c="'+k+'"]');
     if(sc&&dTask.conc[k])sc.querySelectorAll("button").forEach(b=>
-      b.classList.toggle("on",+b.dataset.v===dTask.conc[k]));
-  });
+      b.classList.toggle("on",+b.dataset.v===dTask.conc[k]));});
   syncConc();
   $("#edRemOn").checked=dTask.remOn;
   $("#edRemT").disabled=!dTask.remOn;$("#edRemT").value=dTask.remT;
+  $("#guideBox").style.display=t?"none":"none";
   $("#ovEdit").classList.add("open");
   setTimeout(()=>$("#edName").focus(),240);
+}
+function syncTier(){
+  $$("#edTier button").forEach(b=>b.classList.toggle("on",b.dataset.t===editTier));
+  $("#edDaysBox").style.display=editTier==="anchor"?"":"none";
+  $("#edFloorBox").style.display=editTier==="practice"?"":"none";
+  $("#edGapBox").style.display=editTier==="project"?"":"none";
+  $("#edFocusBox").style.display=editTier==="practice"?"":"none";
+  $("#edTinyLbl").textContent=editTier==="practice"?"Minimum useful dose":"Tiny version";
+  $("#edTinyHint").textContent=editTier==="practice"
+    ? "A real floor, not a token — below some threshold a session produces no learning. 10–15 minutes, not one."
+    : "A floor for bad days. Keeps the chain alive and earns 1 point.";
 }
 function buildDays(){
   const c=$("#edDays");c.innerHTML="";
@@ -1406,9 +1700,9 @@ function syncConc(){
   $("#edConcV").style.color=v>=2?"var(--mauve)":(v<=-2?"var(--warn)":"var(--muted)");
   const q=c.intrinsic>=4&&c.intrinsic>=c.identified&&c.intrinsic>c.introjected&&c.intrinsic>c.external;
   $("#edConcL").innerHTML=concLabel(v)+". "+(v>=2
-    ? "Goals like this get more sustained effort and more out of reaching them."
-    : v<=-2 ? "Obligation-driven goals tend to be dropped, and attaining them doesn't feel like much. Worth reframing or cutting."
-    : "Mixed motives. Fine, just don't expect it to carry itself.")+
+    ? "Goals like this get more sustained effort, and reaching them actually feels like something."
+    : v<=-2 ? "Obligation-driven goals get dropped, and attaining them produces little. Worth reframing, cutting, or keeping unscored."
+    : "Mixed motives — fine, just don't expect it to carry itself.")+
     (q?"<br><b>Quiet mode</b> — you do this for its own sake, so it won't be scored in the moment.":"");
 }
 function saveTask(){
@@ -1416,27 +1710,33 @@ function saveTask(){
   const ks=["intrinsic","identified","introjected","external"];
   const c=ks.every(k=>dTask.conc[k])?{intrinsic:dTask.conc.intrinsic,identified:dTask.conc.identified,
     introjected:dTask.conc.introjected,external:dTask.conc.external,ratedOn:K(T())}:null;
-  const patch={name:name,kind:editKind,weight:dTask.w,cue:$("#edCue").value.trim(),
+  const patch={name:name,tier:editTier,weight:dTask.w,cue:$("#edCue").value.trim(),
     tiny:$("#edTiny").value.trim(),reminderTime:dTask.remOn?dTask.remT:"",conc:c,
-    gap:Math.max(1,parseInt($("#edGap").value,10)||7),
-    days:editKind==="project"?[0,1,2,3,4,5,6]:(dTask.days.length?dTask.days.slice():[0,1,2,3,4,5,6])};
-  if(editId){const t=byId(editId);Object.assign(t,patch);t.cueOK=true;}
+    floor:Math.max(1,Math.min(7,parseInt($("#edFloor").value,10)||3)),
+    gap:Math.max(1,parseInt($("#edGap").value,10)||10),
+    focus:$("#edFocus").value.trim(),
+    days:editTier==="anchor"?(dTask.days.length?dTask.days.slice():[0,1,2,3,4,5,6]):[0,1,2,3,4,5,6]};
+  if(editId){const t=byId(editId);
+    if(t.focus!==patch.focus&&patch.focus)patch.levelOn=K(T());
+    Object.assign(t,patch);t.cueOK=true;}
   else S.tasks.push(Object.assign({id:"t"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
-    miles:[],cueOK:true},patch));
+    miles:[],cueOK:true,level:1,levelOn:K(T()),retired:false},patch));
   save();$("#ovEdit").classList.remove("open");renderAll();
 }
 
-/* ---------- setup list ---------- */
+/* ---------- setup list + seed ---------- */
 function renderManage(){
-  const rs=recurring(),box=$("#mngList");
-  if(!rs.length){box.innerHTML='<div class="empty" style="padding:26px 16px"><h3>Nothing yet</h3><p>Add your first recurring task.</p></div>';return;}
-  box.innerHTML=rs.map((t,i)=>{
+  const box=$("#mngList"),ts=S.tasks;
+  if(!ts.length){box.innerHTML='<div class="empty" style="padding:26px 16px"><h3>Nothing yet</h3><p>Add your first task, or load the starter set above.</p></div>';return;}
+  const order={anchor:0,practice:1,project:2};
+  const sorted=ts.slice().sort((a,b)=>order[a.tier]-order[b.tier]);
+  box.innerHTML=sorted.map(t=>{
     const c=conc(t);
-    return '<div class="mrow" data-id="'+t.id+'">'+
-      '<div class="arrows"><button class="ib" data-mv="up" '+(i===0?"disabled style=opacity:.3":"")+'>▲</button>'+
-      '<button class="ib" data-mv="down" '+(i===rs.length-1?"disabled style=opacity:.3":"")+'>▼</button></div>'+
-      '<div class="mi"><div class="mn">'+esc(t.name)+'</div><div class="md">'+daysSummary(t.days)+
-      ' · '+pts(t)+'pt'+(c!==null?' · '+(c>0?"+":"")+c:' · unrated')+'</div></div>'+
+    const sub=t.tier==="anchor"?daysSummary(t.days):t.tier==="practice"?(t.floor+"×/wk"):("~"+t.gap+"d");
+    return '<div class="mrow '+(t.retired?"retired":"")+'" data-id="'+t.id+'">'+
+      '<span class="tierbadge tb-'+t.tier+'">'+t.tier[0].toUpperCase()+'</span>'+
+      '<div class="mi"><div class="mn">'+esc(t.name)+'</div><div class="md">'+sub+' · '+pts(t)+'pt'+
+      (c!==null?' · '+(c>0?"+":"")+c:' · unrated')+(t.retired?' · retired':'')+'</div></div>'+
       '<button class="ib" data-act="ed">✎</button><button class="ib" data-act="rm">✕</button></div>';
   }).join("");
   box.querySelectorAll(".mrow").forEach(el=>{
@@ -1446,167 +1746,168 @@ function renderManage(){
     el.querySelector('[data-act=rm]').onclick=()=>{
       if(confirm("Delete this task? History stays in your data but it won't appear anymore.")){
         S.tasks=S.tasks.filter(x=>x.id!==id);save();renderAll();}};
-    el.querySelector('[data-mv=up]').onclick=()=>mv(id,-1);
-    el.querySelector('[data-mv=down]').onclick=()=>mv(id,1);
   });
 }
-function mv(id,d){
-  const i=S.tasks.findIndex(t=>t.id===id),j=i+d;
-  if(j<0||j>=S.tasks.length)return;
-  const a=S.tasks,tmp=a[i];a[i]=a[j];a[j]=tmp;save();renderManage();
+const SEED=[
+  {tier:"anchor",name:"Stretch",weight:1,days:[0,1,2,3,4,5,6],cue:"right after training, or before bed",tiny:"two stretches"},
+  {tier:"anchor",name:"Meditate",weight:1,days:[0,1,2,3,4,5,6],cue:"sitting down at my desk, before opening anything",tiny:"three minutes"},
+  {tier:"anchor",name:"Lights out by 00:30",weight:2,days:[0,1,2,3,4,5,6],cue:"phone on the charger across the room at 23:45",tiny:"in bed by 1:00"},
+  {tier:"anchor",name:"Same wake time (±30m)",weight:1,days:[0,1,2,3,4,5,6],cue:"alarm doesn't move at weekends",tiny:""},
+  {tier:"anchor",name:"Hit protein",weight:2,days:[0,1,2,3,4,5,6],cue:"smoothie at breakfast, protein at both other meals",tiny:"one shake"},
+  {tier:"anchor",name:"Creatine",weight:1,days:[0,1,2,3,4,5,6],cue:"goes in the morning smoothie",tiny:""},
+  {tier:"anchor",name:"Veg at two meals",weight:1,days:[0,1,2,3,4,5,6],cue:"fill a third of the plate first",tiny:"veg at one meal"},
+  {tier:"anchor",name:"Logged what I ate",weight:1,days:[0,1,2,3,4,5,6],cue:"log each meal as I finish it",tiny:"log one meal"},
+  {tier:"practice",name:"Work out",weight:3,floor:3,cue:"campus gym straight after my last class",tiny:"change and do the first exercise",focus:"progressive overload — main lifts"},
+  {tier:"practice",name:"Violin",weight:3,floor:4,cue:"before dinner",tiny:"15 minutes",focus:"set a focus"},
+  {tier:"practice",name:"Draw",weight:3,floor:3,cue:"evening, at the desk",tiny:"15 minutes",focus:"set a focus"},
+  {tier:"practice",name:"Practice typing",weight:1,floor:2,cue:"before starting coursework",tiny:"10 minutes",focus:"accuracy over speed"},
+  {tier:"practice",name:"Learn something new",weight:2,floor:2,cue:"with morning coffee",tiny:"20 minutes",focus:"pick one topic"},
+  {tier:"practice",name:"Write",weight:2,floor:2,cue:"after dinner",tiny:"15 minutes",focus:"300 words on the scenario"},
+  {tier:"project",name:"Delta Green",weight:3,gap:14,cue:"",tiny:""},
+  {tier:"project",name:"Ricing / configs",weight:2,gap:10,cue:"",tiny:""}
+];
+function renderSeed(){
+  const box=$("#seedBox");
+  if(S.prefs.seeded||S.tasks.length>3){box.innerHTML="";return;}
+  box.innerHTML='<div class="seedbox"><h3>Load the starter set?</h3>'+
+    '<p>Eight anchors, six practice tasks with weekly floors, and two projects — cues and minimum doses '+
+    'already filled in. You can edit or delete any of them, and rate what each one means to you later.</p>'+
+    '<div class="sact"><button class="btn btn-s" id="seedNo">No thanks</button>'+
+    '<button class="btn btn-p" id="seedYes">Load it</button></div></div>';
+  $("#seedYes").onclick=()=>{
+    SEED.forEach((s,i)=>S.tasks.push(Object.assign({
+      id:"s"+Date.now().toString(36)+i,days:[0,1,2,3,4,5,6],floor:3,gap:10,focus:"",
+      conc:null,miles:[],cueOK:true,level:1,levelOn:K(T()),retired:false,reminderTime:""},s)));
+    S.prefs.seeded=true;save();haptic("big");renderAll();};
+  $("#seedNo").onclick=()=>{S.prefs.seeded=true;save();renderSeed();};
 }
 
-/* ---------- transition mode ---------- */
+/* ---------- transition ---------- */
 function renderTransSetup(){
   $("#trOn").checked=S.transition.on;
   $("#trDateBox").style.display=S.transition.on?"":"none";
   $("#trDate").value=S.transition.date||"";
   const st=$("#trStatus");
   if(!S.transition.on||!S.transition.date){st.textContent="";return;}
-  const m=parseD(S.transition.date),n=daysBetween(m,T());
+  const m=parseD(S.transition.date),n=between(m,T());
   const pend=S.tasks.filter(t=>!t.cueOK).length;
-  if(n<0)st.textContent="Starts in "+(-n)+" days. On move-in, every task's cue gets cleared for rebuilding.";
+  if(n<0)st.textContent="Starts in "+(-n)+" days. On move-in every cue is cleared for rebuilding.";
   else if(n<=84)st.textContent="Week "+(Math.floor(n/7)+1)+" of 12."+
-    (pend?" "+pend+" task"+(pend>1?"s":"")+" still need a new cue.":" All cues rebuilt.");
-  else st.textContent="The 12-week window has passed. You can turn this off.";
+    (pend?" "+pend+" cue"+(pend>1?"s":"")+" still to rebuild.":" All cues rebuilt.");
+  else st.textContent="The 12-week window has passed — you can turn this off.";
 }
 function renderTransBanner(){
   const b=$("#transBanner");b.innerHTML="";
   if(!S.transition.on||!S.transition.date)return;
-  const m=parseD(S.transition.date),n=daysBetween(m,T());
+  const m=parseD(S.transition.date),n=between(m,T());
   if(n<0||n>84)return;
   const pend=S.tasks.filter(t=>!t.cueOK);
   if(pend.length){
     b.innerHTML='<div class="banner"><h3>Rebuild your cues — '+pend.length+' left</h3>'+
-      '<p>Your habits were triggered by your old surroundings. Those cues don\'t exist here, which is '+
-      'the real reason routines collapse after a move. Re-anchor each one to something fixed in your new week.</p>'+
+      '<p>Your habits were triggered by your old surroundings. Those cues don\'t exist here, which is the '+
+      'real reason routines collapse after a move. Re-anchor each one to something fixed in your new week.</p>'+
       '<button class="btn btn-p btn-b" id="cueGo" style="margin-top:11px">Rebuild next cue</button></div>';
     $("#cueGo").onclick=openCue;
   }else if(n<=14){
     b.innerHTML='<div class="banner"><h3>Transition mode · week '+(Math.floor(n/7)+1)+'</h3>'+
-      '<p>Cues are rebuilt. Expect a dip anyway — it\'s normal and your consistency now measures from '+
-      'move-in, not before. A disruption like this is also the easiest window you\'ll get to add something new.</p></div>';
+      '<p>Cues rebuilt. Expect a dip anyway — consistency now measures from move-in, not before. '+
+      'A disruption like this is also the easiest window you\'ll get for adding something new.</p></div>';
   }
 }
 function openCue(){
   const pend=S.tasks.filter(t=>!t.cueOK);
   if(!pend.length){$("#ovCue").classList.remove("open");renderToday();return;}
   const t=pend[0];
-  $("#cueSheet").innerHTML='<h2>New cue</h2><p class="shsub">'+(pend.length)+' left</p>'+
-    '<div class="cueq"><div class="cq">'+esc(t.name)+'</div>'+
-    '<div class="cs">Old cue: '+(t.cue?esc(t.cue):"none set")+'</div></div>'+
+  $("#cueSheet").innerHTML='<h2>New cue</h2><p class="shsub">'+pend.length+' left</p>'+
+    '<div class="cueq"><div class="cq">'+esc(t.name)+'</div><div class="cs">Old cue: '+
+    (t.cue?esc(t.cue):"none set")+'</div></div>'+
     '<div class="fld"><label>When and where, now</label>'+
     '<input type="text" id="cueVal" placeholder="e.g. after my Tuesday seminar, in the library" autocomplete="off">'+
     '<p class="hint">Anchor it to something already fixed in your week — a lecture, a meal, the walk home. '+
     'Fixed events survive a chaotic timetable; clock times don\'t.</p></div>'+
     '<div class="sact"><button class="btn btn-s" id="cueSkip">Skip for now</button>'+
     '<button class="btn btn-p" id="cueSave">Save cue</button></div>';
-  $("#cueSave").onclick=()=>{const v=$("#cueVal").value.trim();
-    t.cue=v;t.cueOK=true;save();haptic("mid");openCue();};
-  $("#cueSkip").onclick=()=>{$("#ovCue").classList.remove("open");};
+  $("#cueSave").onclick=()=>{t.cue=$("#cueVal").value.trim();t.cueOK=true;save();haptic("mid");openCue();};
+  $("#cueSkip").onclick=()=>$("#ovCue").classList.remove("open");
   $("#ovCue").classList.add("open");
-  setTimeout(()=>{const el=$("#cueVal");if(el)el.focus();},240);
+  setTimeout(()=>{const e=$("#cueVal");if(e)e.focus();},240);
 }
-function markCuesStale(){S.tasks.forEach(t=>t.cueOK=false);save();}
 
-/* ---------- monthly review ---------- */
+/* ---------- review ---------- */
 function monthStats(off){
   const n=T(),start=new Date(n.getFullYear(),n.getMonth()+off,1);
-  const end=new Date(n.getFullYear(),n.getMonth()+off+1,0);
-  const last=end>n?n:end;
-  let tot=0,got=0,showed=0,fullD=0,tinyD=0,days=0,mins=0;
+  const end=new Date(n.getFullYear(),n.getMonth()+off+1,0),last=end>n?n:end;
+  let tot=0,got=0,showed=0,fullD=0,days=0,mins=0;
   for(let d=new Date(start);d<=last;d=add(d,1)){
     const p=dayPts(d);
-    if(p){days++;tot+=p.tot;got+=p.got;
-      const c=covered(d),f=full(d);
-      if(c)showed++;if(f)fullD++;if(c&&!f)tinyD++;}
+    if(p){days++;tot+=p.tot;got+=p.got;if(covered(d))showed++;if(fullDay(d))fullD++;}
   }
-  S.sessions.forEach(s=>{const sd=parseD(s.date);
-    if(sd>=start&&sd<=last)mins+=s.minutes||0;});
-  return {days,showed,fullD,tinyD,mins,start,end,
-    cons:tot?got/tot:0,label:start.toLocaleDateString(undefined,{month:"long",year:"numeric"})};
+  S.sessions.forEach(s=>{const sd=parseD(s.date);if(sd>=start&&sd<=last)mins+=s.minutes||0;});
+  return {days,showed,fullD,mins,start,cons:tot?Math.min(1,got/tot):0,
+    label:start.toLocaleDateString(undefined,{month:"long",year:"numeric"})};
 }
 function renderReview(){
   const m=monthStats(revOff),prev=monthStats(revOff-1);
-  let h='<h2>Monthly review</h2><p class="shsub">Consistency, not streaks. This survives a bad week.</p>';
+  let h='<h2>Monthly review</h2><p class="shsub">Consistency, not streaks — this survives a bad week.</p>';
   h+='<div class="seg" style="margin-bottom:16px"><button id="rvP">‹</button>'+
     '<button style="flex:2" class="on">'+(revOff===0?"This month":m.label)+'</button>'+
     '<button id="rvN" '+(revOff>=0?"disabled style=opacity:.4":"")+'>›</button></div>';
-  let sum="";
-  if(!m.days)sum="Nothing tracked this month yet.";
-  else{
-    sum="You showed up on <b>"+m.showed+" of "+m.days+"</b> tracked days";
-    if(m.tinyD)sum+=", <b>"+m.tinyD+"</b> of those on the tiny version — which still counts";
-    sum+=". ";
-    if(m.mins)sum+="Logged <b>"+(m.mins>=60?(m.mins/60).toFixed(1)+" hours":m.mins+" minutes")+"</b> of sessions. ";
-    if(prev.days>=5){
-      const d=Math.round((m.cons-prev.cons)*100);
-      sum+=d>2?"Consistency is up <b>"+d+" points</b> on last month."
-        :d<-2?"Consistency is down "+Math.abs(d)+" points. Worth seeing which task slipped — it's not a verdict on the month."
-        :"Consistency is level with last month.";
-    }else sum+="Not enough history to compare months yet.";
-  }
+  let sum=!m.days?"Nothing tracked this month yet.":
+    "You cleared the day's bar on <b>"+m.showed+" of "+m.days+"</b> tracked days. "+
+    (m.mins?"Logged <b>"+(m.mins>=60?(m.mins/60).toFixed(1)+" hours":m.mins+" minutes")+"</b> of sessions. ":"")+
+    (prev.days>=5?(()=>{const d=Math.round((m.cons-prev.cons)*100);
+      return d>2?"Consistency is up <b>"+d+" points</b> on last month.":
+        d<-2?"Consistency is down "+Math.abs(d)+" points — worth seeing which task slipped, not a verdict on the month.":
+        "Consistency is level with last month.";})():"Not enough history to compare months yet.");
   h+='<div class="card" style="margin-top:0;font-size:13.5px;line-height:1.6">'+sum+'</div>';
   h+='<div class="dstat" style="margin-top:14px"><div class="stat"><div class="v">'+Math.round(m.cons*100)+
     '<span class="u">%</span></div><div class="l">Consistency</div></div>'+
-    '<div class="stat"><div class="v">'+m.showed+'</div><div class="l">Showed up</div></div>'+
-    '<div class="stat"><div class="v">'+m.fullD+'</div><div class="l">Full days</div></div></div>';
-
-  // 6-month trend
+    '<div class="stat"><div class="v">'+m.showed+'</div><div class="l">Days cleared</div></div>'+
+    '<div class="stat"><div class="v">'+m.fullD+'</div><div class="l">Everything days</div></div></div>';
   const bars=[];for(let i=5;i>=0;i--)bars.push(monthStats(revOff-i));
-  h+='<div class="card"><h2>Last 6 months</h2><p class="sub">The number worth watching.</p>'+
-    '<div class="wkbars">'+bars.map(b=>{
-      const hh=b.days?Math.max(5,Math.round(b.cons*100)):0;
+  h+='<div class="card"><h2>Last 6 months</h2><p class="sub">The number worth watching.</p><div class="wkbars">'+
+    bars.map(b=>{const hh=b.days?Math.max(5,Math.round(b.cons*100)):0;
       return '<div class="wkcol"><div class="wktrack" style="height:64px"><div class="wkfill" style="height:'+hh+
         '%;background:'+(b.days?heatVar(b.cons):"transparent")+'"></div></div><div class="wklab">'+
         b.start.toLocaleDateString(undefined,{month:"short"})+'</div></div>';}).join("")+'</div></div>';
-
-  // obligation drift
-  const drift=S.tasks.filter(t=>{const c=conc(t);return c!==null&&c<=-2;});
-  if(drift.length){
-    h+='<div class="card"><h2>Running on obligation</h2><p class="sub">These score higher on guilt and '+
-      'outside pressure than on value or enjoyment. Goals like that get dropped, and hitting them doesn\'t '+
-      'feel like much. Consider cutting, reframing, or keeping them unscored.</p>'+
-      drift.map(t=>'<div class="brow" data-tid="'+t.id+'"><div class="bname">'+esc(t.name)+
-        '</div><div class="bpct">'+conc(t)+'</div></div>').join("")+'</div>';
-  }
-  // resurfaced notes
-  const old=S.sessions.filter(s=>s.note).filter(s=>{
-    const g=daysBetween(parseD(s.date),T());return g>=75&&g<=200;});
-  if(old.length){
-    h+='<div class="card"><h2>A few months ago</h2><p class="sub">Where you were. Skill accumulates '+
-      'invisibly — this is the point of the log.</p>'+
-      old.slice(-4).map(s=>'<div class="noteitem"><span class="nd">'+
-        parseD(s.date).toLocaleDateString(undefined,{month:"short",day:"numeric"})+' · '+
-        esc((byId(s.taskId)||{name:"—"}).name)+'</span>'+esc(s.note)+'</div>').join("")+'</div>';
-  }
+  const drift=live().filter(t=>{const c=conc(t);return c!==null&&c<=-2;});
+  if(drift.length)h+='<div class="card"><h2>Running on obligation</h2><p class="sub">These score higher on guilt '+
+    'and outside pressure than on value or enjoyment. Consider cutting, reframing, or keeping them unscored.</p>'+
+    drift.map(t=>'<div class="brow" data-tid="'+t.id+'"><div class="bname">'+esc(t.name)+
+      '</div><div class="bpct">'+conc(t)+'</div></div>').join("")+'</div>';
+  const old=S.sessions.filter(s=>s.note).filter(s=>{const g=between(parseD(s.date),T());return g>=75&&g<=200;});
+  if(old.length)h+='<div class="card"><h2>A few months ago</h2><p class="sub">Skill accumulates invisibly — '+
+    'this is the point of the log.</p>'+old.slice(-4).map(s=>'<div class="noteitem"><span class="nd">'+
+    parseD(s.date).toLocaleDateString(undefined,{month:"short",day:"numeric"})+' · '+
+    esc((byId(s.taskId)||{name:"—"}).name)+'</span>'+esc(s.note)+'</div>').join("")+'</div>';
   h+='<button class="btn btn-p btn-b" id="rvClose" style="margin-top:16px">Close</button>';
   $("#reviewSheet").innerHTML=h;
   $("#rvClose").onclick=()=>$("#ovReview").classList.remove("open");
   const p=$("#rvP"),n2=$("#rvN");
   if(p)p.onclick=()=>{revOff--;renderReview();};
   if(n2)n2.onclick=()=>{if(revOff<0){revOff++;renderReview();}};
-  wireBrk("#reviewSheet");
   $("#reviewSheet").querySelectorAll(".brow").forEach(el=>{
     if(el.dataset.tid)el.onclick=()=>{$("#ovReview").classList.remove("open");
       setTimeout(()=>openDetail(el.dataset.tid),140);};});
 }
 
-/* ---------- reminders ---------- */
-function remCount(){return S.tasks.filter(t=>t.reminderTime).length;}
+/* ---------- reminders + data ---------- */
 function renderRem(){
   $("#remOn").checked=!!S.reminder.enabled;
   $("#remTime").value=S.reminder.time||"20:00";
   $("#pHap").checked=S.prefs.haptic;$("#pConf").checked=S.prefs.confetti;
   $("#pSurp").checked=S.prefs.surprise;$("#pFreeze").checked=S.prefs.freeze;
+  $("#pGrad").checked=S.prefs.graduate;
+  $$("#thrSeg button").forEach(b=>b.classList.toggle("on",+b.dataset.thr===S.prefs.threshold));
   const parts=[];
   if(S.reminder.enabled)parts.push("an end-of-day nudge at "+fmtT(S.reminder.time));
-  const n=remCount();if(n)parts.push(n+" per-task reminder"+(n>1?"s":""));
+  const n=S.tasks.filter(t=>t.reminderTime).length;
+  if(n)parts.push(n+" per-task reminder"+(n>1?"s":""));
   $("#remNote").textContent=parts.length
-    ? "Add to Calendar bundles "+parts.join(" and ")+" into one file. That's the only way to get an alert "
-      +"when the app is closed — a web app can't schedule notifications in the background without a server. "
-      +"In-app alerts work while it's open. Re-add after changing times."
-    : "Nothing set. Turn on the end-of-day nudge, or give individual tasks their own time.";
+    ? "Add to Calendar bundles "+parts.join(" and ")+" into one file. That's the only way to get an alert when "+
+      "the app is closed — a web app with no server can't schedule background notifications, on Android or iOS. "+
+      "In-app alerts work while it's open."
+    : "Nothing set yet.";
 }
 function icsEv(uid,start,sum,rule){
   const s=String(sum).replace(/([,;\\])/g,"\\$1");
@@ -1615,7 +1916,7 @@ function icsEv(uid,start,sum,rule){
     "TRIGGER:PT0S","END:VALARM","END:VEVENT"];
 }
 function downloadIcs(){
-  const n=remCount();
+  const n=S.tasks.filter(t=>t.reminderTime).length;
   if(!S.reminder.enabled&&!n){$("#remNote").textContent="Nothing to add yet.";return;}
   const now=T(),pad=x=>String(x).padStart(2,"0");
   const dp=""+now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate());
@@ -1624,14 +1925,14 @@ function downloadIcs(){
     L=L.concat(icsEv("d-eod-"+Date.now(),dp+"T"+pad(p[0])+pad(p[1])+"00","Finish today's tasks","FREQ=DAILY"));}
   S.tasks.filter(t=>t.reminderTime).forEach((t,i)=>{
     const p=t.reminderTime.split(":").map(Number);
-    const rule=t.kind==="project"||t.days.length===7?"FREQ=DAILY"
+    const rule=(t.tier!=="anchor"||t.days.length===7)?"FREQ=DAILY"
       :"FREQ=WEEKLY;BYDAY="+t.days.slice().sort((a,b)=>a-b).map(d=>ICAL[d]).join(",");
     L=L.concat(icsEv("d-t"+i+"-"+Date.now(),dp+"T"+pad(p[0])+pad(p[1])+"00",t.name,rule));});
   L.push("END:VCALENDAR");
   const b=new Blob([L.join("\r\n")],{type:"text/calendar"});
   const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="daily-reminders.ics";a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-  $("#remNote").textContent="Downloaded. Open it and add to your calendar — those fire even when the app is closed.";
+  $("#remNote").textContent="Downloaded — open it and add to your calendar.";
 }
 function tryNotify(){
   const n=$("#remNote");
@@ -1646,39 +1947,35 @@ function tryNotify(){
 function remCheck(){
   if(!("Notification" in window)||Notification.permission!=="granted"||!S.reminder.notify)return;
   const now=T(),tk=K(now),mins=now.getHours()*60+now.getMinutes();
-  const s=sched(now),ds=doneSet(now),ts=tinySet(now);
+  const a=anchorsToday(now),ds=doneSet(now),ts=tinySet(now);
   const seen=new Set(S.notified[tk]||[]);
   const fire=(id,body)=>{if(seen.has(id))return;
     try{new Notification("Daily",{body:body});seen.add(id);}catch(e){}};
-  s.forEach(t=>{if(t.reminderTime&&!ds.has(t.id)&&!ts.has(t.id)){
+  live().forEach(t=>{if(t.reminderTime&&!ds.has(t.id)&&!ts.has(t.id)){
     const p=t.reminderTime.split(":").map(Number);
     if(mins>=p[0]*60+p[1])fire(t.id,"Time for: "+t.name);}});
   if(S.reminder.enabled){const p=S.reminder.time.split(":").map(Number);
-    const left=s.filter(t=>!ds.has(t.id)&&!ts.has(t.id)).length;
-    if(mins>=p[0]*60+p[1]&&left>0)fire("_eod","Still "+left+" task"+(left>1?"s":"")+" open today.");}
+    if(mins>=p[0]*60+p[1]&&!enough(now))fire("_eod","Today hasn't cleared the bar yet.");}
   if(seen.size){S.notified={};S.notified[tk]=[...seen];save();}
 }
-
-/* ---------- data ---------- */
 function exportData(){
   const b=new Blob([JSON.stringify(S,null,2)],{type:"application/json"});
   const a=document.createElement("a");a.href=URL.createObjectURL(b);
   a.download="daily-backup-"+K(T())+".json";a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-  $("#dataNote").textContent="Exported. Keep this somewhere off the device.";
+  $("#dataNote").textContent="Exported. Keep a copy off this device.";
 }
 function importData(f){
   const r=new FileReader();
-  r.onload=()=>{
-    try{
-      const o=JSON.parse(r.result);
-      if(!o.tasks||!o.done)throw 0;
-      const nT=o.tasks.length,nD=Object.keys(o.done).length;
-      if(!confirm("Import "+nT+" tasks and "+nD+" days of history? This replaces what's here now."))return;
-      S=o;defaults();save();applyTheme();renderAll();
-      $("#dataNote").textContent="Imported "+nT+" tasks and "+nD+" days. Older backups are upgraded automatically — nothing is lost.";
-    }catch(e){alert("That doesn't look like a valid backup file.");}
-  };
+  r.onload=()=>{try{
+    const o=JSON.parse(r.result);
+    if(!o.tasks||!o.done)throw 0;
+    const nT=o.tasks.length,nD=Object.keys(o.done).length,sch=o.schema||"1/2";
+    if(!confirm("Import "+nT+" tasks and "+nD+" days of history? This replaces what's here."))return;
+    S=o;defaults();save();applyTheme();renderAll();
+    $("#dataNote").textContent="Imported "+nT+" tasks and "+nD+" days from a schema-"+sch+
+      " backup. Old tasks became anchors; weights, cues and tiny versions carried over untouched.";
+  }catch(e){alert("That doesn't look like a valid backup file.");}};
   r.readAsText(f);
 }
 
@@ -1687,18 +1984,20 @@ function go(v){
   document.body.dataset.view=v;
   $$(".nb").forEach(b=>b.classList.toggle("on",b.dataset.nav===v));
   if(v==="today")renderToday();
-  if(v==="proj")renderProjects();
-  if(v==="trends")renderTrends();
-  if(v==="setup"){renderManage();renderRem();renderTransSetup();}
+  if(v==="week")renderWeek();
+  if(v==="body")renderBody();
+  if(v==="setup"){renderSeed();renderManage();renderRem();renderTransSetup();}
   scrollTo(0,0);
 }
-function renderAll(){renderToday();renderProjects();renderTrends();renderManage();renderRem();renderTransSetup();}
-
+function renderAll(){renderToday();renderWeek();renderBody();renderSeed();renderManage();renderRem();renderTransSetup();}
 function init(){
   load();applyTheme();
+  const p0=dayPts(T());lastOk=!!(p0&&(p0.got/p0.tot)>=S.prefs.threshold);
   $$(".nb").forEach(b=>b.onclick=()=>go(b.dataset.nav));
-  $("#addTask").onclick=()=>openEdit(null,"recurring");
-  $("#addProj").onclick=()=>openEdit(null,"project");
+  $("#addTask").onclick=()=>openEdit(null,"anchor");
+  $("#gToggle").onclick=()=>{const g=$("#guideBox");
+    g.style.display=g.style.display==="none"?"":"none";};
+  $$("#edTier button").forEach(b=>b.onclick=()=>{editTier=b.dataset.t;syncTier();});
   $("#edSave").onclick=saveTask;
   $("#edCancel").onclick=()=>$("#ovEdit").classList.remove("open");
   $("#ovEdit").onclick=e=>{if(e.target.id==="ovEdit")$("#ovEdit").classList.remove("open");};
@@ -1712,14 +2011,17 @@ function init(){
   $("#edRemT").onchange=e=>{dTask.remT=e.target.value||"09:00";};
   $$("#edW button").forEach(b=>b.onclick=()=>{dTask.w=+b.dataset.w;syncW();});
   $$("#ovEdit [data-q]").forEach(q=>q.onclick=()=>{
-    const m={all:[0,1,2,3,4,5,6],week:[1,2,3,4,5],end:[0,6]};
-    dTask.days=m[q.dataset.q].slice();syncDays();});
+    const m={all:[0,1,2,3,4,5,6],week:[1,2,3,4,5],end:[0,6]};dTask.days=m[q.dataset.q].slice();syncDays();});
   $$("#themeSeg button").forEach(b=>b.onclick=()=>{S.theme=b.dataset.th;save();applyTheme();});
+  $$("#thrSeg button").forEach(b=>b.onclick=()=>{S.prefs.threshold=+b.dataset.thr;save();renderRem();renderAll();});
   $("#pHap").onchange=e=>{S.prefs.haptic=e.target.checked;save();if(e.target.checked)haptic("mid");};
   $("#pConf").onchange=e=>{S.prefs.confetti=e.target.checked;save();if(e.target.checked)confetti();};
   $("#pSurp").onchange=e=>{S.prefs.surprise=e.target.checked;save();};
-  $("#pFreeze").onchange=e=>{S.prefs.freeze=e.target.checked;save();renderTrends();};
+  $("#pFreeze").onchange=e=>{S.prefs.freeze=e.target.checked;save();renderWeek();};
+  $("#pGrad").onchange=e=>{S.prefs.graduate=e.target.checked;save();};
   $("#reviewBtn").onclick=()=>{revOff=0;renderReview();$("#ovReview").classList.add("open");};
+  $("#wSave").onclick=logWeight;
+  $("#wIn").addEventListener("keydown",e=>{if(e.key==="Enter")logWeight();});
   $("#remOn").onchange=e=>{S.reminder.enabled=e.target.checked;save();renderRem();};
   $("#remTime").onchange=e=>{S.reminder.time=e.target.value||"20:00";save();renderRem();};
   $("#remCal").onclick=downloadIcs;
@@ -1727,16 +2029,15 @@ function init(){
   $("#expBtn").onclick=exportData;
   $("#impBtn").onclick=()=>$("#impFile").click();
   $("#impFile").onchange=e=>{if(e.target.files[0])importData(e.target.files[0]);e.target.value="";};
-  $("#resetBtn").onclick=()=>{if(confirm("Erase all tasks, history and sessions on this device? Can't be undone.")){
-    const th=S.theme,pf=S.prefs;S={theme:th,prefs:pf};defaults();save();applyTheme();renderAll();}};
-  $("#trOn").onchange=e=>{
-    S.transition.on=e.target.checked;
+  $("#resetBtn").onclick=()=>{if(confirm("Erase all tasks, history, sessions and weights? Can't be undone.")){
+    const th=S.theme,pf=S.prefs;S={theme:th,prefs:pf};S.prefs.seeded=false;defaults();save();applyTheme();renderAll();}};
+  $("#trOn").onchange=e=>{S.transition.on=e.target.checked;
     if(e.target.checked&&!S.transition.date)S.transition.date=K(T());
     save();renderTransSetup();renderToday();};
   $("#trDate").onchange=e=>{
-    const prev=S.transition.date;
-    S.transition.date=e.target.value;
-    if(e.target.value&&e.target.value!==prev&&parseD(e.target.value)<=T())markCuesStale();
+    const prev=S.transition.date;S.transition.date=e.target.value;
+    if(e.target.value&&e.target.value!==prev&&parseD(e.target.value)<=T())
+      {S.tasks.forEach(t=>t.cueOK=false);}
     save();renderTransSetup();renderToday();};
   if(matchMedia){const mq=matchMedia("(prefers-color-scheme: dark)");
     if(mq.addEventListener)mq.addEventListener("change",()=>{if(S.theme==="auto")applyTheme();});}
