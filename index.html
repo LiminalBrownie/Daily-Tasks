@@ -43,8 +43,10 @@
     transition:background-color .3s,color .3s}
   .wrap{max-width:540px;margin:0 auto;padding:0 18px}
   .view{display:none;animation:fade .22s ease}
-  body[data-view="today"] #v-today,body[data-view="proj"] #v-proj,
-  body[data-view="trends"] #v-trends,body[data-view="setup"] #v-setup{display:block}
+  body[data-view="today"] #v-today,
+  body[data-view="week"] #v-week,
+  body[data-view="body"] #v-body,
+  body[data-view="setup"] #v-setup{display:block}
   @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
   header{padding:22px 0 4px}
   .kicker{font:600 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
@@ -369,6 +371,36 @@
   .seedbox h3{font-size:14.5px;margin:0 0 5px;font-weight:600}
   .seedbox p{font-size:12.5px;color:var(--muted);margin:0 0 12px;line-height:1.5}
 
+  /* ---- protocol sheet ---- */
+  .ptag{display:inline-block;font:700 9.5px var(--mono);letter-spacing:.07em;padding:3px 8px;
+    border-radius:5px;background:var(--accent-soft);color:var(--accent);margin-bottom:9px}
+  .pk{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:10px 0;
+    border-top:1px solid var(--line2)}
+  .pk:first-child{border-top:none}
+  .pk .k{font-size:13px;color:var(--muted);flex:1}
+  .pk .v{font:700 14.5px var(--mono);text-align:right;white-space:nowrap}
+  .pk .v em{display:block;font:500 10.5px var(--sans);color:var(--faint);font-style:normal;margin-top:2px}
+  .prule{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line2)}
+  .prule:first-child{border-top:none}
+  .prule .n{width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--on-accent);
+    font:700 11px var(--mono);display:grid;place-items:center;flex:none;margin-top:1px}
+  .prule .t{flex:1;font-size:13.5px;line-height:1.55}
+  .sched{border-radius:13px;background:var(--card2);padding:13px 14px;margin-top:11px}
+  .sched:first-of-type{margin-top:4px}
+  .sched h4{font:700 10.5px var(--mono);letter-spacing:.1em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 9px}
+  .sline{display:flex;gap:12px;padding:5px 0;font-size:13px;line-height:1.5;color:var(--muted)}
+  .sline .tm{font:600 11px var(--mono);color:var(--faint);width:42px;flex:none;padding-top:2px}
+  .sline b{color:var(--ink);font-weight:600}
+  .sline.key{color:var(--ink)}
+  .sline.key .tm{color:var(--accent)}
+  .pnote{font-size:12.5px;color:var(--muted);line-height:1.55;margin:13px 0 0;padding-top:12px;
+    border-top:1px solid var(--line2)}
+  .pnote b{color:var(--ink)}
+  .phand{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .phand div{background:var(--card2);border-radius:11px;padding:11px 12px;font-size:12.5px;line-height:1.4}
+  .phand b{display:block;font-size:13.5px;margin-bottom:2px}
+
 </style>
 </head>
 <body data-view="today" data-theme="dark">
@@ -498,6 +530,7 @@
         There's deliberately no target, no streak and no colour-coding: those are the tracker features
         most associated with disordered eating, and none of them make the trend more accurate.</p>
     </div>
+    <button class="btn btn-s btn-b" id="protoBtn" style="margin-top:14px">Protocol reference →</button>
     <div class="card">
       <h2>Creatine and the scale</h2>
       <p class="sub" style="margin:0">Creatine pulls water into muscle, so expect 2–4 lb to appear in the
@@ -668,8 +701,11 @@
 
   <div class="fld"><label>When / where</label>
     <input type="text" id="edCue" placeholder="e.g. after my last lecture" autocomplete="off">
+    <input type="text" id="edCue2" placeholder="alternative — e.g. 6am before class" autocomplete="off" style="margin-top:7px">
+    <input type="text" id="edCue3" placeholder="alternative — e.g. 5pm before dinner" autocomplete="off" style="margin-top:7px">
     <p class="hint">Naming the moment raises follow-through (d ≈ 0.59 for health behaviours; smaller
-      when measured objectively, but real). Anchor to a fixed event, not a clock time.</p></div>
+      when measured objectively, but real). Anchor to a fixed event, not a clock time. Add alternatives
+      if the slot moves — a plan for each realistic context beats one plan you can only follow some days.</p></div>
 
   <div class="fld"><label id="edTinyLbl">Tiny version</label>
     <input type="text" id="edTiny" placeholder="e.g. one scale" autocomplete="off">
@@ -718,6 +754,7 @@
 <div class="ov" id="ovDetail"><div class="sheet" id="detailSheet"></div></div>
 <div class="ov" id="ovReview"><div class="sheet" id="reviewSheet"></div></div>
 <div class="ov" id="ovCue"><div class="sheet" id="cueSheet"></div></div>
+<div class="ov" id="ovProto"><div class="sheet" id="protoSheet"></div></div>
 <script>
 "use strict";
 (function(){
@@ -768,6 +805,7 @@ function defaults(){
     if(!t.days)t.days=[0,1,2,3,4,5,6];
     if(!t.weight)t.weight=2;
     if(t.cue===undefined)t.cue="";
+    if(!Array.isArray(t.cues))t.cues=t.cue?[t.cue]:[];
     if(t.tiny===undefined)t.tiny="";
     if(t.reminderTime===undefined)t.reminderTime="";
     if(t.conc===undefined)t.conc=(t.concordance!==undefined?t.concordance:null);
@@ -782,7 +820,7 @@ function defaults(){
   });
   S.schema=4;
 }
-function load(){try{const r=localStorage.getItem(KEY);if(r)S=JSON.parse(r);}catch(e){S={};}defaults();}
+function load(){try{const r=localStorage.getItem(KEY);if(r)S=JSON.parse(r);}catch(e){S={};}defaults();save();}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 
 /* ---------- dates ---------- */
@@ -804,6 +842,9 @@ function practice(){return live().filter(t=>t.tier==="practice");}
 function projects(){return live().filter(t=>t.tier==="project");}
 function byId(id){return S.tasks.find(t=>t.id===id);}
 function pts(t){return PTS[t.weight||2];}
+function cueList(t){return (t.cues&&t.cues.length)?t.cues:(t.cue?[t.cue]:[]);}
+function cueText(t){const c=cueList(t);
+  return !c.length?"":(c.length===1?c[0]:c.length+" options · "+c[0]);}
 function doneSet(d){return new Set(S.done[K(d)]||[]);}
 function tinySet(d){return new Set(S.tiny[K(d)]||[]);}
 function isDone(d,id){return doneSet(d).has(id);}
@@ -1039,7 +1080,7 @@ function taskRow(t,d,extra){
   const st=statusOf(d,t.id),bits=[];
   if(st==="tiny")bits.push('<span class="hi">TINY</span>');
   if(!t.cueOK)bits.push('<span class="hi">needs a new cue</span>');
-  else if(t.cue)bits.push(esc(t.cue));
+  else if(cueText(t))bits.push(esc(cueText(t)));
   if(t.tier==="practice"&&t.focus)bits.push("L"+t.level+" · "+esc(t.focus));
   if(extra)bits.push(extra);
   if(t.reminderTime)bits.push("⏰ "+fmtT(t.reminderTime));
@@ -1286,7 +1327,9 @@ function renderBody(){
   $("#wUnit").textContent=u;
   if(!s.length){
     $("#wTrend").textContent="—";$("#wRaw").textContent="No entries yet.";
-    $("#wRate").textContent="";$("#wChart").innerHTML="";$("#wBand").textContent="";
+    $("#wRate").textContent="";$("#wChart").innerHTML="";
+    $("#wBand").innerHTML="Log your weight whenever you like — most days is ideal. The bold line only "+
+      "starts meaning something after about 8 entries across a week; before that you'd be reading water.";
     return;
   }
   const last=s[s.length-1];
@@ -1301,14 +1344,19 @@ function renderBody(){
     $("#wRate").style.color=tr.perWeek<0?"var(--good-ink)":"var(--muted)";
     const pctWk=Math.abs(tr.perWeek)/last.t*100;
     let band;
-    if(tr.perWeek>=0)band="The trend isn't falling yet. Give it two more weeks before changing anything — "+
-      "water shifts easily swamp a real deficit over short windows.";
-    else if(pctWk<0.35)band="That's gentler than the usual band. Fine if it's sustainable, but slow enough that "+
-      "you may not see much for a while.";
-    else if(pctWk<=0.8)band="<b>Inside the 0.5–0.75%/week band</b> associated with the best lean-mass retention. "+
-      "Nothing to change.";
-    else band="Faster than 0.8%/week. Lean-mass loss rises as the deficit grows — worth easing off "+
-      "unless this is early water weight.";
+    const wks=tr.days/7;
+    if(wks<3)band="<b>Too early to act on.</b> Creatine water and normal fluctuation dominate the first "+
+      "few weeks. Don't change calories until you have three weeks of trend.";
+    else if(tr.perWeek>=0)band="The trend isn't falling yet. If this holds for another full week, that's "+
+      "when a small adjustment makes sense — not before.";
+    else if(pctWk<0.35)band="Gentler than target. Fine if it's sustainable, but slow enough that you may "+
+      "not see much for a while.";
+    else if(pctWk<=0.65)band="<b>On target — 0.5–0.6% of bodyweight per week.</b> This is the rate "+
+      "that keeps the muscle on. Nothing to change.";
+    else if(pctWk<=0.9)band="A little faster than target. Fine short-term, but if it holds for three weeks "+
+      "add back ~150 cal — lean-mass loss climbs as the deficit grows.";
+    else band="Faster than 0.9%/week. That is a steeper deficit than intended. Eat more, especially if "+
+      "your lifts are slipping.";
     $("#wBand").innerHTML=band+" <span style='color:var(--faint)'>Based on "+tr.days+" days, n="+tr.n+".</span>";
   }else{
     $("#wRate").textContent="";
@@ -1645,7 +1693,8 @@ function openEdit(id,tier){
          :{days:[0,1,2,3,4,5,6],w:2,conc:{},remOn:false,remT:"09:00"};
   $("#edTitle").textContent=t?"Edit":"New task";
   $("#edName").value=t?t.name:"";
-  $("#edCue").value=t?(t.cue||""):"";
+  const cl=t?cueList(t):[];
+  $("#edCue").value=cl[0]||"";$("#edCue2").value=cl[1]||"";$("#edCue3").value=cl[2]||"";
   $("#edTiny").value=t?(t.tiny||""):"";
   $("#edFloor").value=t?(t.floor||3):3;
   $("#edGap").value=t?(t.gap||10):10;
@@ -1710,7 +1759,8 @@ function saveTask(){
   const ks=["intrinsic","identified","introjected","external"];
   const c=ks.every(k=>dTask.conc[k])?{intrinsic:dTask.conc.intrinsic,identified:dTask.conc.identified,
     introjected:dTask.conc.introjected,external:dTask.conc.external,ratedOn:K(T())}:null;
-  const patch={name:name,tier:editTier,weight:dTask.w,cue:$("#edCue").value.trim(),
+  const cues=[$("#edCue").value.trim(),$("#edCue2").value.trim(),$("#edCue3").value.trim()].filter(Boolean);
+  const patch={name:name,tier:editTier,weight:dTask.w,cue:cues[0]||"",cues:cues,
     tiny:$("#edTiny").value.trim(),reminderTime:dTask.remOn?dTask.remT:"",conc:c,
     floor:Math.max(1,Math.min(7,parseInt($("#edFloor").value,10)||3)),
     gap:Math.max(1,parseInt($("#edGap").value,10)||10),
@@ -1753,11 +1803,13 @@ const SEED=[
   {tier:"anchor",name:"Meditate",weight:1,days:[0,1,2,3,4,5,6],cue:"sitting down at my desk, before opening anything",tiny:"three minutes"},
   {tier:"anchor",name:"Lights out by 00:30",weight:2,days:[0,1,2,3,4,5,6],cue:"phone on the charger across the room at 23:45",tiny:"in bed by 1:00"},
   {tier:"anchor",name:"Same wake time (±30m)",weight:1,days:[0,1,2,3,4,5,6],cue:"alarm doesn't move at weekends",tiny:""},
-  {tier:"anchor",name:"Hit protein",weight:2,days:[0,1,2,3,4,5,6],cue:"smoothie at breakfast, protein at both other meals",tiny:"one shake"},
-  {tier:"anchor",name:"Creatine",weight:1,days:[0,1,2,3,4,5,6],cue:"goes in the morning smoothie",tiny:""},
+  {tier:"anchor",name:"Anchor smoothie",weight:2,days:[0,1,2,3,4,5,6],cue:"first thing, before anything else",cues:["first thing, before anything else","straight after an early workout"],tiny:"scoop of whey in almond milk"},
+  {tier:"anchor",name:"Hit protein (~160g)",weight:2,days:[0,1,2,3,4,5,6],cue:"smoothie, lunch, snack, dinner",tiny:"one extra shake"},
+  {tier:"anchor",name:"85g protein before dinner",weight:1,days:[0,1,2,3,4,5,6],cue:"check the running total at 5pm",tiny:"a shake at 5pm"},
+  {tier:"anchor",name:"Creatine 5g",weight:1,days:[0,1,2,3,4,5,6],cue:"goes in the morning smoothie",tiny:""},
   {tier:"anchor",name:"Veg at two meals",weight:1,days:[0,1,2,3,4,5,6],cue:"fill a third of the plate first",tiny:"veg at one meal"},
   {tier:"anchor",name:"Logged what I ate",weight:1,days:[0,1,2,3,4,5,6],cue:"log each meal as I finish it",tiny:"log one meal"},
-  {tier:"practice",name:"Work out",weight:3,floor:3,cue:"campus gym straight after my last class",tiny:"change and do the first exercise",focus:"progressive overload — main lifts"},
+  {tier:"practice",name:"Work out",weight:3,floor:4,cue:"6-7am, before the day starts",cues:["6-7am, before the day starts","12-1pm, either side of lunch","5-6pm, before dinner"],tiny:"change and do the first exercise",focus:"progressive overload — main lifts"},
   {tier:"practice",name:"Violin",weight:3,floor:4,cue:"before dinner",tiny:"15 minutes",focus:"set a focus"},
   {tier:"practice",name:"Draw",weight:3,floor:3,cue:"evening, at the desk",tiny:"15 minutes",focus:"set a focus"},
   {tier:"practice",name:"Practice typing",weight:1,floor:2,cue:"before starting coursework",tiny:"10 minutes",focus:"accuracy over speed"},
@@ -1770,13 +1822,13 @@ function renderSeed(){
   const box=$("#seedBox");
   if(S.prefs.seeded||S.tasks.length>3){box.innerHTML="";return;}
   box.innerHTML='<div class="seedbox"><h3>Load the starter set?</h3>'+
-    '<p>Eight anchors, six practice tasks with weekly floors, and two projects — cues and minimum doses '+
+    '<p>Ten anchors, six practice tasks with weekly floors, and two projects — cues and minimum doses '+
     'already filled in. You can edit or delete any of them, and rate what each one means to you later.</p>'+
     '<div class="sact"><button class="btn btn-s" id="seedNo">No thanks</button>'+
     '<button class="btn btn-p" id="seedYes">Load it</button></div></div>';
   $("#seedYes").onclick=()=>{
     SEED.forEach((s,i)=>S.tasks.push(Object.assign({
-      id:"s"+Date.now().toString(36)+i,days:[0,1,2,3,4,5,6],floor:3,gap:10,focus:"",
+      id:"s"+Date.now().toString(36)+i,days:[0,1,2,3,4,5,6],floor:3,gap:10,focus:"",cues:[],
       conc:null,miles:[],cueOK:true,level:1,levelOn:K(T()),retired:false,reminderTime:""},s)));
     S.prefs.seeded=true;save();haptic("big");renderAll();};
   $("#seedNo").onclick=()=>{S.prefs.seeded=true;save();renderSeed();};
@@ -1827,7 +1879,7 @@ function openCue(){
     'Fixed events survive a chaotic timetable; clock times don\'t.</p></div>'+
     '<div class="sact"><button class="btn btn-s" id="cueSkip">Skip for now</button>'+
     '<button class="btn btn-p" id="cueSave">Save cue</button></div>';
-  $("#cueSave").onclick=()=>{t.cue=$("#cueVal").value.trim();t.cueOK=true;save();haptic("mid");openCue();};
+  $("#cueSave").onclick=()=>{const v=$("#cueVal").value.trim();t.cue=v;t.cues=v?[v]:[];t.cueOK=true;save();haptic("mid");openCue();};
   $("#cueSkip").onclick=()=>$("#ovCue").classList.remove("open");
   $("#ovCue").classList.add("open");
   setTimeout(()=>{const e=$("#cueVal");if(e)e.focus();},240);
@@ -1979,6 +2031,148 @@ function importData(f){
   r.readAsText(f);
 }
 
+
+function openProto(){
+  const card=(tag,h,s,b)=>'<div class="card">'+(tag?'<span class="ptag">'+tag+'</span>':'')+
+    '<h2>'+h+'</h2>'+(s?'<p class="sub">'+s+'</p>':'')+b+'</div>';
+  const kv=(k,v,e)=>'<div class="pk"><span class="k">'+k+'</span><span class="v">'+v+
+    (e?'<em>'+e+'</em>':'')+'</span></div>';
+  const rule=(n,t)=>'<div class="prule"><span class="n">'+n+'</span><span class="t">'+t+'</span></div>';
+  const line=(t,txt,key)=>'<div class="sline'+(key?' key':'')+'"><span class="tm">'+t+'</span><span>'+txt+'</span></div>';
+  const sched=(name,rows)=>'<div class="sched"><h4>'+name+'</h4>'+rows+'</div>';
+  const note=t=>'<p class="pnote">'+t+'</p>';
+
+  let h='<h2>Protocol</h2><p class="shsub">Targets, six rules, three day-shapes. Reference only — '+
+    'the app scores behaviours, not this.</p>';
+
+  h+=card("Targets","Your numbers",
+    "Mifflin-St Jeor at 5\u20326\u2033, 180 lb, 18, lifting four times a week. Estimates carry about \u00b110% "+
+    "error, so treat them as a starting point the weight trend will correct.",
+    kv("Maintenance","2,650\u20132,750","kcal estimated")+
+    kv("Eat","2,200\u20132,350","kcal \u00b7 400\u2013500 deficit")+
+    kv("Protein","160 g","\u00b115 \u00b7 about 2.0 g/kg")+
+    kv("Fat","70\u201380 g","never under 55")+
+    kv("Carbs","~245 g","the remainder")+
+    kv("Fibre","30\u201338 g","hunger control")+
+    kv("Loss rate","0.9\u20131.1 lb","per week \u00b7 0.5\u20130.6% BW")+
+    kv("Landing zone","150\u2013160 lb","at 12\u201315% body fat")+
+    note("<b>Why not faster.</b> Lean-mass loss climbs once the daily deficit passes roughly 500, and at "+
+      "your weight 0.75%/week would already need about 675. Losing slower is how the muscle stays on. "+
+      "Regularly under 2,000 means the deficit is too steep \u2014 that's a warning sign, not a target."));
+
+  h+=card("Non-negotiable","The six that don't move","Everything else is yours to change.",
+    rule(1,"<b>Anchor smoothie every morning.</b> Whey 25\u201330g \u00b7 \u00bd cup frozen mango \u00b7 handful "+
+      "spinach \u00b7 \u00bd banana \u00b7 1 tbsp chia \u00b7 1 cup unsweetened almond milk \u00b7 <b>5g creatine</b>. "+
+      "About 300 cal and 30g protein before you're properly awake.")+
+    rule(2,"<b>160g protein.</b> The daily total is what matters. Spread it over three or four meals "+
+      "because that's marginally better and much easier \u2014 but there is no 30g ceiling, so don't count "+
+      "per-meal grams.")+
+    rule(3,"<b>2,200\u20132,350 calories.</b>")+
+    rule(4,"<b>5g creatine, seven days a week.</b> Rest days included. Saturation takes 2\u20134 weeks and "+
+      "cares about the fortnight, not the hour. No loading phase.")+
+    rule(5,"<b>Lift four times a week</b>, with progressive overload. Without this a deficit just makes "+
+      "you a smaller version of the same shape.")+
+    rule(6,"<b>7\u20139 hours sleep.</b> It decides whether lost weight comes from fat or muscle \u2014 and it "+
+      "consolidates your violin and drawing practice overnight too."));
+
+  h+=card("Daily","Eating shapes","Pick one each morning to match when you're training. Timing isn't "+
+    "magic once total intake and protein are matched \u2014 the value is deciding once instead of "+
+    "negotiating with yourself six times a day.",
+    sched("A \u00b7 train early, 6\u20137am",
+      line("5:30","\u00bd banana + coffee. Small on purpose.")+
+      line("7:00","<b>Anchor smoothie</b> \u2014 doubles as post-workout. 30g",1)+
+      line("12:00","Lunch: lean protein + carb + veg. 35g")+
+      line("15:30","Greek yoghurt or cottage cheese + almonds. 20g")+
+      line("\u2192","<b>85g in before dinner.</b>",1)+
+      line("18:30","Family dinner \u2014 hand portions, no logging."))+
+    sched("B \u00b7 train midday, 12\u20132pm",
+      line("7:30","<b>Anchor smoothie.</b> 30g",1)+
+      line("10:00","Eggs or yoghurt. 20g")+
+      line("12:00","Lunch either side of training \u2014 carbs before, protein after. 35g")+
+      line("16:00","Snack. 15g")+
+      line("\u2192","<b>85g in before dinner.</b>",1)+
+      line("18:30","Family dinner \u2014 hand portions."))+
+    sched("C \u00b7 train evening, 5\u20136pm",
+      line("7:30","<b>Anchor smoothie.</b> 30g",1)+
+      line("12:30","Lunch. 35g")+
+      line("15:30","Snack \u2014 this is the one that gets you there. 20g")+
+      line("\u2192","<b>85g in before training.</b>",1)+
+      line("17:00","30\u201350g carbs before lifting. Bagel, banana, whatever's there.")+
+      line("19:30","Dinner after \u2014 hand portions. Add a shake if it was light.")));
+
+  h+=card("","The meal you can't weigh","Hand portions are accurate enough. Precision at a family "+
+    "dinner buys you nothing.",
+    '<div class="phand"><div><b>\u270b Palm</b>protein \u00b7 20\u201330g</div>'+
+    '<div><b>\ud83e\udd32 Cupped hand</b>carbs</div>'+
+    '<div><b>\u270a Fist</b>vegetables</div>'+
+    '<div><b>\ud83d\udc4d Thumb</b>fats</div></div>'+
+    note("Under ~25g protein at dinner? Add a shake afterwards. <b>Always add, never subtract</b> \u2014 "+
+      "eating less tomorrow to make up for today is the one habit worth never starting."));
+
+  h+=card("Halls","Eating on campus","This is most of your food and the hardest to measure. Build "+
+    "around that rather than fighting it.",
+    rule(1,"<b>Find your dining service's nutrition portal.</b> Most US universities publish per-item "+
+      "calories and macros \u2014 NetNutrition, Nutrislice or Dine On Campus. Better data than any app's "+
+      "database for the food you'll actually eat.")+
+    rule(2,"<b>Build five or six standard plates and stop deciding.</b> Save each as a Meal and reuse it. "+
+      "The grill, sandwich station and salad bar barely change, so a handful of templates covers the term.")+
+    rule(3,"<b>Do a lap first.</b> See everything, then build the plate deliberately instead of "+
+      "committing at the first station.")+
+    rule(4,"<b>Protein first, leanest options.</b> Grilled chicken, eggs, deli meat, fish, yoghurt. "+
+      "This is where 160g in a hall is won or lost.")+
+    rule(5,"<b>Same vessel every time.</b> You don't need to know the scoop is 180g \u2014 you need it to "+
+      "be the same 180g, so the error is consistent.")+
+    rule(6,"<b>Expect \u00b1200 kcal and don't chase better.</b> You can't know what went into food you "+
+      "didn't cook.")+
+    note("<b>Your weight trend is the error correction.</b> Eating what you think is 2,300 and nothing "+
+      "moves for three weeks? Your real intake is higher. Adjust by what the trend says, not by "+
+      "re-weighing your rice."));
+
+  h+=card("Adjusting","When to change something","",
+    rule("\u2460","<b>Weeks 1\u20134: change nothing.</b> Creatine pulls 2\u20134 lb of water into muscle and "+
+      "normal fluctuation swamps a real deficit at this timescale. The scale will be uninterpretable, "+
+      "and that's expected.")+
+    rule("\u2461","<b>Then judge on three weeks of the trend line</b>, not two of raw readings. Flat for "+
+      "three weeks \u2192 cut 150\u2013200 cal once \u2192 wait three more.")+
+    rule("\u2462","<b>Strength dropping outranks the scale.</b> Eat more or sleep more. A stalled scale "+
+      "with rising lifts means it's working \u2014 fat off, muscle on, weight flat.")+
+    rule("\u2463","<b>Ravenous?</b> More volume \u2014 vegetables, water, protein. Never a bigger deficit.")+
+    rule("\u2464","<b>Nothing after 8 weeks of honest adherence</b> \u2192 stop self-adjusting and see a GP "+
+      "or dietitian."));
+
+  h+=card("Tracking","Log, then taper, then stop","",
+    rule(1,"<b>Weeks 1\u20133, log everything.</b> Not to restrict \u2014 to calibrate. You're learning what "+
+      "40g of protein and 600 calories look like on a plate. That knowledge is the part that lasts.")+
+    rule(2,"<b>Weigh five things once</b> \u2014 a chicken breast, your scoop of rice, a bowl of pasta, a "+
+      "handful of almonds, a spoon of peanut butter. Then you'll never need the scale for them again.")+
+    rule(3,"<b>Then taper.</b> Keep logging the smoothie and lunch \u2014 fixed anyway \u2014 and estimate "+
+      "dinner. Most of the accuracy for a fraction of the effort.")+
+    rule(4,"<b>If you track one number, track protein.</b> The trend line self-corrects calorie errors. "+
+      "Nothing on the scale tells you whether you hit 160g or 110g \u2014 and that's the number deciding "+
+      "whether the muscle stays.")+
+    note("<b>Stop entirely if</b> the number sets your mood, you skip meals to make up for a big one, "+
+      "eating with people gets stressful, or you can't take a rest day. Drop to weekly weighing and keep "+
+      "the behaviours \u2014 they work on their own. Taking that off-ramp isn't failure."));
+
+  h+=card("Apps","What to use","On-device, open source, no account. All on F-Droid.",
+    kv("Waistline","\u2605","GPLv3 \u00b7 USDA + Open Food Facts \u00b7 recipes and meals")+
+    kv("OpenNutriTracker","alt","GPL-3 \u00b7 IOM/WHO references, sources screen")+
+    kv("Privacy Friendly Food Tracker","alt","encrypted local DB \u00b7 smallest database")+
+    kv("Cronometer","\u26a0","most accurate \u00b7 but cloud account")+
+    note("Waistline's value for you isn't barcodes \u2014 hall food has none. It's <b>USDA lookups plus "+
+      "custom Recipes and Meals</b>, so you enter your hall's items once and reuse them. Cronometer is "+
+      "more accurate (roughly \u00b15% vs MyFitnessPal's \u00b118%, drawing on USDA FoodData Central rather "+
+      "than crowd-sourced entries) but proprietary and account-based \u2014 and that precision is moot for "+
+      "an unlabelled hall portion you're estimating anyway. Barcode lookups do hit Open Food Facts' "+
+      "servers; the diary itself works offline, so deny network access if you'd rather. Check the F-Droid "+
+      "listing's permissions and anti-features before installing \u2014 that's authoritative, not me."));
+
+  h+='<button class="btn btn-p btn-b" id="protoClose" style="margin-top:16px">Close</button>';
+  $("#protoSheet").innerHTML=h;
+  $("#protoClose").onclick=()=>$("#ovProto").classList.remove("open");
+  $("#ovProto").classList.add("open");
+}
+
 /* ---------- nav + init ---------- */
 function go(v){
   document.body.dataset.view=v;
@@ -2021,6 +2215,8 @@ function init(){
   $("#pGrad").onchange=e=>{S.prefs.graduate=e.target.checked;save();};
   $("#reviewBtn").onclick=()=>{revOff=0;renderReview();$("#ovReview").classList.add("open");};
   $("#wSave").onclick=logWeight;
+  $("#protoBtn").onclick=openProto;
+  $("#ovProto").onclick=e=>{if(e.target.id==="ovProto")$("#ovProto").classList.remove("open");};
   $("#wIn").addEventListener("keydown",e=>{if(e.key==="Enter")logWeight();});
   $("#remOn").onchange=e=>{S.reminder.enabled=e.target.checked;save();renderRem();};
   $("#remTime").onchange=e=>{S.reminder.time=e.target.value||"20:00";save();renderRem();};
