@@ -456,7 +456,13 @@
       <h2>Weekly floors</h2>
       <p class="sub">Guaranteed minimums. Green pips are floor sessions, purple are pool.</p>
       <div id="floorList"></div>
-      <div style="margin-top:15px">
+      <div style="margin-top:16px">
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px">Floors met, last 12 weeks</div>
+        <p class="hint" style="margin:0 0 8px">How many of your floors you hit each week. This is the
+          honest measure of whether the commitment is the right size.</p>
+        <div class="wkbars" id="floorHist"></div>
+      </div>
+      <div style="margin-top:16px">
         <div style="display:flex;align-items:baseline;justify-content:space-between">
           <span style="font-size:13px;font-weight:600">Shared pool</span>
           <span class="fcount" id="poolCount" style="width:auto">0/0</span>
@@ -875,7 +881,14 @@ function floorState(off){
   const poolUsed=rows.reduce((a,r)=>a+r.extra,0);
   return {rows,remaining,poolUsed,poolTarget:S.prefs.pool};
 }
-/* today's practice ask = remaining floors spread over remaining days of the week */
+/* Stable daily practice target used for SCORING every day, past or present.
+   Derived from committed floors, never from what was actually done, so history
+   stays comparable and a token session can't score a full day. */
+function dailyTarget(){
+  const f=practice().reduce((a,t)=>a+(t.floor||3),0);
+  return f?Math.max(1,Math.ceil(f/7)):0;
+}
+/* today's practice ask = remaining floors spread over remaining days of the week (guidance only) */
 function practiceAsk(){
   const fs=floorState(0);
   const dayIdx=(T().getDay()+6)%7;            // 0=Mon
@@ -887,9 +900,24 @@ function practiceDoneToday(){
   const d=T();return practice().filter(t=>isDone(d,t.id)).length;
 }
 
+function floorWeeks(t,weeks){
+  let met=0,n=0;
+  for(let w=0;w<weeks;w++){n++;if(doneThisWeek(t.id,-w)>=(t.floor||3))met++;}
+  return {met,n};
+}
+function floorHistory(weeks){
+  const out=[];
+  for(let w=weeks-1;w>=0;w--){
+    const rows=practice().map(t=>({n:doneThisWeek(t.id,-w),f:t.floor||3}));
+    const met=rows.filter(r=>r.n>=r.f).length;
+    out.push({off:-w,met:met,total:rows.length,
+      pct:rows.length?met/rows.length:null,start:monStart(-w)});
+  }
+  return out;
+}
+
 /* ---------- day scoring ---------- */
 function dayPts(d){
-  const isToday=K(d)===K(T());
   const a=anchorsToday(d);
   const ds=doneSet(d), ts=tinySet(d);
   let tot=0,got=0,mtot=0,mgot=0;
@@ -899,10 +927,8 @@ function dayPts(d){
   const pl=practice();
   const donePr=pl.filter(t=>ds.has(t.id));
   const tinyPr=pl.filter(t=>!ds.has(t.id)&&ts.has(t.id));
-  let ask;
-  if(isToday) ask=Math.max(practiceAsk(),donePr.length+tinyPr.length);
-  else ask=Math.max(1,donePr.length+tinyPr.length);
-  if(pl.length){
+  const ask=dailyTarget();
+  if(pl.length&&ask){
     const avgP=pl.reduce((x,t)=>x+pts(t),0)/pl.length;
     const avgM=pl.reduce((x,t)=>x+pts(t)*mW(t),0)/pl.length;
     tot+=ask*avgP; mtot+=ask*avgM;
@@ -1243,6 +1269,16 @@ function renderWeek(){
   $("#floorList").querySelectorAll(".floorrow").forEach(el=>
     el.onclick=()=>openDetail(el.dataset.tid));
 
+  const fh=floorHistory(12);
+  $("#floorHist").innerHTML=fh.map(w=>{
+    const h=w.pct===null?0:Math.max(6,Math.round(w.pct*100));
+    const lbl=w.off===0?"now":w.start.getDate();
+    return '<div class="wkcol'+(w.off===0?" now":"")+'"><div class="wktrack" style="height:56px">'+
+      '<div class="wkfill" style="height:'+h+'%;background:'+
+      (w.pct===null?"transparent":heatVar(w.pct))+'"></div></div>'+
+      '<div class="wknum">'+lbl+'</div></div>';
+  }).join("");
+  const metNow=fh[fh.length-1];
   const pt=fs.poolTarget;
   $("#poolCount").textContent=fs.poolUsed+"/"+pt;
   $("#poolBar").style.width=Math.min(100,pt?fs.poolUsed/pt*100:0)+"%";
@@ -1487,7 +1523,11 @@ function openDetail(id){
       if(t.tier!=="anchor"||t.days.includes(d.getDay())){sc++;if(isDone(d,t.id))dn++;}}
     let tot=0;Object.keys(S.done).forEach(k=>{if(S.done[k].indexOf(id)>=0)tot++;});
     const mins=totalMins(id);
-    h+='<div class="dstat"><div class="stat"><div class="v">'+taskStreak(t)+'</div><div class="l">Streak</div></div>'+
+    const headline=t.tier==="practice"
+      ? (()=>{const fw=floorWeeks(t,8);return '<div class="v">'+fw.met+'<span class="u">/'+fw.n+
+          '</span></div><div class="l">Weeks floor met</div>';})()
+      : '<div class="v">'+taskStreak(t)+'</div><div class="l">Streak</div>';
+    h+='<div class="dstat"><div class="stat">'+headline+'</div>'+
       '<div class="stat"><div class="v">'+(sc?Math.round(dn/sc*100):0)+'<span class="u">%</span></div><div class="l">30-day rate</div></div>'+
       '<div class="stat"><div class="v">'+(mins>=60?(mins/60).toFixed(0)+'<span class="u">h</span>':tot)+'</div><div class="l">'+(mins>=60?"Total time":"Total done")+'</div></div></div>';
   }
@@ -1507,7 +1547,7 @@ function openDetail(id){
   if(cs)ins.push({i:"⏱",n:cs.n,txt:cs.share>=.6
     ? "<b>"+Math.round(cs.share*100)+"%</b> of sessions fall in the same 3-hour window. Stable context is the strongest accelerator there is."
     : "Sessions spread across <b>"+cs.windows+" time windows</b>. Unstable timing is usually the bottleneck, not commitment."});
-  if(t.tier!=="project"){
+  if(t.tier==="anchor"){
     const dw=dowStats(t,8).filter(x=>x.rate!==null&&x.n>=4);
     if(dw.length>=3){const worst=dw.slice().sort((a,b)=>a.rate-b.rate)[0];
       if(worst.rate<=.5)ins.push({i:"📉",n:worst.n,
@@ -1553,7 +1593,7 @@ function openDetail(id){
     '<div class="heat-wrap"><div class="heat-days"><span>M</span><span></span><span>W</span><span></span><span>F</span><span></span><span>S</span></div>'+
     '<div class="heat-scroll"><div class="heat" id="dHeat"></div></div></div></div>';
 
-  if(t.tier!=="project"){
+  if(t.tier==="anchor"){
     const dw=dowStats(t,8);
     h+='<div class="card"><h2>By day of week</h2><p class="sub">Last 8 weeks.</p><div class="dow">'+
       dw.map(x=>{const hh=x.rate===null?0:Math.max(5,Math.round(x.rate*100));
@@ -1561,6 +1601,11 @@ function openDetail(id){
         (x.rate===null?"transparent":heatVar(x.rate))+'"></div></div><div class="dowl">'+DL[x.w]+
         '</div><div class="dowp">'+(x.rate===null?"—":Math.round(x.rate*100)+"%")+'</div></div>';}).join("")+
       '</div></div>';
+  }else if(t.tier==="practice"){
+    h+='<div class="card"><h2>Why there\'s no day-of-week chart here</h2><p class="sub" style="margin:0">'+
+      'Which practice task you do on a given day is set by the weekly ask and your own choice \u2014 and the '+
+      'ask front-loads the week by design. A day-of-week chart would be showing you the scheduler, not your '+
+      'habits. Floors met, hours and level movement are the honest measures for this kind of task.</p></div>';
   }
 
   const notes=sessionsFor(id).filter(s=>s.note).sort((a,b)=>a.date<b.date?1:-1);
@@ -1640,8 +1685,10 @@ function openSession(id){
   const q=quiet(t);
   $("#ssSub").textContent=q?"Just logging that it happened. No scores.":"Everything here is optional.";
   $("#ssFlowBox").style.display=q?"none":"";
+  // automaticity only makes sense for anchors - complex practice never becomes automatic
   const have=sessionsFor(id).filter(s=>s.automaticity).length;
-  $("#ssAutoBox").style.display=(!q&&Math.random()<(have<6?0.55:0.12))?"":"none";
+  const askAuto=t.tier==="anchor"&&!q&&Math.random()<(have<6?0.55:0.12);
+  $("#ssAutoBox").style.display=askAuto?"":"none";
   const lb=$("#ssLvlBox");
   if(t.tier==="practice"){
     lb.style.display="";
@@ -1922,6 +1969,30 @@ function renderReview(){
       return '<div class="wkcol"><div class="wktrack" style="height:64px"><div class="wkfill" style="height:'+hh+
         '%;background:'+(b.days?heatVar(b.cons):"transparent")+'"></div></div><div class="wklab">'+
         b.start.toLocaleDateString(undefined,{month:"short"})+'</div></div>';}).join("")+'</div></div>';
+  // practice: floors, hours, progression — the half the review was missing
+  const mStart=m.start, mEnd=new Date(mStart.getFullYear(),mStart.getMonth()+1,0);
+  const mLast=mEnd>T()?T():mEnd;
+  const prows=practice().map(t=>{
+    let mins=0,lv=[],days=0;
+    sessionsFor(t.id).forEach(s=>{const sd=parseD(s.date);
+      if(sd>=mStart&&sd<=mLast){mins+=s.minutes||0;if(s.level)lv.push(s.level);}});
+    for(let dd=new Date(mStart);dd<=mLast;dd=add(dd,1))if(isDone(dd,t.id))days++;
+    const gain=lv.length>=2?Math.max.apply(null,lv)-Math.min.apply(null,lv):0;
+    return {t,mins,days,gain};
+  }).filter(r=>r.days||r.mins);
+  if(prows.length){
+    const totMins=prows.reduce((a,r)=>a+r.mins,0);
+    const hrs=totMins>=60?(totMins/60).toFixed(1)+" hours":totMins+" min";
+    h+='<div class="card"><h2>Practice this month</h2><p class="sub">Sessions, time invested, and whether '+
+      'the difficulty actually moved. Attendance protects a skill; progression improves it.</p>'+
+      prows.sort((a,b)=>b.mins-a.mins).map(r=>
+        '<div class="pk"><span class="k">'+esc(r.t.name)+'</span><span class="v">'+r.days+
+        '<em>'+(r.mins?(r.mins>=60?(r.mins/60).toFixed(1)+"h":r.mins+"m"):"no time logged")+
+        (r.gain?" \u00b7 +"+r.gain+" level"+(r.gain>1?"s":""):" \u00b7 level flat")+'</em></span></div>').join("")+
+      '<p class="pnote"><b>'+hrs+'</b> logged across '+prows.length+' pursuit'+(prows.length>1?"s":"")+
+      '. '+(prows.every(r=>!r.gain)?"No difficulty increases this month \u2014 that\u2019s the signal you\u2019ve "+
+      "drifted into maintenance. Bump a level on the one that feels easiest.":"")+'</p></div>';
+  }
   const drift=live().filter(t=>{const c=conc(t);return c!==null&&c<=-2;});
   if(drift.length)h+='<div class="card"><h2>Running on obligation</h2><p class="sub">These score higher on guilt '+
     'and outside pressure than on value or enjoyment. Consider cutting, reframing, or keeping them unscored.</p>'+
