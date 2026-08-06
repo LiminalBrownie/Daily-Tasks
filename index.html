@@ -424,15 +424,12 @@
         <div class="ringbox">
           <svg width="118" height="118" viewBox="0 0 118 118">
             <circle class="rc" cx="59" cy="59" r="50" stroke="var(--line2)" stroke-width="11"/>
-            <circle class="rc" cx="59" cy="59" r="36" stroke="var(--line2)" stroke-width="11"/>
             <circle class="rc" id="ringE" cx="59" cy="59" r="50" stroke="var(--accent)" stroke-width="11" stroke-dasharray="314" stroke-dashoffset="314"/>
-            <circle class="rc" id="ringM" cx="59" cy="59" r="36" stroke="var(--mauve)" stroke-width="11" stroke-dasharray="226" stroke-dashoffset="226"/>
           </svg>
           <div class="ringlbl"><b id="ringPct">0%</b><span id="ringSub">of enough</span></div>
         </div>
         <div class="rmeta">
-          <div class="rrow"><span class="rdot" style="background:var(--accent)"></span><span class="rt">Effort</span><span class="rv" id="rvE">0/0</span></div>
-          <div class="rrow"><span class="rdot" style="background:var(--mauve)"></span><span class="rt">Meaning</span><span class="rv" id="rvM">0%</span></div>
+          <div class="rrow"><span class="rdot" style="background:var(--accent)"></span><span class="rt">Effort points</span><span class="rv" id="rvE">0/0</span></div>
           <div class="rnote" id="rNote"></div>
         </div>
       </div>
@@ -475,8 +472,8 @@
     <div class="stats">
       <div class="stat"><div class="v" id="sCons">0<span class="u">%</span></div><div class="l">Consistency · 30d</div></div>
       <div class="stat"><div class="v" id="sRec">—</div><div class="l">Bounce-back rate</div></div>
-      <div class="stat"><div class="v" id="sStreak">0<span class="u">d</span></div><div class="l">Current streak</div></div>
-      <div class="stat"><div class="v" id="sBest">0<span class="u">d</span></div><div class="l">Best streak</div></div>
+      <div class="stat"><div class="v" id="sMean">—</div><div class="l">Meaning · 7d</div></div>
+      <div class="stat"><div class="v" id="sFloors">0</div><div class="l">Floors met this week</div></div>
     </div>
     <p class="hint" id="graceNote" style="margin:9px 4px 0"></p>
 
@@ -713,6 +710,13 @@
       when measured objectively, but real). Anchor to a fixed event, not a clock time. Add alternatives
       if the slot moves — a plan for each realistic context beats one plan you can only follow some days.</p></div>
 
+  <div class="fld"><label>If it goes wrong <span style="text-transform:none;letter-spacing:0;font-weight:500">(optional)</span></label>
+    <input type="text" id="edCopeWhen" placeholder="if I get back late and I'm tired..." autocomplete="off">
+    <input type="text" id="edCopeThen" placeholder="...then I'll do the tiny version before sitting down" autocomplete="off" style="margin-top:7px">
+    <p class="hint">A coping plan, distinct from the when/where above. Naming the barrier and your response
+      in advance predicts behaviour at four weeks and six months, but not at two — it's what keeps a habit
+      alive after the novelty wears off, which is precisely when college will test it.</p></div>
+
   <div class="fld"><label id="edTinyLbl">Tiny version</label>
     <input type="text" id="edTiny" placeholder="e.g. one scale" autocomplete="off">
     <p class="hint" id="edTinyHint">A floor for bad days. Keeps the chain alive and earns 1 point.</p></div>
@@ -823,6 +827,7 @@ function defaults(){
     if(t.levelOn===undefined)t.levelOn=null;
     if(typeof t.retired!=="boolean")t.retired=false;
     if(t.cueOK===undefined)t.cueOK=true;
+    if(!t.cope)t.cope={when:"",then:""};
   });
   S.schema=4;
 }
@@ -848,6 +853,8 @@ function practice(){return live().filter(t=>t.tier==="practice");}
 function projects(){return live().filter(t=>t.tier==="project");}
 function byId(id){return S.tasks.find(t=>t.id===id);}
 function pts(t){return PTS[t.weight||2];}
+/* tiny is always worth less than the full task, and never more than 1 point */
+function tinyPts(t){return Math.min(1,pts(t)/2);}
 function cueList(t){return (t.cues&&t.cues.length)?t.cues:(t.cue?[t.cue]:[]);}
 function cueText(t){const c=cueList(t);
   return !c.length?"":(c.length===1?c[0]:c.length+" options · "+c[0]);}
@@ -922,7 +929,7 @@ function dayPts(d){
   const ds=doneSet(d), ts=tinySet(d);
   let tot=0,got=0,mtot=0,mgot=0;
   a.forEach(t=>{const p=pts(t),m=p*mW(t);tot+=p;mtot+=m;
-    if(ds.has(t.id)){got+=p;mgot+=m;}else if(ts.has(t.id)){got+=1;mgot+=mW(t);}});
+    if(ds.has(t.id)){got+=p;mgot+=m;}else if(ts.has(t.id)){const tp=tinyPts(t);got+=tp;mgot+=tp*mW(t);}});
   // practice contributes: today by ask, past days by what was actually scheduled-equivalent
   const pl=practice();
   const donePr=pl.filter(t=>ds.has(t.id));
@@ -933,7 +940,7 @@ function dayPts(d){
     const avgM=pl.reduce((x,t)=>x+pts(t)*mW(t),0)/pl.length;
     tot+=ask*avgP; mtot+=ask*avgM;
     donePr.forEach(t=>{got+=pts(t);mgot+=pts(t)*mW(t);});
-    tinyPr.forEach(t=>{got+=1;mgot+=mW(t);});
+    tinyPr.forEach(t=>{const tp=tinyPts(t);got+=tp;mgot+=tp*mW(t);});
   }
   if(tot===0)return null;
   return {tot:Math.round(tot*10)/10,got:Math.round(got*10)/10,mtot,mgot};
@@ -979,7 +986,9 @@ function bestStreak(){
     if(S.prefs.freeze){const k=MK(d);used[k]=(used[k]||0)+1;if(used[k]<=2)continue;}
     run=0;
   }
-  return best;
+  // the two walks allocate grace days in opposite directions, so guard the invariant:
+  // your best streak can never be shorter than the one you are currently on
+  return Math.max(best,streak());
 }
 function gracesLeft(){
   const k=MK(T());let used=0;
@@ -1016,6 +1025,35 @@ function medianGap(id){
 }
 function daysSince(id){const l=lastSession(id);return l===null?null:between(parseD(l),T());}
 
+/* ---------- anomaly detection ----------
+   Dopamine tracks prediction error, not reward, so a predictable celebration
+   habituates to nothing. Genuine novelty is the only non-habituating signal:
+   fire only when you do something you have actually been avoiding. */
+function rate30(t){
+  let s=0,c2=0;
+  for(let i=0;i<30;i++){const d=add(T(),-i);
+    if(t.tier!=="anchor"||t.days.includes(d.getDay())){s++;if(isDone(d,t.id))c2++;}}
+  return s>=8?c2/s:null;
+}
+function gapBefore(t){
+  for(let i=1;i<120;i++){if(isDone(add(T(),-i),t.id))return i;}
+  return null;
+}
+function anomaly(t){
+  const r=rate30(t);
+  if(r===null||r>=0.5)return null;          // only for genuinely neglected tasks
+  const g=gapBefore(t);
+  if(g===null)return {days:null,rate:r};
+  if(g>=7)return {days:g,rate:r};
+  return null;
+}
+/* de-escalation: a floor missed most weeks is too big, not evidence of failure */
+function floorTooHigh(t){
+  if(t.tier!=="practice")return null;
+  const fw=floorWeeks(t,4);
+  return (fw.n>=4&&fw.met<=1)?fw:null;
+}
+
 /* ---------- graduation ---------- */
 function gradCandidate(t){
   if(!S.prefs.graduate||t.retired||t.tier!=="anchor")return false;
@@ -1029,8 +1067,13 @@ function gradCandidate(t){
   const plateaued=au.length>=3?au.slice(-3).every(s=>s.automaticity>=4):true;
   return plateaued;
 }
-function retiredPoints(){                 // retired anchors keep giving their head start
-  return S.tasks.filter(t=>t.retired&&t.tier==="anchor").reduce((a,t)=>a+pts(t),0);
+/* meaning % over a window - concordance is a slow-moving trait, so this belongs
+   on the weekly view rather than as a daily score */
+function meaningPct(days){
+  let mt=0,mg=0;
+  for(let i=0;i<days;i++){const d=add(T(),-i);if(!withinBase(d))break;
+    const p=dayPts(d);if(!p)continue;mt+=p.mtot;mg+=p.mgot;}
+  return mt?Math.min(1,mg/mt):null;
 }
 
 /* ---------- weight trend (EWMA) ---------- */
@@ -1136,19 +1179,17 @@ function renderToday(){
   const mp=p&&p.mtot?Math.min(1,p.mgot/p.mtot):0;
   const ok=p&&raw>=thr;
 
-  const cE=2*Math.PI*50,cM=2*Math.PI*36;
+  const cE=2*Math.PI*50;
   $("#ringE").style.strokeDashoffset=cE*(1-shown);
   $("#ringE").style.stroke=ok?"var(--good)":"var(--accent)";
-  $("#ringM").style.strokeDashoffset=cM*(1-mp);
   $("#ringPct").textContent=Math.round(shown*100)+"%";
   $("#ringPct").style.color=ok?"var(--good-ink)":"var(--ink)";
   $("#ringSub").textContent=thr>=1?"of all":"of enough";
   $("#rvE").textContent=(p?p.got:0)+"/"+(p?p.tot:0);
-  $("#rvM").textContent=Math.round(mp*100)+"%";
   const note=$("#rNote");
   if(!p)note.textContent="";
-  else if(mp>raw+0.12)note.textContent="You're ahead on the things that matter to you.";
-  else if(raw>mp+0.12)note.textContent="Today's effort is landing on the lower-meaning tasks.";
+  else if(mp>raw+0.12)note.textContent="Weighted toward what actually matters to you.";
+  else if(raw>mp+0.12)note.textContent="Today's effort is landing on the obligations.";
   else note.textContent="";
 
   const gg=$("#goalGrad");
@@ -1164,9 +1205,7 @@ function renderToday(){
   const box=$("#todayAnchors");
   if(a.length){
     const dn=a.filter(t=>ds.has(t.id)).length;
-    const rp=retiredPoints();
-    box.innerHTML='<div class="lbl">Anchors · '+dn+' of '+a.length+
-      (rp?' <span style="text-transform:none;letter-spacing:0">(+'+rp+' banked from retired)</span>':'')+'</div>'+
+        box.innerHTML='<div class="lbl">Anchors · '+dn+' of '+a.length+'</div>'+
       a.map(t=>taskRow(t,d)).join("");
     wireRows(box);
   }else box.innerHTML="";
@@ -1224,7 +1263,14 @@ function toggle(id){
   if(on){
     const wasOk=false,p=dayPts(T()),nowOk=p&&(p.got/p.tot)>=S.prefs.threshold;
     const c=conc(t);
-    if(nowOk&&!wasOk&&justCrossed()){haptic("huge");confetti();toast("Enough for today");}
+    const fullNow=p&&p.got>=p.tot;
+    const an=anomaly(t);
+    if(fullNow&&!lastFull){haptic("huge");confetti();toast("Everything done");lastFull=true;}
+    else if(an){                                   // real novelty - the only kind that can't habituate
+      haptic("big");
+      toast(an.days?("first in "+an.days+" days"):"first time",'var(--mauve)');
+    }
+    else if(nowOk&&!wasOk&&justCrossed()){haptic("big");toast("Enough for today");}
     else{
       haptic(c!==null&&c>=4?"big":(c!==null&&c<=-2?"soft":"mid"));
       if(S.prefs.surprise&&Math.random()<.18)toast(PRAISE[(Math.random()*PRAISE.length)|0],"var(--accent)");
@@ -1234,7 +1280,7 @@ function toggle(id){
   }
   renderToday();
 }
-let lastOk=false;
+let lastOk=false,lastFull=false;
 function justCrossed(){
   const p=dayPts(T());const ok=p&&(p.got/p.tot)>=S.prefs.threshold;
   const crossed=ok&&!lastOk;lastOk=ok;return crossed;
@@ -1278,7 +1324,6 @@ function renderWeek(){
       (w.pct===null?"transparent":heatVar(w.pct))+'"></div></div>'+
       '<div class="wknum">'+lbl+'</div></div>';
   }).join("");
-  const metNow=fh[fh.length-1];
   const pt=fs.poolTarget;
   $("#poolCount").textContent=fs.poolUsed+"/"+pt;
   $("#poolBar").style.width=Math.min(100,pt?fs.poolUsed/pt*100:0)+"%";
@@ -1287,14 +1332,18 @@ function renderWeek(){
     : "Floors are met — pool sessions are surplus, never a target.";
 
   $("#sCons").innerHTML=Math.round(consistency(30)*100)+'<span class="u">%</span>';
+  const mp7=meaningPct(7);
+  $("#sMean").innerHTML=mp7===null?'—':Math.round(mp7*100)+'<span class="u">%</span>';
+  const fsNow=floorState(0);
+  const metNow=fsNow.rows.filter(r=>r.met).length;
+  $("#sFloors").innerHTML=metNow+'<span class="u">/'+fsNow.rows.length+'</span>';
   const rec=recovery();
   $("#sRec").innerHTML=rec?Math.round(rec.rate*100)+'<span class="u">%</span>':'—';
   $("#sRec").nextElementSibling.textContent=rec?("Bounce-back · n="+rec.n):"Bounce-back rate";
-  $("#sStreak").innerHTML=streak()+'<span class="u">d</span>';
-  $("#sBest").innerHTML=bestStreak()+'<span class="u">d</span>';
-  $("#graceNote").textContent=S.prefs.freeze
-    ? "Grace days left this month: "+gracesLeft()+" of 2. Consistency is the number that matters."
-    : "Grace days are off, so one miss resets the streak.";
+  const gl=gracesLeft();
+  $("#graceNote").innerHTML='Streak <b>'+streak()+'d</b> · best '+bestStreak()+'d'+
+    (S.prefs.freeze?' · '+gl+' grace day'+(gl===1?'':'s')+' unused this month':'')+
+    '. Kept small on purpose \u2014 consistency is the number worth watching.';
 
   const tk=K(T());
   $("#wkBars").innerHTML=days.map(d=>{
@@ -1387,7 +1436,7 @@ function renderBody(){
       "when a small adjustment makes sense — not before.";
     else if(pctWk<0.35)band="Gentler than target. Fine if it's sustainable, but slow enough that you may "+
       "not see much for a while.";
-    else if(pctWk<=0.65)band="<b>On target — 0.5–0.6% of bodyweight per week.</b> This is the rate "+
+    else if(pctWk<=0.62)band="<b>On target — 0.5–0.6% of bodyweight per week.</b> This is the rate "+
       "that keeps the muscle on. Nothing to change.";
     else if(pctWk<=0.9)band="A little faster than target. Fine short-term, but if it holds for three weeks "+
       "add back ~150 cal — lean-mass loss climbs as the deficit grows.";
@@ -1532,6 +1581,31 @@ function openDetail(id){
       '<div class="stat"><div class="v">'+(mins>=60?(mins/60).toFixed(0)+'<span class="u">h</span>':tot)+'</div><div class="l">'+(mins>=60?"Total time":"Total done")+'</div></div></div>';
   }
 
+  // floor too big -> offer to shrink it rather than let it read as failure
+  const fth=floorTooHigh(t);
+  if(fth){
+    h+='<div class="gradnote" style="background:var(--accent-soft);color:var(--ink)">'+
+      '<b>This floor looks too high.</b> You\'ve met it '+fth.met+' of the last '+fth.n+' weeks. '+
+      'That usually means the commitment is the wrong size, not that you\'re failing it \u2014 and a floor '+
+      'you miss most weeks stops meaning anything. Dropping it to '+Math.max(1,(t.floor||3)-1)+
+      '\u00d7 makes it real again; you can always exceed it into the pool.'+
+      '<br><button class="btn btn-p" id="lowerBtn" style="padding:9px 14px">Lower to '+
+      Math.max(1,(t.floor||3)-1)+'\u00d7/week</button></div>';
+  }
+  // coping plan prompt - only once the task is actually slipping, which is when it works
+  const r30=rate30(t);
+  if(r30!==null&&r30<0.6&&!(t.cope&&t.cope.when)){
+    h+='<div class="gradnote" style="background:var(--card2);color:var(--muted)">'+
+      '<b style="color:var(--ink)">Worth a coping plan.</b> This is running at '+Math.round(r30*100)+
+      '%. Naming the specific obstacle and your response to it \u2014 <i>if X happens, then I\'ll do Y</i> '+
+      '\u2014 predicts behaviour at four weeks and six months, though not at two. It\'s the thing that '+
+      'keeps something going once the novelty is gone.'+
+      '<br><button class="btn btn-s" id="copeBtn" style="padding:9px 14px">Add one</button></div>';
+  }
+  if(t.cope&&t.cope.when&&t.cope.then){
+    h+='<div class="card" style="margin-top:0"><h2>Your coping plan</h2>'+
+      '<p class="sub" style="margin:0"><b>If</b> '+esc(t.cope.when)+' <b>then</b> '+esc(t.cope.then)+'</p></div>';
+  }
   if(gradCandidate(t)){
     h+='<div class="gradnote">This has run above 90% for a month and feels automatic. Retiring it keeps '+
       'its point in your daily total — so you keep the head start — but it stops asking. It comes back '+
@@ -1632,6 +1706,10 @@ function openDetail(id){
   $("#dClose").onclick=()=>$("#ovDetail").classList.remove("open");
   $("#dEdit").onclick=()=>{$("#ovDetail").classList.remove("open");setTimeout(()=>openEdit(id),140);};
   $("#dLog").onclick=()=>{$("#ovDetail").classList.remove("open");setTimeout(()=>openSession(id),140);};
+  const lb=$("#lowerBtn");
+  if(lb)lb.onclick=()=>{t.floor=Math.max(1,(t.floor||3)-1);save();haptic("mid");openDetail(id);renderAll();};
+  const cb=$("#copeBtn");
+  if(cb)cb.onclick=()=>{$("#ovDetail").classList.remove("open");setTimeout(()=>openEdit(id),140);};
   const gb=$("#gradBtn");if(gb)gb.onclick=()=>{t.retired=true;save();haptic("big");openDetail(id);renderAll();};
   const ub=$("#unretireBtn");if(ub)ub.onclick=()=>{t.retired=false;save();openDetail(id);renderAll();};
   $("#detailSheet").querySelectorAll("[data-lvl]").forEach(b=>b.onclick=()=>{
@@ -1743,6 +1821,8 @@ function openEdit(id,tier){
   const cl=t?cueList(t):[];
   $("#edCue").value=cl[0]||"";$("#edCue2").value=cl[1]||"";$("#edCue3").value=cl[2]||"";
   $("#edTiny").value=t?(t.tiny||""):"";
+  $("#edCopeWhen").value=t&&t.cope?(t.cope.when||""):"";
+  $("#edCopeThen").value=t&&t.cope?(t.cope.then||""):"";
   $("#edFloor").value=t?(t.floor||3):3;
   $("#edGap").value=t?(t.gap||10):10;
   $("#edFocus").value=t?(t.focus||""):"";
@@ -1768,7 +1848,7 @@ function syncTier(){
   $("#edTinyLbl").textContent=editTier==="practice"?"Minimum useful dose":"Tiny version";
   $("#edTinyHint").textContent=editTier==="practice"
     ? "A real floor, not a token — below some threshold a session produces no learning. 10–15 minutes, not one."
-    : "A floor for bad days. Keeps the chain alive and earns 1 point.";
+    : "A floor for bad days. Keeps the chain alive and earns half credit \u2014 always less than doing it properly.";
 }
 function buildDays(){
   const c=$("#edDays");c.innerHTML="";
@@ -1809,6 +1889,7 @@ function saveTask(){
   const cues=[$("#edCue").value.trim(),$("#edCue2").value.trim(),$("#edCue3").value.trim()].filter(Boolean);
   const patch={name:name,tier:editTier,weight:dTask.w,cue:cues[0]||"",cues:cues,
     tiny:$("#edTiny").value.trim(),reminderTime:dTask.remOn?dTask.remT:"",conc:c,
+    cope:{when:$("#edCopeWhen").value.trim(),then:$("#edCopeThen").value.trim()},
     floor:Math.max(1,Math.min(7,parseInt($("#edFloor").value,10)||3)),
     gap:Math.max(1,parseInt($("#edGap").value,10)||10),
     focus:$("#edFocus").value.trim(),
@@ -1850,9 +1931,9 @@ const SEED=[
   {tier:"anchor",name:"Meditate",weight:1,days:[0,1,2,3,4,5,6],cue:"sitting down at my desk, before opening anything",tiny:"three minutes"},
   {tier:"anchor",name:"Lights out by 00:30",weight:2,days:[0,1,2,3,4,5,6],cue:"phone on the charger across the room at 23:45",tiny:"in bed by 1:00"},
   {tier:"anchor",name:"Same wake time (±30m)",weight:1,days:[0,1,2,3,4,5,6],cue:"alarm doesn't move at weekends",tiny:""},
-  {tier:"anchor",name:"Anchor smoothie",weight:2,days:[0,1,2,3,4,5,6],cue:"first thing, before anything else",cues:["first thing, before anything else","straight after an early workout"],tiny:"scoop of whey in almond milk"},
+  {tier:"anchor",name:"Anchor smoothie",weight:2,days:[0,1,2,3,4,5,6],cue:"first thing, before anything else",cues:["first thing, before anything else","straight after an early workout"],tiny:"scoop of whey in skim milk"},
   {tier:"anchor",name:"Hit protein (~160g)",weight:2,days:[0,1,2,3,4,5,6],cue:"smoothie, lunch, snack, dinner",tiny:"one extra shake"},
-  {tier:"anchor",name:"85g protein before dinner",weight:1,days:[0,1,2,3,4,5,6],cue:"check the running total at 5pm",tiny:"a shake at 5pm"},
+  {tier:"anchor",name:"115g protein before dinner",weight:1,days:[0,1,2,3,4,5,6],cue:"check the running total at 5pm",tiny:"a shake at 5pm"},
   {tier:"anchor",name:"Creatine 5g",weight:1,days:[0,1,2,3,4,5,6],cue:"goes in the morning smoothie",tiny:""},
   {tier:"anchor",name:"Veg at two meals",weight:1,days:[0,1,2,3,4,5,6],cue:"fill a third of the plate first",tiny:"veg at one meal"},
   {tier:"anchor",name:"Logged what I ate",weight:1,days:[0,1,2,3,4,5,6],cue:"log each meal as I finish it",tiny:"log one meal"},
@@ -2119,22 +2200,27 @@ function openProto(){
   h+=card("Targets","Your numbers",
     "Mifflin-St Jeor at 5\u20326\u2033, 180 lb, 18, lifting four times a week. Estimates carry about \u00b110% "+
     "error, so treat them as a starting point the weight trend will correct.",
-    kv("Maintenance","2,650\u20132,750","kcal estimated")+
+    kv("Maintenance","2,650\u20132,750","if lifting 4\u00d7/week")+
     kv("Eat","2,200\u20132,350","kcal \u00b7 400\u2013500 deficit")+
     kv("Protein","160 g","\u00b115 \u00b7 about 2.0 g/kg")+
     kv("Fat","70\u201380 g","never under 55")+
     kv("Carbs","~245 g","the remainder")+
     kv("Fibre","30\u201338 g","hunger control")+
-    kv("Loss rate","0.9\u20131.1 lb","per week \u00b7 0.5\u20130.6% BW")+
+    kv("Loss rate","0.85\u20131.0 lb","per week \u00b7 ~0.5% BW")+
     kv("Landing zone","150\u2013160 lb","at 12\u201315% body fat")+
+    note("<b>These assume you're actually training four times a week.</b> If you're not lifting yet, "+
+      "maintenance is closer to 2,450 and you should eat about <b>2,000</b> until training is running. "+
+      "Start at the lower end, and let three weeks of trend tell you which is right \u2014 the estimate "+
+      "carries more error than the difference between these numbers.")+
     note("<b>Why not faster.</b> Lean-mass loss climbs once the daily deficit passes roughly 500, and at "+
       "your weight 0.75%/week would already need about 675. Losing slower is how the muscle stays on. "+
       "Regularly under 2,000 means the deficit is too steep \u2014 that's a warning sign, not a target."));
 
   h+=card("Non-negotiable","The six that don't move","Everything else is yours to change.",
     rule(1,"<b>Anchor smoothie every morning.</b> Whey 25\u201330g \u00b7 \u00bd cup frozen mango \u00b7 handful "+
-      "spinach \u00b7 \u00bd banana \u00b7 1 tbsp chia \u00b7 1 cup unsweetened almond milk \u00b7 <b>5g creatine</b>. "+
-      "About 300 cal and 30g protein before you're properly awake.")+
+      "spinach \u00b7 \u00bd banana \u00b7 1 tbsp chia \u00b7 20g oats \u00b7 <b>1 cup skim milk</b> \u00b7 <b>5g creatine</b>. "+
+      "450 cal and <b>44g protein</b> before you're properly awake. Skim milk rather than almond — it "+
+      "carries 8g of protein that almond milk doesn't, which is most of the reason this reaches 44g.")+
     rule(2,"<b>160g protein.</b> The daily total is what matters. Spread it over three or four meals "+
       "because that's marginally better and much easier \u2014 but there is no 30g ceiling, so don't count "+
       "per-meal grams.")+
@@ -2148,28 +2234,34 @@ function openProto(){
 
   h+=card("Daily","Eating shapes","Pick one each morning to match when you're training. Timing isn't "+
     "magic once total intake and protein are matched \u2014 the value is deciding once instead of "+
-    "negotiating with yourself six times a day.",
+    "negotiating with yourself six times a day. Every shape totals ~2,250 kcal and ~160g protein, and "+
+    "lands ~115g before dinner so the family meal can be anything.",
     sched("A \u00b7 train early, 6\u20137am",
-      line("5:30","\u00bd banana + coffee. Small on purpose.")+
-      line("7:00","<b>Anchor smoothie</b> \u2014 doubles as post-workout. 30g",1)+
-      line("12:00","Lunch: lean protein + carb + veg. 35g")+
-      line("15:30","Greek yoghurt or cottage cheese + almonds. 20g")+
-      line("\u2192","<b>85g in before dinner.</b>",1)+
-      line("18:30","Family dinner \u2014 hand portions, no logging."))+
+      line("5:30","\u00bd banana + coffee. 55 kcal")+
+      line("7:00","<b>Anchor smoothie</b> \u2014 doubles as post-workout. <b>450 \u00b7 44g</b>",1)+
+      line("12:00","Lunch: palm of protein + carbs + veg. <b>600 \u00b7 45g</b>")+
+      line("15:30","Greek yoghurt + almonds + fruit. <b>300 \u00b7 25g</b>")+
+      line("\u2192","<b>~115g in before dinner.</b>",1)+
+      line("18:30","Dinner \u2014 hand portions. <b>700 \u00b7 40g</b>")+
+      line("21:00","Top-up only if short: milk or cottage cheese. <b>200 \u00b7 10g</b>"))+
     sched("B \u00b7 train midday, 12\u20132pm",
-      line("7:30","<b>Anchor smoothie.</b> 30g",1)+
-      line("10:00","Eggs or yoghurt. 20g")+
-      line("12:00","Lunch either side of training \u2014 carbs before, protein after. 35g")+
-      line("16:00","Snack. 15g")+
-      line("\u2192","<b>85g in before dinner.</b>",1)+
-      line("18:30","Family dinner \u2014 hand portions."))+
+      line("7:30","<b>Anchor smoothie.</b> <b>450 \u00b7 44g</b>",1)+
+      line("10:00","Eggs or yoghurt. <b>250 \u00b7 22g</b>")+
+      line("12:00","Lunch either side of training. <b>600 \u00b7 45g</b>")+
+      line("16:00","Snack. <b>250 \u00b7 20g</b>")+
+      line("\u2192","<b>~115g in before dinner.</b>",1)+
+      line("18:30","Dinner \u2014 hand portions. <b>700 \u00b7 35g</b>"))+
     sched("C \u00b7 train evening, 5\u20136pm",
-      line("7:30","<b>Anchor smoothie.</b> 30g",1)+
-      line("12:30","Lunch. 35g")+
-      line("15:30","Snack \u2014 this is the one that gets you there. 20g")+
-      line("\u2192","<b>85g in before training.</b>",1)+
-      line("17:00","30\u201350g carbs before lifting. Bagel, banana, whatever's there.")+
-      line("19:30","Dinner after \u2014 hand portions. Add a shake if it was light.")));
+      line("7:30","<b>Anchor smoothie.</b> <b>450 \u00b7 44g</b>",1)+
+      line("12:30","Lunch. <b>600 \u00b7 45g</b>")+
+      line("15:30","Snack \u2014 the one that gets you there. <b>300 \u00b7 25g</b>")+
+      line("\u2192","<b>~115g in before training.</b>",1)+
+      line("17:00","30\u201350g carbs before lifting. <b>200 \u00b7 5g</b>")+
+      line("19:30","Dinner after \u2014 hand portions. <b>700 \u00b7 45g</b>"))+
+    note("<b>If 2,250 feels like a lot of food, that's the point.</b> You reached 180 lb eating roughly "+
+      "2,650\u20132,750, so this is already a cut \u2014 you just never counted before. But protein and fibre "+
+      "carry far more volume per calorie: 500 kcal of chicken, rice and veg is about 520g of actual food "+
+      "against 190g for two slices of pizza. You'll be eating close to twice the bulk on fewer calories."));
 
   h+=card("","The meal you can't weigh","Hand portions are accurate enough. Precision at a family "+
     "dinner buys you nothing.",
