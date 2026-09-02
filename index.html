@@ -544,6 +544,15 @@
         border:1px solid var(--line);border-radius:11px;padding:11px 13px;outline:none">
         <button class="btn btn-p" id="tdAdd" style="padding:11px 15px">Add</button></div>
     </div>
+    <input type="text" id="tdSearch" placeholder="Search the list" autocomplete="off"
+      style="width:100%;margin-top:12px;font:500 14px var(--sans);color:var(--ink);background:var(--card);
+      border:1px solid var(--line);border-radius:11px;padding:10px 13px;outline:none">
+    <div class="seg" id="tdSortSeg" style="margin-top:12px">
+      <button data-so="smart">Priority</button><button data-so="due">Due</button>
+      <button data-so="imp">Importance</button><button data-so="tag">Tag</button>
+    </div>
+    <div class="chips" id="tdTagBar" style="margin-top:10px"></div>
+    <div id="tdNeglect"></div>
     <div id="tdOverdue"></div>
     <div id="tdSoon"></div>
     <div id="tdRest"></div>
@@ -561,6 +570,8 @@
         <span class="wd" id="wRate"></span></div>
       <div class="wraw" id="wRaw">No entries yet.</div>
       <svg class="wchart" id="wChart" viewBox="0 0 320 150" preserveAspectRatio="none"></svg>
+      <div class="seg" id="unitSeg" style="margin-top:12px">
+        <button data-unit="lb">lb</button><button data-unit="kg">kg</button></div>
       <div class="wentry">
         <input type="number" id="wIn" step="0.1" placeholder="today's weight">
         <button class="btn btn-p" id="wSave">Log</button>
@@ -814,9 +825,27 @@
       <button data-s="quick"><span class="wt">Quick</span><span class="wp">under 10 min</span></button>
       <button data-s="normal"><span class="wt">Normal</span><span class="wp">an hour-ish</span></button>
       <button data-s="big"><span class="wt">Big</span><span class="wp">a real chunk</span></button>
-    </div></div>
+    </div>
+    <p class="hint">This sets how much lead time the task gets. "Do next" orders by when you'd have to
+      <i>start</i> to finish on time, not by the due date alone — so a six-hour assignment due Friday
+      comes up before a five-minute errand due tomorrow.</p></div>
+  <div class="fld"><label>How much does this matter?</label>
+    <div class="wsel" id="tdImp">
+      <button data-i="1"><span class="wt">Low</span><span class="wp">nice to clear</span></button>
+      <button data-i="2"><span class="wt">Normal</span><span class="wp">ordinary</span></button>
+      <button data-i="3"><span class="wt">High</span><span class="wp">real consequences</span></button>
+    </div>
+    <p class="hint">Used to break ties when two things need starting on the same day.</p></div>
   <div class="fld"><label>Due <span style="text-transform:none;letter-spacing:0;font-weight:500">(optional)</span></label>
-    <input type="date" id="tdDue"></div>
+    <input type="date" id="tdDue">
+    <div id="tdUrgBox" style="margin-top:10px">
+      <div class="wsel" id="tdUrg">
+        <button data-u="1"><span class="wt">Whenever</span></button>
+        <button data-u="2"><span class="wt">Soonish</span></button>
+        <button data-u="3"><span class="wt">Pressing</span></button>
+      </div>
+      <p class="hint">No due date, so set the pressure by hand.</p>
+    </div></div>
   <div class="fld"><label>When will you do it?</label>
     <input type="text" id="tdPlan" placeholder="e.g. Thursday after my 2pm, in the library" autocomplete="off">
     <p class="hint">Worth thirty seconds. An unfinished task keeps intruding on your attention until it's
@@ -824,8 +853,13 @@
       finishing it. This is the field that stops the list living in your head.</p></div>
   <div class="fld"><label>Tag <span style="text-transform:none;letter-spacing:0;font-weight:500">(optional)</span></label>
     <input type="text" id="tdTag" placeholder="e.g. CS, Macro, admin" autocomplete="off"></div>
+  <div class="fld"><label>Repeats</label>
+    <div class="chips" id="tdRep">
+      <button class="chip" data-r="0">One-off</button><button class="chip" data-r="7">Weekly</button>
+      <button class="chip" data-r="14">Fortnightly</button></div>
+    <p class="hint">For recurring problem sets. Ticking it off creates the next one automatically.</p></div>
   <div class="sact"><button class="btn btn-s" id="tdDel">Delete</button>
-    <button class="btn btn-p" id="tdSave">Save</button></div>
+    <button class="btn btn-p" id="tdSave">Done</button></div>
 </div></div>
 
 <div class="ov" id="ovCue"><div class="sheet" id="cueSheet"></div></div>
@@ -873,12 +907,17 @@ function defaults(){
   if(!p.unit)p.unit="lb";
   if(typeof p.seeded!=="boolean")p.seeded=false;
   if(typeof p.loadAware!=="boolean")p.loadAware=true;
+  if(!p.tdSort)p.tdSort="smart";
+  if(!p.tdTag)p.tdTag="";
   S.todos.forEach(t=>{
     if(!t.size)t.size="normal";
     if(t.due===undefined)t.due="";
     if(t.plan===undefined)t.plan="";
     if(t.doneOn===undefined)t.doneOn=null;
     if(t.tag===undefined)t.tag="";
+    if(!t.imp)t.imp=2;                 // 1 low, 2 normal, 3 high
+    if(!t.urg)t.urg=2;                 // manual urgency, used when no due date
+    if(t.rep===undefined)t.rep=0;      // days between repeats, 0 = one-off
   });
   S.tasks.forEach(t=>{
     // v3 used kind:"recurring"|"project"; v1/v2 had no kind at all
@@ -902,6 +941,7 @@ function defaults(){
     if(typeof t.retired!=="boolean")t.retired=false;
     if(t.cueOK===undefined)t.cueOK=true;
     if(!t.cope)t.cope={when:"",then:""};
+    if(t.quiet===undefined)t.quiet=null;   // null = follow the concordance answers
   });
   S.schema=4;
 }
@@ -945,8 +985,9 @@ function concLabel(v){
   if(v>=5)return "Strongly yours"; if(v>=2)return "Mostly yours";
   if(v>=-1)return "Mixed"; if(v>=-4)return "Mostly obligation"; return "Pure obligation";}
 function mW(t){const v=conc(t);return v===null?1:0.25+((v+8)/16)*1.5;}
-function quiet(t){if(!t.conc)return false;const c=t.conc;
+function quietAuto(t){if(!t.conc)return false;const c=t.conc;
   return c.intrinsic>=4&&c.intrinsic>=c.identified&&c.intrinsic>c.introjected&&c.intrinsic>c.external;}
+function quiet(t){return t.quiet===true?true:(t.quiet===false?false:quietAuto(t));}
 
 /* ---------- weekly floors + pool ---------- */
 function weekDays(off){const s=monStart(off||0);return Array.from({length:7},(_,i)=>add(s,i));}
@@ -1031,10 +1072,63 @@ function dueState(t){
   if(n<=2)return {k:"soon",days:n};
   return {k:"later",days:n};
 }
+/* Deadlines are real. The question a student actually needs answered is not
+   "what is due soonest" but "what must I start now to finish on time" - a
+   6-hour assignment due Friday needs today; a 5-minute errand due tomorrow
+   does not. Lead time is how the two get compared honestly. */
+const LEAD={quick:0,normal:1,big:3};
+function leadDays(t){return LEAD[t.size]!==undefined?LEAD[t.size]:1;}
+function startBy(t){
+  if(t.due)return addDaysDate(parseD(t.due),-leadDays(t));
+  const off={3:2,2:9,1:24}[t.urg||2];        // no deadline: urgency stands in
+  return addDaysDate(T(),off+leadDays(t));
+}
+function addDaysDate(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x;}
+function startState(t){
+  const n=between(T(),startBy(t));
+  if(n<0)return {k:"late",days:-n};          // should already have begun
+  if(n===0)return {k:"now",days:0};
+  return {k:"soon",days:n};
+}
+function urgency(t){
+  if(!t.due)return t.urg||2;
+  const n=between(T(),parseD(t.due));
+  if(n<0)return 4;
+  if(n<=1)return 4;
+  if(n<=3)return 3;
+  if(n<=7)return 2;
+  return 1;
+}
+function priority(t){return (t.imp||2)*2+urgency(t);}
 function sortTodos(a,b){
-  const A=a.due?parseD(a.due).getTime():Infinity, B=b.due?parseD(b.due).getTime():Infinity;
-  if(A!==B)return A-B;
+  const m=S.prefs.tdSort;
+  if(m==="due"){
+    const A=a.due?parseD(a.due).getTime():Infinity,B=b.due?parseD(b.due).getTime():Infinity;
+    if(A!==B)return A-B;
+    return priority(b)-priority(a);
+  }
+  if(m==="imp"){
+    if((b.imp||2)!==(a.imp||2))return (b.imp||2)-(a.imp||2);
+    return startBy(a)-startBy(b);
+  }
+  if(m==="tag"){
+    const A=(a.tag||"~").toLowerCase(),B=(b.tag||"~").toLowerCase();
+    if(A!==B)return A<B?-1:1;
+    return startBy(a)-startBy(b);
+  }
+  // default: start-by date, importance breaks ties
+  const d=startBy(a)-startBy(b);
+  if(d!==0)return d;
+  if((b.imp||2)!==(a.imp||2))return (b.imp||2)-(a.imp||2);
   return todoPts(b)-todoPts(a);
+}
+/* big, important, and no deadline yet forcing it - the group that gets eaten */
+function neglected(){
+  return openTodos().filter(t=>(t.imp||2)>=3&&!t.due).sort(sortTodos);
+}
+function allTags(){
+  const s={};S.todos.filter(t=>!t.doneOn&&t.tag).forEach(t=>s[t.tag]=1);
+  return Object.keys(s).sort();
 }
 function todoStats(days){
   let done=0,p=0;
@@ -1097,7 +1191,16 @@ function practiceDrought(){
   for(let i=0;i<120;i++){if(practiceTouched(add(T(),-i)))return i;}
   return 120;
 }
-function fullDay(d){const r=ratio(d);return r===null?null:r>=1;}
+/* Literal completion, not a ratio - overshooting practice used to paper over
+   skipped anchors and the app would announce "everything done" when it wasn't. */
+function fullDay(d){
+  const a=anchorsToday(d), pl=practice();
+  if(!a.length&&!pl.length)return null;
+  const ds=doneSet(d);
+  if(!a.every(t=>ds.has(t.id)))return false;
+  const need=dailyTarget();
+  return pl.filter(t=>ds.has(t.id)).length>=need;
+}
 
 function baseDate(){
   if(S.transition.on&&S.transition.date){const m=parseD(S.transition.date);if(m<=T())return m;}
@@ -1431,7 +1534,7 @@ function toggle(id){
   if(on){
     const wasOk=false,p=dayPts(T()),nowOk=p&&(p.got/p.tot)>=S.prefs.threshold;
     const c=conc(t);
-    const fullNow=p&&p.got>=p.tot;
+    const fullNow=fullDay(T())===true;
     const an=anomaly(t);
     if(fullNow&&!lastFull){haptic("huge");confetti();toast("Everything done");lastFull=true;}
     else if(an){                                   // real novelty - the only kind that can't habituate
@@ -1468,9 +1571,15 @@ function maybeSession(id){
 function todoRow(t){
   const ds=dueState(t), bits=[];
   if(ds.k==="over")bits.push('<span class="over">'+ds.days+'d overdue</span>');
-  else if(ds.k==="today")bits.push('<span class="today">due today</span>');
+  else if(ds.k==="today")bits.push('<span class="over">due today</span>');
   else if(ds.k==="soon")bits.push('<span class="today">due in '+ds.days+'d</span>');
   else if(ds.k==="later")bits.push("due "+parseD(t.due).toLocaleDateString(undefined,{month:"short",day:"numeric"}));
+  if(t.due&&t.size!=="quick"){
+    const ss=startState(t);
+    if(ss.k==="late")bits.push('<span class="over">start now</span>');
+    else if(ss.k==="now")bits.push('<span class="today">start today</span>');
+  }
+  if((t.imp||2)>=3)bits.push('<span style="color:var(--mauve)">important</span>');
   if(t.tag)bits.push(esc(t.tag));
   if(t.plan)bits.push('<span class="plan">'+esc(t.plan)+'</span>');
   return '<div class="td '+(t.doneOn?"on":"")+'" data-td="'+t.id+'">'+
@@ -1487,11 +1596,22 @@ function wireTodos(scope){
     e.stopPropagation(); toggleTodo(el.dataset.tdx);});
 }
 function renderList(){
-  const open=openTodos().slice().sort(sortTodos);
+  $$("#tdSortSeg button").forEach(b=>b.classList.toggle("on",b.dataset.so===S.prefs.tdSort));
+  const tags=allTags();
+  $("#tdTagBar").innerHTML=tags.length
+    ? '<button class="chip '+(S.prefs.tdTag?"":"on")+'" data-tg="">All</button>'+
+      tags.map(t=>'<button class="chip '+(S.prefs.tdTag===t?"on":"")+'" data-tg="'+esc(t)+'">'+esc(t)+'</button>').join("")
+    : "";
+  $("#tdTagBar").querySelectorAll("[data-tg]").forEach(el=>el.onclick=()=>{
+    S.prefs.tdTag=el.dataset.tg;save();renderList();});
+  const q=(S.prefs.tdQ||"").toLowerCase();
+  const filt=t=>(!S.prefs.tdTag||t.tag===S.prefs.tdTag)&&
+    (!q||(t.name+" "+(t.tag||"")+" "+(t.plan||"")).toLowerCase().includes(q));
+  const open=openTodos().filter(filt).slice().sort(sortTodos);
   const over=open.filter(t=>dueState(t).k==="over");
   const soon=open.filter(t=>["today","soon"].includes(dueState(t).k));
   const rest=open.filter(t=>!over.includes(t)&&!soon.includes(t));
-  const done=S.todos.filter(t=>t.doneOn&&between(parseD(t.doneOn),T())<7)
+  const done=S.todos.filter(t=>t.doneOn&&between(parseD(t.doneOn),T())<7).filter(filt)
     .sort((a,b)=>a.doneOn<b.doneOn?1:-1);
   $("#listCount").textContent=open.length+" open";
   const sec=(id,label,arr)=>{
@@ -1499,9 +1619,18 @@ function renderList(){
     el.innerHTML=arr.length?'<div class="lbl">'+label+'</div>'+arr.map(todoRow).join(""):"";
     wireTodos(el);
   };
-  sec("tdOverdue","Overdue",over);
-  sec("tdSoon","Next few days",soon);
-  sec("tdRest","Everything else",rest);
+  const neg=neglected().filter(filt);
+  const negEl=$("#tdNeglect");
+  if(neg.length&&S.prefs.tdSort==="smart"){
+    negEl.innerHTML='<div class="lbl">Matters, no deadline pushing it</div>'+
+      neg.slice(0,4).map(todoRow).join("")+
+      '<p class="hint" style="margin:2px 4px 0">Surfaced deliberately \u2014 this is the group that '+
+      'quietly loses to whatever has a clock on it.</p>';
+    wireTodos(negEl);
+  }else negEl.innerHTML="";
+  sec("tdOverdue","Overdue",over.filter(t=>!(neg.includes(t)&&S.prefs.tdSort==="smart")));
+  sec("tdSoon","Next few days",soon.filter(t=>!(neg.includes(t)&&S.prefs.tdSort==="smart")));
+  sec("tdRest","Everything else",rest.filter(t=>!(neg.includes(t)&&S.prefs.tdSort==="smart")));
   sec("tdDone","Done this week \u00b7 "+todoStats(7).p+" pts",done);
   if(!open.length&&!done.length){
     $("#tdRest").innerHTML='<div class="empty"><h3>Nothing on the list</h3>'+
@@ -1519,6 +1648,11 @@ function toggleTodo(id){
   const t=S.todos.find(x=>x.id===id); if(!t)return;
   const on=!t.doneOn;
   t.doneOn=on?K(T()):null;
+  if(on&&t.rep>0){                      // weekly problem sets etc - spawn the next one
+    const base=t.due?parseD(t.due):T();
+    S.todos.push(Object.assign({},t,{id:"d"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),
+      doneOn:null,due:K(addDaysDate(base,t.rep))}));
+  }
   save();
   if(on){haptic(t.size==="big"?"big":"soft");toast("+"+todoPts(t),"var(--good-ink)");}
   renderAll();
@@ -1526,20 +1660,26 @@ function toggleTodo(id){
 function openTodo(id){
   const t=id?S.todos.find(x=>x.id===id):null;
   editTodoId=id||null;
-  dTodo={size:t?t.size:"normal"};
+  dTodo={size:t?t.size:"normal",imp:t?(t.imp||2):2,urg:t?(t.urg||2):2,rep:t?(t.rep||0):0};
   $("#tdTitle").textContent=t?"Edit":"New";
   $("#tdName").value=t?t.name:"";
   $("#tdDue").value=t?(t.due||""):"";
   $("#tdPlan").value=t?(t.plan||""):"";
   $("#tdTag").value=t?(t.tag||""):"";
-  syncTdSize();
+  syncTdSize();syncTdImp();syncTdUrg();syncTdRep();
   $("#ovTodo").classList.add("open");
 }
 function syncTdSize(){$$("#tdSize button").forEach(b=>b.classList.toggle("on",b.dataset.s===dTodo.size));}
+function syncTdRep(){$$("#tdRep button").forEach(b=>b.classList.toggle("on",+b.dataset.r===dTodo.rep));}
+function syncTdImp(){$$("#tdImp button").forEach(b=>b.classList.toggle("on",+b.dataset.i===dTodo.imp));}
+function syncTdUrg(){
+  $$("#tdUrg button").forEach(b=>b.classList.toggle("on",+b.dataset.u===dTodo.urg));
+  $("#tdUrgBox").style.display=$("#tdDue").value?"none":"";
+}
 function saveTodo(){
   const n=$("#tdName").value.trim(); if(!n){$("#tdName").focus();return;}
-  const patch={name:n,size:dTodo.size,due:$("#tdDue").value||"",
-    plan:$("#tdPlan").value.trim(),tag:$("#tdTag").value.trim()};
+  const patch={name:n,size:dTodo.size,imp:dTodo.imp,urg:dTodo.urg,due:$("#tdDue").value||"",
+    rep:dTodo.rep,plan:$("#tdPlan").value.trim(),tag:$("#tdTag").value.trim()};
   if(editTodoId)Object.assign(S.todos.find(x=>x.id===editTodoId),patch);
   else S.todos.push(Object.assign({id:"d"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),
     doneOn:null},patch));
@@ -1660,6 +1800,7 @@ function pickDay(date,cell){
 function renderBody(){
   const s=weightSeries(),u=S.prefs.unit;
   $("#wUnit").textContent=u;
+  $$("#unitSeg button").forEach(b=>b.classList.toggle("on",b.dataset.unit===u));
   if(!s.length){
     $("#wTrend").textContent="—";$("#wRaw").textContent="No entries yet.";
     $("#wRate").textContent="";$("#wChart").innerHTML="";
@@ -2643,10 +2784,17 @@ function init(){
   $("#pGrad").onchange=e=>{S.prefs.graduate=e.target.checked;save();};
   $("#reviewBtn").onclick=()=>{revOff=0;renderReview();$("#ovReview").classList.add("open");};
   $("#wSave").onclick=logWeight;
+  $$("#unitSeg button").forEach(b=>b.onclick=()=>{
+    const to=b.dataset.unit;
+    if(to===S.prefs.unit)return;
+    const f=to==="kg"?0.45359237:2.20462262;
+    S.weights=S.weights.map(e=>({date:e.date,v:Math.round(e.v*f*10)/10}));
+    S.prefs.unit=to;save();renderBody();});
+  $("#tdSearch").oninput=e=>{S.prefs.tdQ=e.target.value;renderList();};
   $("#tdAdd").onclick=()=>{const v=$("#tdNew").value.trim();if(!v)return;
-    S.todos.push({id:"d"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),
-      name:v,size:"normal",due:"",plan:"",tag:"",doneOn:null});
-    save();$("#tdNew").value="";haptic("soft");renderAll();};
+    const nid="d"+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+    S.todos.push({id:nid,name:v,size:"normal",imp:2,urg:2,due:"",plan:"",tag:"",doneOn:null});
+    save();$("#tdNew").value="";haptic("soft");renderAll();openTodo(nid);};
   $("#tdNew").addEventListener("keydown",e=>{if(e.key==="Enter")$("#tdAdd").onclick();});
   $("#tdSave").onclick=saveTodo;
   $("#tdDel").onclick=()=>{if(editTodoId&&confirm("Delete this?")){
@@ -2654,6 +2802,11 @@ function init(){
     else $("#ovTodo").classList.remove("open");};
   $("#ovTodo").onclick=e=>{if(e.target.id==="ovTodo")$("#ovTodo").classList.remove("open");};
   $$("#tdSize button").forEach(b=>b.onclick=()=>{dTodo.size=b.dataset.s;syncTdSize();});
+  $$("#tdImp button").forEach(b=>b.onclick=()=>{dTodo.imp=+b.dataset.i;syncTdImp();});
+  $$("#tdUrg button").forEach(b=>b.onclick=()=>{dTodo.urg=+b.dataset.u;syncTdUrg();});
+  $$("#tdRep button").forEach(b=>b.onclick=()=>{dTodo.rep=+b.dataset.r;syncTdRep();});
+  $("#tdDue").onchange=()=>syncTdUrg();
+  $$("#tdSortSeg button").forEach(b=>b.onclick=()=>{S.prefs.tdSort=b.dataset.so;save();renderList();});
   $("#protoBtn").onclick=openProto;
   $("#ovProto").onclick=e=>{if(e.target.id==="ovProto")$("#ovProto").classList.remove("open");};
   $("#wIn").addEventListener("keydown",e=>{if(e.key==="Enter")logWeight();});
