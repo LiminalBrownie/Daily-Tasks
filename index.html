@@ -45,6 +45,7 @@
   .view{display:none;animation:fade .22s ease}
   body[data-view="today"] #v-today,
   body[data-view="week"] #v-week,
+  body[data-view="list"] #v-list,
   body[data-view="body"] #v-body,
   body[data-view="setup"] #v-setup{display:block}
   @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
@@ -401,6 +402,27 @@
   .phand div{background:var(--card2);border-radius:11px;padding:11px 12px;font-size:12.5px;line-height:1.4}
   .phand b{display:block;font-size:13.5px;margin-bottom:2px}
 
+
+  /* ---- todo list ---- */
+  .td{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:14px;
+    padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow);cursor:pointer}
+  .td .box{width:22px;height:22px;border-radius:7px;border:2px solid var(--line);flex:none;
+    display:grid;place-items:center;color:var(--on-accent);transition:.16s}
+  .td .box svg{width:12px;height:12px;opacity:0;transform:scale(.5);transition:.16s}
+  .td.on .box{background:var(--good);border-color:var(--good)}
+  .td.on .box svg{opacity:1;transform:none}
+  .td .tb{flex:1;min-width:0}
+  .td .tn{font-size:14.5px;font-weight:500;line-height:1.35}
+  .td.on .tn{color:var(--faint);text-decoration:line-through;text-decoration-color:var(--line)}
+  .td .tm{font:500 10.5px var(--mono);color:var(--faint);margin-top:3px;display:flex;gap:7px;flex-wrap:wrap}
+  .td .tm .over{color:var(--danger)}
+  .td .tm .today{color:var(--accent)}
+  .td .tm .plan{color:var(--good-ink)}
+  .td .tp{font:700 10px var(--mono);padding:3px 6px;border-radius:6px;background:var(--card2);
+    color:var(--muted);flex:none}
+  .loadnote{background:var(--accent-soft);border-radius:13px;padding:12px 14px;margin-top:12px;
+    font-size:12.5px;line-height:1.55;color:var(--ink)}
+  .loadnote b{color:var(--accent)}
 </style>
 </head>
 <body data-view="today" data-theme="dark">
@@ -440,6 +462,7 @@
     <div id="todayAnchors"></div>
     <div id="todayPractice"></div>
     <div id="todayProjects"></div>
+    <div id="todayTodos"></div>
   </section>
 
   <!-- WEEK -->
@@ -507,6 +530,24 @@
       <div id="taskBrk"></div>
     </div>
     <button class="btn btn-s btn-b" id="reviewBtn" style="margin-top:14px">Monthly review →</button>
+  </section>
+
+  <!-- LIST -->
+  <section id="v-list" class="view">
+    <header>
+      <div class="kicker">One-off things</div>
+      <div class="datewrap"><h1>List</h1><div class="sub-r" id="listCount"></div></div>
+    </header>
+    <div class="card" style="padding:14px">
+      <div class="rin"><input type="text" id="tdNew" placeholder="Add something you need to do"
+        autocomplete="off" style="flex:1;font:500 15px var(--sans);color:var(--ink);background:var(--card2);
+        border:1px solid var(--line);border-radius:11px;padding:11px 13px;outline:none">
+        <button class="btn btn-p" id="tdAdd" style="padding:11px 15px">Add</button></div>
+    </div>
+    <div id="tdOverdue"></div>
+    <div id="tdSoon"></div>
+    <div id="tdRest"></div>
+    <div id="tdDone"></div>
   </section>
 
   <!-- BODY -->
@@ -632,6 +673,7 @@
 <nav><div class="nav-in">
   <button class="nb on" data-nav="today"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Today</button>
   <button class="nb" data-nav="week"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Week</button>
+  <button class="nb" data-nav="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>List</button>
   <button class="nb" data-nav="body"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 3 4-6 5 5"/></svg>Body</button>
   <button class="nb" data-nav="setup"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.14.35.4.64.73.83H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Setup</button>
 </div></nav>
@@ -763,6 +805,29 @@
 
 <div class="ov" id="ovDetail"><div class="sheet" id="detailSheet"></div></div>
 <div class="ov" id="ovReview"><div class="sheet" id="reviewSheet"></div></div>
+<div class="ov" id="ovTodo"><div class="sheet">
+  <h2 id="tdTitle">Edit</h2>
+  <p class="shsub">One-off. Doesn't repeat, doesn't build a streak.</p>
+  <div class="fld"><label>What</label><input type="text" id="tdName" autocomplete="off"></div>
+  <div class="fld"><label>Size</label>
+    <div class="wsel" id="tdSize">
+      <button data-s="quick"><span class="wt">Quick</span><span class="wp">under 10 min</span></button>
+      <button data-s="normal"><span class="wt">Normal</span><span class="wp">an hour-ish</span></button>
+      <button data-s="big"><span class="wt">Big</span><span class="wp">a real chunk</span></button>
+    </div></div>
+  <div class="fld"><label>Due <span style="text-transform:none;letter-spacing:0;font-weight:500">(optional)</span></label>
+    <input type="date" id="tdDue"></div>
+  <div class="fld"><label>When will you do it?</label>
+    <input type="text" id="tdPlan" placeholder="e.g. Thursday after my 2pm, in the library" autocomplete="off">
+    <p class="hint">Worth thirty seconds. An unfinished task keeps intruding on your attention until it's
+      either done or planned — and a specific when-and-where plan discharges that as effectively as
+      finishing it. This is the field that stops the list living in your head.</p></div>
+  <div class="fld"><label>Tag <span style="text-transform:none;letter-spacing:0;font-weight:500">(optional)</span></label>
+    <input type="text" id="tdTag" placeholder="e.g. CS, Macro, admin" autocomplete="off"></div>
+  <div class="sact"><button class="btn btn-s" id="tdDel">Delete</button>
+    <button class="btn btn-p" id="tdSave">Save</button></div>
+</div></div>
+
 <div class="ov" id="ovCue"><div class="sheet" id="cueSheet"></div></div>
 <div class="ov" id="ovProto"><div class="sheet" id="protoSheet"></div></div>
 <script>
@@ -778,7 +843,7 @@ const PRAISE=["That's the one you usually skip.","Momentum. Good.","Small thing 
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
 
 let S={};
-let editId=null, editTier="anchor", detailId=null, sessTask=null, revOff=0;
+let editId=null, editTier="anchor", detailId=null, sessTask=null, revOff=0, editTodoId=null, dTodo={size:"normal"};
 let dTask={}, dSess={};
 
 /* ---------- storage + migration (v1/v2/v3 -> v4) ---------- */
@@ -787,6 +852,7 @@ function defaults(){
   if(!S.done)S.done={};
   if(!S.tiny)S.tiny={};
   if(!S.sessions)S.sessions=[];
+  if(!S.todos)S.todos=[];
   if(!S.weights)S.weights=[];
   if(!S.reminder)S.reminder={};
   if(typeof S.reminder.enabled!=="boolean")S.reminder.enabled=false;
@@ -806,6 +872,14 @@ function defaults(){
   if(typeof p.pool!=="number")p.pool=3;
   if(!p.unit)p.unit="lb";
   if(typeof p.seeded!=="boolean")p.seeded=false;
+  if(typeof p.loadAware!=="boolean")p.loadAware=true;
+  S.todos.forEach(t=>{
+    if(!t.size)t.size="normal";
+    if(t.due===undefined)t.due="";
+    if(t.plan===undefined)t.plan="";
+    if(t.doneOn===undefined)t.doneOn=null;
+    if(t.tag===undefined)t.tag="";
+  });
   S.tasks.forEach(t=>{
     // v3 used kind:"recurring"|"project"; v1/v2 had no kind at all
     if(!t.tier){
@@ -923,6 +997,51 @@ function floorHistory(weeks){
   return out;
 }
 
+/* ---------- one-off todos ----------
+   Kept on a separate axis from anchors and practice. They add to what a day is
+   worth but never to what it demands, so a heavy coursework day can only ever
+   raise the score - never create a new way to fall short. */
+const TODO_PTS={quick:0.5,normal:1,big:3};
+const TD_SEED=[
+  ["Answer macro questions","normal","Macro"],
+  ["Complete Macro HW #1","normal","Macro"],
+  ["Complete CS HW #1","big","CS"],
+  ["Read CS textbook to chapter 3","big","CS"],
+  ["Complete HW1 for Hns Engineering","big","Engr"],
+  ["Complete SCLA 4sp","normal","SCLA"],
+  ["Buy engineering paper","quick","admin"],
+  ["Change myEyeDr address","quick","admin"],
+  ["Double-check Virginia voting","quick","admin"],
+  ["Sort out DRC testing","normal","admin"],
+  ["Sign up for Purdue Outing Club","quick","social"],
+  ["Plan for finals","big","admin"]];
+function todoPts(t){return TODO_PTS[t.size]||1;}
+function openTodos(){return S.todos.filter(t=>!t.doneOn);}
+function todosDoneOn(d){const k=K(d);return S.todos.filter(t=>t.doneOn===k);}
+function todoCredit(d){
+  const got=todosDoneOn(d).reduce((a,t)=>a+todoPts(t),0);
+  const base=Math.max(8,anchorsToday(d).reduce((a,t)=>a+pts(t),0)+dailyTarget()*2.5);
+  return Math.min(got,base*0.4);      // capped: admin can't replace the whole day
+}
+function dueState(t){
+  if(!t.due)return {k:"none",days:null};
+  const n=between(T(),parseD(t.due));
+  if(n<0)return {k:"over",days:-n};
+  if(n===0)return {k:"today",days:0};
+  if(n<=2)return {k:"soon",days:n};
+  return {k:"later",days:n};
+}
+function sortTodos(a,b){
+  const A=a.due?parseD(a.due).getTime():Infinity, B=b.due?parseD(b.due).getTime():Infinity;
+  if(A!==B)return A-B;
+  return todoPts(b)-todoPts(a);
+}
+function todoStats(days){
+  let done=0,p=0;
+  S.todos.forEach(t=>{if(t.doneOn&&between(parseD(t.doneOn),T())<days){done++;p+=todoPts(t);}});
+  return {done,p};
+}
+
 /* ---------- day scoring ---------- */
 function dayPts(d){
   const a=anchorsToday(d);
@@ -942,16 +1061,41 @@ function dayPts(d){
     donePr.forEach(t=>{got+=pts(t);mgot+=pts(t)*mW(t);});
     tinyPr.forEach(t=>{const tp=tinyPts(t);got+=tp;mgot+=tp*mW(t);});
   }
-  if(tot===0)return null;
-  return {tot:Math.round(tot*10)/10,got:Math.round(got*10)/10,mtot,mgot};
+  const tc=todoCredit(d);
+  got+=tc; mgot+=tc;
+  if(tot===0)return tc>0?{tot:Math.max(1,tc),got:tc,mtot:Math.max(1,tc),mgot:tc,todo:tc}:null;
+  return {tot:Math.round(tot*10)/10,got:Math.round(got*10)/10,mtot,mgot,todo:tc};
 }
 function ratio(d){const p=dayPts(d);return p?Math.min(1,p.got/p.tot):null;}
 function enough(d){const r=ratio(d);return r===null?null:r>=S.prefs.threshold;}
+/* A day counts when the score clears the bar AND, if practice is scheduled with
+   floors still outstanding, you touched at least one practice item. Coursework
+   raises the score honestly, but it must not be able to stand in for the hobbies
+   the whole app exists to protect - otherwise the streak survives while they die. */
+function practiceTouched(d){
+  const pl=practice(); if(!pl.length)return true;
+  const ds=doneSet(d), ts=tinySet(d);
+  return pl.some(t=>ds.has(t.id)||ts.has(t.id));
+}
+function floorsOnTrack(d){
+  const rows=practice(); if(!rows.length)return true;
+  // measured against the week that d falls in
+  const off=Math.floor((monStart(0)-add(d,-((d.getDay()+6)%7)))/604800000);
+  return rows.every(t=>doneThisWeek(t.id,-off)>=(t.floor||3));
+}
 function covered(d){
   const a=anchorsToday(d);
   if(!a.length&&!practice().length)return null;
   const r=ratio(d);
-  return r===null?null:r>=S.prefs.threshold;
+  if(r===null)return null;
+  if(r<S.prefs.threshold)return false;
+  return practiceTouched(d)||floorsOnTrack(d);
+}
+/* days since any practice session at all - portfolio-level drought */
+function practiceDrought(){
+  if(!practice().length)return null;
+  for(let i=0;i<120;i++){if(practiceTouched(add(T(),-i)))return i;}
+  return 120;
 }
 function fullDay(d){const r=ratio(d);return r===null?null:r>=1;}
 
@@ -1243,6 +1387,30 @@ function renderToday(){
     : "";
   $("#todayProjects").querySelectorAll("[data-proj]").forEach(el=>
     el.onclick=()=>openSession(el.dataset.proj));
+
+  // one-off things that are due, plus an honest note when coursework is carrying the day
+  const dueTd=openTodos().filter(t=>["over","today","soon"].includes(dueState(t).k)).sort(sortTodos);
+  const dTod=todosDoneOn(d);
+  const box2=$("#todayTodos");
+  let html="";
+  if(dueTd.length)html+='<div class="lbl">Due now</div>'+dueTd.slice(0,6).map(todoRow).join("");
+  if(dTod.length)html+='<div class="lbl">Cleared today \u00b7 '+
+    dTod.reduce((a,t)=>a+todoPts(t),0)+' pts</div>'+dTod.map(todoRow).join("");
+  const dr=practiceDrought();
+  if(dr!==null&&dr>=5){
+    html+='<div class="loadnote" style="background:var(--card2)">'+
+      '<b style="color:var(--warn)">'+dr+' days since any practice session.</b> Coursework still counts '+
+      'toward your day, but it can\'t stand in for the things you actually came here to protect. '+
+      'One session \u2014 even the tiny version \u2014 is enough to keep the chain alive.</div>';
+  }
+  if(S.prefs.loadAware&&p&&p.todo>0){
+    const share=p.todo/p.tot;
+    if(share>=0.15)html+='<div class="loadnote">Coursework and one-off work is carrying <b>'+
+      Math.round(share*100)+'%</b> of today. That is real work and it counts here \u2014 a day spent on '+
+      'assignments is not a day you did nothing.</div>';
+  }
+  box2.innerHTML=html;
+  wireTodos(box2);
 }
 function renderFresh(){
   const box=$("#freshBox");
@@ -1294,6 +1462,88 @@ function maybeSession(id){
   const t=byId(id);if(!t)return;
   const pr=t.tier==="practice"?0.75:0.25;
   if(Math.random()<pr)setTimeout(()=>openSession(id),420);
+}
+
+/* ---------- LIST ---------- */
+function todoRow(t){
+  const ds=dueState(t), bits=[];
+  if(ds.k==="over")bits.push('<span class="over">'+ds.days+'d overdue</span>');
+  else if(ds.k==="today")bits.push('<span class="today">due today</span>');
+  else if(ds.k==="soon")bits.push('<span class="today">due in '+ds.days+'d</span>');
+  else if(ds.k==="later")bits.push("due "+parseD(t.due).toLocaleDateString(undefined,{month:"short",day:"numeric"}));
+  if(t.tag)bits.push(esc(t.tag));
+  if(t.plan)bits.push('<span class="plan">'+esc(t.plan)+'</span>');
+  return '<div class="td '+(t.doneOn?"on":"")+'" data-td="'+t.id+'">'+
+    '<div class="box" data-tdx="'+t.id+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" '+
+    'stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div>'+
+    '<div class="tb"><div class="tn">'+esc(t.name)+'</div>'+
+    (bits.length?'<div class="tm">'+bits.join("<span style=\'color:var(--line)\'>\u00b7</span>")+'</div>':'')+
+    '</div><span class="tp">'+todoPts(t)+'</span></div>';
+}
+function wireTodos(scope){
+  scope.querySelectorAll("[data-td]").forEach(el=>el.onclick=e=>{
+    if(e.target.closest("[data-tdx]"))return; openTodo(el.dataset.td);});
+  scope.querySelectorAll("[data-tdx]").forEach(el=>el.onclick=e=>{
+    e.stopPropagation(); toggleTodo(el.dataset.tdx);});
+}
+function renderList(){
+  const open=openTodos().slice().sort(sortTodos);
+  const over=open.filter(t=>dueState(t).k==="over");
+  const soon=open.filter(t=>["today","soon"].includes(dueState(t).k));
+  const rest=open.filter(t=>!over.includes(t)&&!soon.includes(t));
+  const done=S.todos.filter(t=>t.doneOn&&between(parseD(t.doneOn),T())<7)
+    .sort((a,b)=>a.doneOn<b.doneOn?1:-1);
+  $("#listCount").textContent=open.length+" open";
+  const sec=(id,label,arr)=>{
+    const el=$("#"+id);
+    el.innerHTML=arr.length?'<div class="lbl">'+label+'</div>'+arr.map(todoRow).join(""):"";
+    wireTodos(el);
+  };
+  sec("tdOverdue","Overdue",over);
+  sec("tdSoon","Next few days",soon);
+  sec("tdRest","Everything else",rest);
+  sec("tdDone","Done this week \u00b7 "+todoStats(7).p+" pts",done);
+  if(!open.length&&!done.length){
+    $("#tdRest").innerHTML='<div class="empty"><h3>Nothing on the list</h3>'+
+      '<p>Add coursework, errands, anything one-off. Writing it down and giving it a time is what '+
+      'stops it circling in your head.</p>'+
+      (S.prefs.tdSeeded?'':'<button class="btn btn-s" id="tdSeed">Load my starting list</button>')+'</div>';
+    const sb=$("#tdSeed");
+    if(sb)sb.onclick=()=>{
+      TD_SEED.forEach((s,i)=>S.todos.push({id:"s"+Date.now().toString(36)+i,name:s[0],size:s[1],
+        due:"",plan:"",tag:s[2],doneOn:null}));
+      S.prefs.tdSeeded=true;save();haptic("mid");renderAll();};
+  }
+}
+function toggleTodo(id){
+  const t=S.todos.find(x=>x.id===id); if(!t)return;
+  const on=!t.doneOn;
+  t.doneOn=on?K(T()):null;
+  save();
+  if(on){haptic(t.size==="big"?"big":"soft");toast("+"+todoPts(t),"var(--good-ink)");}
+  renderAll();
+}
+function openTodo(id){
+  const t=id?S.todos.find(x=>x.id===id):null;
+  editTodoId=id||null;
+  dTodo={size:t?t.size:"normal"};
+  $("#tdTitle").textContent=t?"Edit":"New";
+  $("#tdName").value=t?t.name:"";
+  $("#tdDue").value=t?(t.due||""):"";
+  $("#tdPlan").value=t?(t.plan||""):"";
+  $("#tdTag").value=t?(t.tag||""):"";
+  syncTdSize();
+  $("#ovTodo").classList.add("open");
+}
+function syncTdSize(){$$("#tdSize button").forEach(b=>b.classList.toggle("on",b.dataset.s===dTodo.size));}
+function saveTodo(){
+  const n=$("#tdName").value.trim(); if(!n){$("#tdName").focus();return;}
+  const patch={name:n,size:dTodo.size,due:$("#tdDue").value||"",
+    plan:$("#tdPlan").value.trim(),tag:$("#tdTag").value.trim()};
+  if(editTodoId)Object.assign(S.todos.find(x=>x.id===editTodoId),patch);
+  else S.todos.push(Object.assign({id:"d"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),
+    doneOn:null},patch));
+  save();$("#ovTodo").classList.remove("open");renderAll();
 }
 
 /* ---------- WEEK ---------- */
@@ -2074,6 +2324,20 @@ function renderReview(){
       '. '+(prows.every(r=>!r.gain)?"No difficulty increases this month \u2014 that\u2019s the signal you\u2019ve "+
       "drifted into maintenance. Bump a level on the one that feels easiest.":"")+'</p></div>';
   }
+  // one-off work done this month
+  const mS=m.start, mE=new Date(mS.getFullYear(),mS.getMonth()+1,0), mL=mE>T()?T():mE;
+  const tdM=S.todos.filter(t=>t.doneOn&&parseD(t.doneOn)>=mS&&parseD(t.doneOn)<=mL);
+  if(tdM.length){
+    const byTag={};
+    tdM.forEach(t=>{const k=t.tag||"untagged";byTag[k]=(byTag[k]||0)+todoPts(t);});
+    const pts2=tdM.reduce((a,t)=>a+todoPts(t),0);
+    h+='<div class="card"><h2>One-off work</h2><p class="sub">Coursework, errands, admin. Not a habit '+
+      'and not scored as one \u2014 but it is where the month actually went.</p>'+
+      Object.keys(byTag).sort((a,b)=>byTag[b]-byTag[a]).map(k=>
+        '<div class="pk"><span class="k">'+esc(k)+'</span><span class="v">'+byTag[k]+'</span></div>').join("")+
+      '<p class="pnote"><b>'+tdM.length+' things cleared</b>, '+pts2+' points. '+
+      'If the personal side looks thin this month, this is why \u2014 and that is information, not failure.</p></div>';
+  }
   const drift=live().filter(t=>{const c=conc(t);return c!==null&&c<=-2;});
   if(drift.length)h+='<div class="card"><h2>Running on obligation</h2><p class="sub">These score higher on guilt '+
     'and outside pressure than on value or enjoyment. Consider cutting, reframing, or keeping them unscored.</p>'+
@@ -2342,11 +2606,12 @@ function go(v){
   $$(".nb").forEach(b=>b.classList.toggle("on",b.dataset.nav===v));
   if(v==="today")renderToday();
   if(v==="week")renderWeek();
+  if(v==="list")renderList();
   if(v==="body")renderBody();
   if(v==="setup"){renderSeed();renderManage();renderRem();renderTransSetup();}
   scrollTo(0,0);
 }
-function renderAll(){renderToday();renderWeek();renderBody();renderSeed();renderManage();renderRem();renderTransSetup();}
+function renderAll(){renderToday();renderList();renderWeek();renderBody();renderSeed();renderManage();renderRem();renderTransSetup();}
 function init(){
   load();applyTheme();
   const p0=dayPts(T());lastOk=!!(p0&&(p0.got/p0.tot)>=S.prefs.threshold);
@@ -2378,6 +2643,17 @@ function init(){
   $("#pGrad").onchange=e=>{S.prefs.graduate=e.target.checked;save();};
   $("#reviewBtn").onclick=()=>{revOff=0;renderReview();$("#ovReview").classList.add("open");};
   $("#wSave").onclick=logWeight;
+  $("#tdAdd").onclick=()=>{const v=$("#tdNew").value.trim();if(!v)return;
+    S.todos.push({id:"d"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),
+      name:v,size:"normal",due:"",plan:"",tag:"",doneOn:null});
+    save();$("#tdNew").value="";haptic("soft");renderAll();};
+  $("#tdNew").addEventListener("keydown",e=>{if(e.key==="Enter")$("#tdAdd").onclick();});
+  $("#tdSave").onclick=saveTodo;
+  $("#tdDel").onclick=()=>{if(editTodoId&&confirm("Delete this?")){
+    S.todos=S.todos.filter(x=>x.id!==editTodoId);save();$("#ovTodo").classList.remove("open");renderAll();}
+    else $("#ovTodo").classList.remove("open");};
+  $("#ovTodo").onclick=e=>{if(e.target.id==="ovTodo")$("#ovTodo").classList.remove("open");};
+  $$("#tdSize button").forEach(b=>b.onclick=()=>{dTodo.size=b.dataset.s;syncTdSize();});
   $("#protoBtn").onclick=openProto;
   $("#ovProto").onclick=e=>{if(e.target.id==="ovProto")$("#ovProto").classList.remove("open");};
   $("#wIn").addEventListener("keydown",e=>{if(e.key==="Enter")logWeight();});
